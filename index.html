@@ -48,9 +48,6 @@
             <small>MSc thesis at Chalmers University of Technology, Sweden</small>
           </div>
           </p>
-          <aside class="notes">
-Hello everyone. My name is Robert, and I am currently working on my master's thesis together with Jack. We're working on a new programming language for the EVM. We're here to talk about how smart contracts are a great fit for a dependently typed functional language and why we want to create this language for the EVM. We will also have a small example showing how an expressive type system can help in contract development. 
-          </aside>
         </section>
 
         <section>
@@ -61,14 +58,6 @@ Hello everyone. My name is Robert, and I am currently working on my master's the
             <li class="fragment">Annotate types to generate boilerplate code</li>
             <li class="fragment">Functional paradigm</li>
           </ul>
-          <aside class="notes">
-When you deploy a smart contract to production, you want to be really sure that it behaves precisely as intended. The more the compilator can catch, the better.
-<br><em>click</em><br>
-    We also want to give developers high-level abstractions of standard behaviour and common patterns. Stuff like high-level cryptography and boilerplate for errors and cleanup.
-<br><em>click</em><br>
-    Also, I hope that after hearing Greg this morning you can appreciate that a language that allows for compositionality of combinators and functions can be really powerful. LLL is functional, but too low-level for a lot of purposes. 
-Jack will now present two types of errors that programmers make when they start developing smart contracts and how we can catch them at compile time.
-          </aside>
         </section>
         <section>
           <section data-transition="slide-in fade-out">
@@ -93,21 +82,6 @@ contract RPS {
 }
           </code></pre>
           <p class="fragment">Ether is not handled correctly!</p>
-          <aside class="notes">
-            Ok, so we look at a simple rock-paper-scissors game, played for money. The joining fee is 10 ether and the reward is 20 ether. I hope you all know the rules, but it doesn't matter if you don't...<br>
-            <em>click</em><br>
-            Here is a small example implementation of the function that lets players join the game. It's very straight forward: <em>point</em>
-              <ul>
-                <li>The game can only be joined if it isn't full.</li>
-                <li>The player has to pay the fee.</li>
-                <li>If both of those are ok, we save the player's address and move.</li>
-                <li>For simplicity, the move is represented as 0, 1 or 2.</li>
-              </ul>
-            
-            <p>This seems quite reasonable, but there are actually a few bugs here. Can you see them? <em>pause</em></p>
-            
-            <p>What happens if a third player tries to join the game? <em>click</em> He loses all his ether, and there is no way to retrieve it! So let's fix this.</p>
-          </aside>
           </section>
           <section data-transition="fade-in fade-out">
           <h2>Case study:<br>Rock-paper-scissors</h2>
@@ -131,15 +105,6 @@ contract RPS {
 }
           </code></pre>
                     <p class="fragment">Better, but the move is still revealed!</p>
-          <aside class="notes">
-            <p>
-            So this is better. But there is one problem left!
-            </p>
-            <em>click</em>
-            <p>
-            Since the blockchain is transparent, the first player will actually reveal its move to the second player! We'll not solve this now, but please remember it for later.
-            </p>
-          </aside>
 </section>
         </section>
 
@@ -161,23 +126,9 @@ contract RPS {
                 <td>Openly communicating secret information</td>
                 <td>Include crypto schemes in the language and stdlib</td>
               </tr>
-              <!--
-              <tr>
-                <td>Incentive incompatibility</td>
-                <td>?</td>
-              </tr> -->
             </tbody>
           </table>
 
-          <aside class="notes">
-            <p>
-            So to summarize, we have (at least) two classes of errors that are common for developers that are new to smart contracts. What we are trying to do is to use an expressive type system to help identify and solve these.
-            </p>
-            <em>point</em><br>
-            <p>
-            To do this, we are including both the ether flow and cryptography directly in the type system.
-            </p>
-          </aside>
         </section>
 
 
@@ -197,21 +148,6 @@ addPlayer : Int -> (success : Bool)
             <li  class="fragment">Function is undefined for value < 10</li>
             </ul>
 
-            <aside class="notes">
-            <p>
-            So if we want to encode the ether flow in the type system, what can we do? Well, we can start with including the transaction value in the type signature, like this.
-            </p>
-            <em>click</em><br>
-            <p>
-            As you can see, we have also put a precondition on the value, saying that this function requires at least 10 ether to run. Otherwise the transaction is invalid for our purposes, and any ether is returned to the sender.
-            </p>
-            <p>
-            This is certainly neat, but it doesn't solve <strong>our</strong> problems.
-            </p>
-            <p>
-            But as you can see, we already know <strong>both</strong> the function's result <strong>and</strong> the transaction value. This is actually enough information to specify how the function should handle ether in all execution paths.
-            </p>
-          </aside>
 
           </section>
           <section data-transition="fade-in fade-out" data-center="false">
@@ -230,17 +166,6 @@ addPlayer : Int -> (success : Bool)
             <li class="fragment">Previous implementation wouldn't type check</li>
             </ul>
 
-            <aside class="notes">
-              We just take the return value and do a conditional check on it. <em>Point to the conditional check.</em><br>
-
-              If the player <strong>was</strong> able to join the game, we should save 10 ether and send away the rest. And if the player <strong>wasn't</strong> able to join the game, we should not save any ether and everything should be sent away.<br>
-              <em>click</em>
-              <p>
-              Now, this type signature would cause the problematic implementation from before to fail <strong>at compile-time</strong>. This is actually quite amazing, because we have catched a large class of errors without any testing or formal verification whatsoever. This technique can actually be used to encode almost <strong>any</strong> contract behavior directly in the type signatures. But this requires some additional effort from the developer, and we will not go any deeper into this.
-              </p><p>
-              But we still have the problem that the player's move is exposed to the opponent. The way to solve this is to use cryptographic commitments. They allow you to commit to a secret value and then reveal it at a later time. But developers shouldn't have to implement commitment schemes for all contracts that handle secrets. That is tedious and, more importantly, it's very error-prone.
-              </p>
-          </aside>
           </section>
           <section data-transition="fade-in slide-out">
             <h2>Catch errors using types</h2>
@@ -260,100 +185,7 @@ addPlayer : Commit Int -> (success : Bool)
 open : Commit a -> a
             </code></pre></li>
             </ul>
-            <aside class="notes">
-              <p>
-              The way we solve this is by annotating the types of secret values, to indicate that they should be treated as commitments, as we can see here. <em>point</em>
-              </p>
-              <em>click</em>
-              <p>
-              The compiler will then automatically generate a function for the sender to reveal it.</p>
-              <em>click</em>
-              <p>
-              When it has been revealed, it can be accessed in-code by using the "open" function from the standard library. It takes any commitment and returns the actual value. If the commitment hasn't been revealed, "open" will fail, return any ether to the sender and abort execution.
-              </p>
-            </aside>
-          </section>
-        </section>
-        <section>
-          <h2>Type-correct implementation</h2>
-          <pre><code class="Haskell">
-addPlayer : Commit Int -> (success : Bool)
-            { IN:   value >= 10;
-              SEND: success ? value - 10 : value;
-              SAVE: success ? 10         : 0 }
-addPlayer {value} move = if !nPlayers < 2
-                           then do save 10
-                                   send (value-10) !sender
-                                   // save move
-                                   // increment counter
-                                   return True
-                           else do send value !sender
-                                   return False   
-          </pre></code>
-          <aside class="notes">
-            So our final implementation looks like this. Notice that we are forced to explicitly save any ether that we want to keep, anything else would be a type error.
-          </aside>
-        </section>
-        <section>
-          <h2>Implementation</h2>
-          <h3>Language: Idris</h3>
-          <ul>
-            <li class="fragment">Very similar to Haskell, but...</li>
-            <li class="fragment">Dependent types</li>
-            <li class="fragment">Algebraic effects for environment interaction</li>
-            <li class="fragment">Strictly evaluated</li>
-          </ul>
-
-          <aside class="notes">
-            All right, so how have we implemented all this? Some of you might have noticed that the syntax we use is very similar to Haskell. When we first started looking at this, we wanted to have something like Haskell on the blockchain. But the more we looked at the problems, the more we realized that dependent types could be really helpful. Also, Haskell is is lazily evaluated, which would become prohibitively expensive to be useful in real life.
-            Then we found Idris.
-<br><em>click</em><br>
-            Idris is very similar to Haskell on the surface, but has dependent types.
-<br><em>click</em><br>
-            Side effects is modeled with algebraic effects. These two things combined allow us to be so expressive in the type signatures. 
-<br><em>click</em><br>
-            Finally, Idris is strictly evaluated. So for our purposes it's like a better Haskell.
-          </aside>
-
-        </section>
-        <section>
-          <h2>Summary</h2>
-<p>An expressive type-system can...
-          <ul>
-            <li>Catch large classes of errors at compile-time</li>
-            <li class="fragment">Generate boiler-plate code</li>
-            <li class="fragment">Provide compositionality</li>
-          </ul>
-</p>
-          <aside class="notes">
-            We have shown how dependent types and algebraic effects can be used together to define the flow of ether throughout the execution of a contract.
-<br><em>click</em><br>
-            We have also seen on a high level how type annotations can ensure that secret information doesn't become public until it's supposed to.
-<br><em>click</em><br>
-            Finally, we have a language where compositionality can be achieved in a natural way.
-          </aside>
-        </section>
-        <section>
-        <h2>Work in progress</h2>
-         <ul>
-         	<li>Lots of future work</li>
-         	<li>Syntax and APIs in flux</li>
-         </ul>
-          <aside class="notes">
-            We still have a long way to go before this actually becomes usable. We have created models for how we want stuff to look for the developer and made sure that we can enforce the properties of interest in practice. We have just started looking at implementing the actual back-end that goes from Idris to LLL. 
-          </aside>
-
-        </section>
-
-        <section style="text-align: left;">
-          <h1>THANK YOU</h1>
-            <p> - <a href="https://github.com/vindaloo-thesis/examples">https://github.com/vindaloo-thesis/examples</a> </p>
-            <p>- Questions? Feedback? Ideas? Talk to us! :)</p>
-            <p>- <a href="mailto:jack.pettersson@consensys.net">jack.pettersson@consensys.net</a>, <a href="mailto:robert@cacti.se">robert@cacti.se</a></p>
-          </p>
-          <aside class="notes">
-            If you have any experience of problems that could be interesting for us to look at, or other ideas, please come talk to us.
-          </aside>
+            
         </section>
 
       </div>
@@ -368,7 +200,7 @@ addPlayer {value} move = if !nPlayers < 2
       // Full list of configuration options available at:
       // https://github.com/hakimel/reveal.js#configuration
       Reveal.initialize({
-        controls: false,
+        controls: true,
         progress: true,
         history: true,
         center: false,
