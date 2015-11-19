@@ -48,6 +48,7 @@
             <small>MSc thesis at Chalmers University of Technology, Sweden</small>
           </div>
           </p>
+          
         </section>
 
         <section>
@@ -58,6 +59,7 @@
             <li class="fragment">Annotate types to generate boilerplate code</li>
             <li class="fragment">Functional paradigm</li>
           </ul>
+          
         </section>
         <section>
           <section data-transition="slide-in fade-out">
@@ -82,6 +84,7 @@ contract RPS {
 }
           </code></pre>
           <p class="fragment">Ether is not handled correctly!</p>
+          
           </section>
           <section data-transition="fade-in fade-out">
           <h2>Case study:<br>Rock-paper-scissors</h2>
@@ -105,6 +108,7 @@ contract RPS {
 }
           </code></pre>
                     <p class="fragment">Better, but the move is still revealed!</p>
+          
 </section>
         </section>
 
@@ -126,9 +130,15 @@ contract RPS {
                 <td>Openly communicating secret information</td>
                 <td>Include crypto schemes in the language and stdlib</td>
               </tr>
+              <!--
+              <tr>
+                <td>Incentive incompatibility</td>
+                <td>?</td>
+              </tr> -->
             </tbody>
           </table>
 
+          
         </section>
 
 
@@ -148,6 +158,7 @@ addPlayer : Int -> (success : Bool)
             <li  class="fragment">Function is undefined for value < 10</li>
             </ul>
 
+            
 
           </section>
           <section data-transition="fade-in fade-out" data-center="false">
@@ -166,6 +177,7 @@ addPlayer : Int -> (success : Bool)
             <li class="fragment">Previous implementation wouldn't type check</li>
             </ul>
 
+            
           </section>
           <section data-transition="fade-in slide-out">
             <h2>Catch errors using types</h2>
@@ -186,6 +198,67 @@ open : Commit a -> a
             </code></pre></li>
             </ul>
             
+          </section>
+        </section>
+        <section>
+          <h2>Type-correct implementation</h2>
+          <pre><code class="Haskell">
+addPlayer : Commit Int -> (success : Bool)
+            { IN:   value >= 10;
+              SEND: success ? value - 10 : value;
+              SAVE: success ? 10         : 0 }
+addPlayer {value} move = if !nPlayers < 2
+                           then do save 10
+                                   send (value-10) !sender
+                                   // save move
+                                   // increment counter
+                                   return True
+                           else do send value !sender
+                                   return False   
+          </pre></code>
+          
+        </section>
+        <section>
+          <h2>Implementation</h2>
+          <h3>Language: Idris</h3>
+          <ul>
+            <li class="fragment">Very similar to Haskell, but...</li>
+            <li class="fragment">Dependent types</li>
+            <li class="fragment">Algebraic effects for environment interaction</li>
+            <li class="fragment">Strictly evaluated</li>
+          </ul>
+
+          
+
+        </section>
+        <section>
+          <h2>Summary</h2>
+<p>An expressive type-system can...
+          <ul>
+            <li>Catch large classes of errors at compile-time</li>
+            <li class="fragment">Generate boiler-plate code</li>
+            <li class="fragment">Provide compositionality</li>
+          </ul>
+</p>
+          
+        </section>
+        <section>
+        <h2>Work in progress</h2>
+         <ul>
+         	<li>Lots of future work</li>
+         	<li>Syntax and APIs in flux</li>
+         </ul>
+          
+
+        </section>
+
+        <section style="text-align: left;">
+          <h1>THANK YOU</h1>
+            <p> - <a href="https://github.com/vindaloo-thesis/examples">https://github.com/vindaloo-thesis/examples</a> </p>
+            <p>- Questions? Feedback? Ideas? Talk to us! :)</p>
+            <p>- <a href="mailto:jack.pettersson@consensys.net">jack.pettersson@consensys.net</a>, <a href="mailto:robert@cacti.se">robert@cacti.se</a></p>
+          </p>
+          
         </section>
 
       </div>
@@ -222,3 +295,4 @@ open : Commit a -> a
 
   </body>
 </html>
+
