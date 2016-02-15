@@ -214,7 +214,7 @@ open : Commit a -> a
         </section>
         <section>
           <h2>Type-correct implementation</h2>
-          <pre><code class="Haskell">
+          <pre><code class="Haskell" style="max-height: 500px;">
 playerMove : Commit Int -> {auto p : LTE 10 value} ->
             EthereumEff (success : Bool)
             { VALUE   = value 
