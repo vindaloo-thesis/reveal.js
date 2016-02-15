@@ -222,15 +222,17 @@ playerMove : Commit Int -> {auto p : LTE 10 value} ->
             ; TRANS   = (if success then -10 else 0)
             ; KEEP    = (if success then 0   else 10)
             }
-playerMove {value} move = if !(read playerCount) < 2
-                           then do write players pc !sender
-                                   write moves pc move
-                                   write playerCount (pc+1)
-                                   keep 10
-                                   send (value-10) !sender
-                                   pureM True
-                           else do send value !sender
-                                   pureM False   
+playerMove {value} move = do
+  pc <- playerCount
+  if pc < 2
+    then do write players pc !sender
+            write moves pc move
+            write playerCount (pc+1)
+            keep 10
+            send (value-10) !sender
+            pureM True
+    else do send value !sender
+            pureM False   
           </pre></code>
           
         </section>
