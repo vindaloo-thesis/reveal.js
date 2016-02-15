@@ -223,10 +223,11 @@ playerMove : Commit Int -> {auto p : LTE 10 value} ->
             ; KEEP    = (if success then 0   else 10)
             }
 playerMove {value} move = if !(read playerCount) < 2
-                           then do keep 10
+                           then do write players pc !sender
+                                   write moves pc move
+                                   write playerCount (pc+1)
+                                   keep 10
                                    send (value-10) !sender
-                                   // save move
-                                   // increment counter
                                    pureM True
                            else do send value !sender
                                    pureM False   
