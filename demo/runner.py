@@ -13,11 +13,11 @@ c = s.abi_contract(serpent_code)
 print("Code added to block chain")
 
 #Test contract
-o = c.get("Bob")
-print("The value stored with key \"Bob\" is " + str(o))
-o = c.register("Bob", 10)
-o = c.get("Bob")
-print("The value stored with key \"Bob\" is " + str(o))
+o = c.get(1337)
+print("The value stored with key 1337 is " + str(o))
+o = c.register(1337, 42)
+o = c.get(1337)
+print("The value stored with key 1337 is " + str(o))
 
 
 
