@@ -65,23 +65,22 @@
           <section data-transition="slide-in fade-out">
           <h2>Case study:<br>Rock-paper-scissors</h2>
 <p>A game of two players. Joining costs exactly 10 ether.</p>
-          <pre class="fragment"><code class="hljs" data-trim contenteditable>
-contract RPS {
-  uint nPlayers;
-  mapping (address => move) public moves;
-  function playerMove(uint move) returns (boolean success) {
-    if (nPlayers < 2 && msg.value >= 10) {
-      moves[msg.sender] = move;
-      nPlayers++;
+          <pre class="fragment"><code data-trim contenteditable>
 
-      return true;
-    else {
+playerMove : Int ->
+            EthereumEff (success : Bool) { }
+playerMove move = do
+  pc <- read playerCount
+  if pc < 2
+    then do
+      write players pc !sender
+      write moves pc move
+      write playerCount (pc+1)
 
-      return false;
-    }
-  }
-  //[...]
-}
+      pureM True
+    else do
+
+      pureM False
           </code></pre>
           <p class="fragment">Ether is not handled correctly!</p>
           
@@ -89,23 +88,21 @@ contract RPS {
           <section data-transition="fade-in fade-out">
           <h2>Case study:<br>Rock-paper-scissors</h2>
           <p>Amended version</p>
-          <pre><code class="hljs" data-trim contenteditable>
-contract RPS {
-  uint nPlayers;
-  mapping (address => uint) public moves;
-  function playerMove(uint move) returns (boolean success) {
-    if (nPlayers < 2 && msg.value >= 10) {
-      moves[msg.sender] = move;
-      nPlayers++;
-      msg.sender.send(msg.value - 10);
-      return true;
-    else {
-      msg.sender.send(msg.value);
-      return false;
-    }
-  }
-  //[...]
-}
+          <pre><code data-trim contenteditable>
+playerMove : Int ->
+            EthereumEff (success : Bool) { }
+playerMove move = do
+  pc <- read playerCount
+  if pc < 2
+    then do
+      write players pc !sender
+      write moves pc move
+      write playerCount (pc+1)
+      send (v-10) !sender
+      pureM True
+    else do
+      send v !sender
+      pureM False
           </code></pre>
                     <p class="fragment">Better, but the move is still revealed!</p>
           
@@ -148,7 +145,7 @@ contract RPS {
             </p>
             <pre><code>
 playerMove : Int ->
-            EthereumEff (success : Bool) -> 
+            EthereumEff (success : Bool)
             { 
             }
             </pre></code>
@@ -160,7 +157,7 @@ playerMove : Int ->
             </p>
             <pre><code>
 playerMove : Int -> {auto p : LTE 10 value} ->
-            EthereumEff (success : Bool) -> 
+            EthereumEff (success : Bool)
             { VALUE   = value 
             ; BALANCE = balance
             ; TRANS   = trans
@@ -178,7 +175,7 @@ playerMove : Int -> {auto p : LTE 10 value} ->
             </p>
             <pre><code>
 playerMove : Int -> {auto p : LTE 10 value} ->
-            EthereumEff (success : Bool) -> 
+            EthereumEff (success : Bool)
             { VALUE   = value 
             ; BALANCE = balance
             ; TRANS   = (if success then -10 else 0)
@@ -197,7 +194,7 @@ playerMove : Int -> {auto p : LTE 10 value} ->
             </p>
             <pre><code>
 playerMove : Commit Int -> {auto p : LTE 10 value} ->
-            EthereumEff (success : Bool) -> 
+            EthereumEff (success : Bool)
             { VALUE   = value 
             ; BALANCE = balance
             ; TRANS   = (if success then -10 else 0)
@@ -219,7 +216,7 @@ open : Commit a -> a
           <h2>Type-correct implementation</h2>
           <pre><code class="Haskell">
 playerMove : Commit Int -> {auto p : LTE 10 value} ->
-            EthereumEff (success : Bool) -> 
+            EthereumEff (success : Bool)
             { VALUE   = value 
             ; BALANCE = balance
             ; TRANS   = (if success then -10 else 0)
