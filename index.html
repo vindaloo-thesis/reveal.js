@@ -41,7 +41,7 @@
       <!-- Any section element inside of this container is displayed as a slide -->
       <div class="slides">
         <section style="text-align: left;">
-          <h3>Type-driven contract development</h3>
+          <h3>Safer smart contracts through type-driven development</h3>
           <p>
           <div style="line-height:70%;">
           <small>Jack Pettersson and Robert Edström</small><br>
@@ -69,7 +69,7 @@
 contract RPS {
   uint nPlayers;
   mapping (address => move) public moves;
-  function addPlayer(uint move) returns (boolean success) {
+  function playerMove(uint move) returns (boolean success) {
     if (nPlayers < 2 && msg.value >= 10) {
       moves[msg.sender] = move;
       nPlayers++;
@@ -93,7 +93,7 @@ contract RPS {
 contract RPS {
   uint nPlayers;
   mapping (address => uint) public moves;
-  function addPlayer(uint move) returns (boolean success) {
+  function playerMove(uint move) returns (boolean success) {
     if (nPlayers < 2 && msg.value >= 10) {
       moves[msg.sender] = move;
       nPlayers++;
@@ -128,7 +128,7 @@ contract RPS {
               </tr>
               <tr>
                 <td>Openly communicating secret information</td>
-                <td>Include crypto schemes in the language and stdlib</td>
+                <td>Include crypto schemes in library and compiler</td>
               </tr>
               <!--
               <tr>
@@ -140,44 +140,55 @@ contract RPS {
 
           
         </section>
-
-
         <section>
           <section data-transition="slide-in fade-out" data-center="false">
+            <h2>Catch errors using types</h2>
+            <p>
+            &nbsp;
+            </p>
+            <pre><code>
+playerMove : Int ->
+            EthereumEff (success : Bool) -> 
+            { 
+            }
+            </pre></code>
+          </section>
+          <section data-transition="fade-in fade-out" data-center="false">
             <h2>Catch errors using types</h2>
             <p>
               We start by including ether in the type signature:
             </p>
             <pre><code>
-addPlayer : Int -> (success : Bool)
-            { IN: value >= 10 }
-
-
+playerMove : Int -> {auto p : LTE 10 value} ->
+            EthereumEff (success : Bool) -> 
+            { VALUE   = value 
+            ; BALANCE = balance
+            ; TRANS   = trans
+            ; KEEP    = keep
+            }
             </pre></code>
             <ul>
-            <li  class="fragment">Function is undefined for value < 10</li>
+            <li>Function is undefined for value < 10</li>
             </ul>
-
-            
-
           </section>
           <section data-transition="fade-in fade-out" data-center="false">
             <h2>Catch errors using types</h2>
             <p>
-              Describe ether flow:
+              We start by including ether in the type signature:
             </p>
             <pre><code>
-addPlayer : Int -> (success : Bool)
-            { IN:   value >= 10;
-              SEND: success ? value - 10 : value;
-              SAVE: success ? 10         : 0 }
+playerMove : Int -> {auto p : LTE 10 value} ->
+            EthereumEff (success : Bool) -> 
+            { VALUE   = value 
+            ; BALANCE = balance
+            ; TRANS   = (if success then -10 else 0)
+            ; KEEP    = (if success then 0   else 10)
+            }
             </pre></code>
             <ul>
-            <li>saved+sent defined for all paths</li>
+            <li>Transferred and kept ether defined for all paths</li>
             <li class="fragment">Previous implementation wouldn't type check</li>
             </ul>
-
-            
           </section>
           <section data-transition="fade-in slide-out">
             <h2>Catch errors using types</h2>
@@ -185,10 +196,13 @@ addPlayer : Int -> (success : Bool)
               Hide player move
             </p>
             <pre><code>
-addPlayer : Commit Int -> (success : Bool)
-            { IN:   value >= 10;
-              SEND: success ? value - 10 : value;
-              SAVE: success ? 10         : 0 }
+playerMove : Commit Int -> {auto p : LTE 10 value} ->
+            EthereumEff (success : Bool) -> 
+            { VALUE   = value 
+            ; BALANCE = balance
+            ; TRANS   = (if success then -10 else 0)
+            ; KEEP    = (if success then 0   else 10)
+            }
             </pre></code>
             <ul>
             <li>Commitments part of the language</li>
@@ -196,6 +210,7 @@ addPlayer : Commit Int -> (success : Bool)
             <li class="fragment">Accessed using a library function:<pre><code>
 open : Commit a -> a
             </code></pre></li>
+            <li class="fragment">Not implemented</li>
             </ul>
             
           </section>
@@ -203,18 +218,21 @@ open : Commit a -> a
         <section>
           <h2>Type-correct implementation</h2>
           <pre><code class="Haskell">
-addPlayer : Commit Int -> (success : Bool)
-            { IN:   value >= 10;
-              SEND: success ? value - 10 : value;
-              SAVE: success ? 10         : 0 }
-addPlayer {value} move = if !nPlayers < 2
-                           then do save 10
+playerMove : Commit Int -> {auto p : LTE 10 value} ->
+            EthereumEff (success : Bool) -> 
+            { VALUE   = value 
+            ; BALANCE = balance
+            ; TRANS   = (if success then -10 else 0)
+            ; KEEP    = (if success then 0   else 10)
+            }
+playerMove {value} move = if !(read playerCount) < 2
+                           then do keep 10
                                    send (value-10) !sender
                                    // save move
                                    // increment counter
-                                   return True
+                                   pureM True
                            else do send value !sender
-                                   return False   
+                                   pureM False   
           </pre></code>
           
         </section>
@@ -245,8 +263,7 @@ addPlayer {value} move = if !nPlayers < 2
         <section>
         <h2>Work in progress</h2>
          <ul>
-         	<li>Lots of future work</li>
-         	<li>Syntax and APIs in flux</li>
+          <li>Lots of future work</li>
          </ul>
           
 
@@ -254,7 +271,7 @@ addPlayer {value} move = if !nPlayers < 2
 
         <section style="text-align: left;">
           <h1>THANK YOU</h1>
-            <p> - <a href="https://github.com/vindaloo-thesis/examples">https://github.com/vindaloo-thesis/examples</a> </p>
+            <p> - <a href="https://github.com/vindaloo-thesis/examples">https://github.com/vindaloo-thesis/idris-se</a> </p>
             <p>- Questions? Feedback? Ideas? Talk to us! :)</p>
             <p>- <a href="mailto:jack.pettersson@consensys.net">jack.pettersson@consensys.net</a>, <a href="mailto:robert@cacti.se">robert@cacti.se</a></p>
           </p>
