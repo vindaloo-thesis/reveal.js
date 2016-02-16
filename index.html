@@ -115,9 +115,21 @@ function buy() {
           <aside class="notes">
           </aside>
         </section>
-
+        <section>
+          <h3>Ethereum smart contract languages</h3>
+          <p>Contracts = byte code on the Ethereum Virtual Machine</p>
+          <ul>
+            <li class="fragment">Solidity ≈ JavaScript</li>
+            <li class="fragment">Serpent ≈ Python</li>
+            <li class="fragment">LLL ≈ LISP</li>
+          </ul>
+          <aside class="notes">
+          </aside>
+        </section>
         <section data-transition="slide-in fade-out">
-          <h2>Example contract:<br>Name registry</h2>
+          <h2>Example contract</h2>
+          <h3>Name registry</h3>
+          <p>Written in Solidity</p>
           <pre class="fragment"><code class="hljs" data-trim contenteditable>
 contract NameRegistry {
   mapping (string => string) names;
