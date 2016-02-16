@@ -385,6 +385,51 @@ playerMove {value} move = do
 
         <section>
           <h2>Demo time!</h2>
+          <aside class="notes">
+            We'll now show you how our impkementation can be used. We'll use our code generator to compile a simple contract from Idris to Serpent and then run it on a simulated version of the Ethereum system supplied with Serpent. 
+
+            $ vim Namecoin.idr
+
+            This is just a simple key value store.  We have one storage variable, db, to map integers to integers. As you can see, the "get" function uses the Store effect and returns the value stored for the given key.
+
+            If we look at the "register" function, we can see that we also use the Environment effect. It takes three parameters, and the first two here are implicit and can be anything. But for the third one, representing the address of the user who initiated the call, we have supplied a fixed value. This means that it will be considered a type error if anyone else tries to register a value. Let's try to compile and run it.
+
+            $ make namecoin_eio
+            $ vim Namecoin.se
+
+            Here is the output from our code generator. This is Serpent, one of the existing contract languages for Ethereum that we mentioned before. This will be fed to a Python script that does the final stage of compilation and runs a simulator to debug it.
+
+            $ vim runner.py
+
+            The details here are not too important.
+            We read in the serpent source.
+            Set up the environment.
+            We try get and print a value with the key 1337, which has not been set yet.
+            We set the value
+            And try to read it again.
+
+            $ ./runner.py
+
+            It works as intended. Let's try to see what happens if the origin check would fail by changing the owner address.
+
+            * Change owner address
+            $ make namecoin_eio
+            $ ./runner.py
+
+            Now it doesn't work anymore, since the origin check fails. 
+
+            So how is this actually enforced? Of course the runtime needs some way to know how to pass the proper arguments to "register" and when it can't and should fail.
+
+            We do this using something we call wrapper functions. This is something that should be possible to automatically generate, but in our current implementation the developer has to write these themselves. Let's have a look.
+
+            $ vim Namecoin_EIO
+
+            It's kind of verbose and we'll just glance through this. Let's look at "get". Since there are no types to enforce, we can just pass on the value. If we look at "register", you can see that we have to check if the origin is indeed the owner before passing it on to the actual function. This is also where we would pass in any proofs required by the type. Like the one from Rock Paper Scissors where the value had to be at least 10.
+
+
+
+
+          </aside>
         </section>
         <section>
           <h2>Summary</h2>
