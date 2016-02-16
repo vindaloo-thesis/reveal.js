@@ -64,6 +64,15 @@
             <li>Possible to automate?</li>
           </ul>
           <aside class="notes">
+          <p>Ok, so contracts are very central to our current society. But what are they?
+          They are essentially written agreements.</p>
+          <p>For example, "if you don't pay your rent, I have the right to kick you our of your apartment"</p>
+          <p>Of course most contracts are much more complicated than that, but at their core, they are more or less logical formulas:<br/>
+          "if x happens, y holds" or "at time x, perform y"</p>
+          <p>As we know, computers are very good at logic, so the question is:<br/>
+          can we describe contracts using code and execute them?</p>
+          <p>The answer is: Yes, we can!</p>
+          <p>This has been known by computer scientists for a long time, and there exist many formal languages and libraries for specifying, executing and analyzing contracts.</p>
           </aside>
         </section>
 
@@ -80,6 +89,13 @@ function buy() {
           </code></pre>
           <p class="fragment">Who executes this?</p>
           <aside class="notes">
+          <p>Just to give you an intuition, let's take a very common financial contract and try to encode it as a program.</p>
+          <p>We'll take a so-called European Option. They allow the holder to buy an asset at a fixed price, but only at a particular time.</p>
+          <p>Here is some object-oriented pseudocode that encodes these rules. If the holder wants to buy the asset, they simply call the buy function. The function checks the current time and transfers the asset and the money.</p>
+          <p>This is all very well, but there is one major question:<br/>
+          Who executes this code? On whose computer is it running? Can we trust that person?</p>
+          <p>If we should start to codify contracts, it is extremely important that they can't be modified by any third parties and that anyone can verify that they are executed correctly.</p>
+          <p>The perfect scenario would be if the code could "execute itself", without any possibility of interference.</p>
           </aside>
         </section>
         
@@ -87,11 +103,17 @@ function buy() {
           <h2>Smart contracts</h2>
           <ul>
             <li>Self-enforcing contracts</li>
-            <li>Primitive examples: vending machines, DRM</li>
-            <li class="fragment">Now: programmable smart contract platforms</li>
+            <li>Primitive example: vending machines</li>
+            <li class="fragment">Now: smart contract platforms</li>
             <li class="fragment">Applications: finance, IoT, commerce, computer protocols, gambling, ...</li>
           </ul>
           <aside class="notes">
+          <p>That's what smart contracts are about!</p>
+          <p>As an example, it's possible to view vending machines as primitive smart contracts:<br/>
+          "If you deposit a coin, you will receive a soda"</p>
+          <p>The last few years, programmable smart contract platforms have become a thing. They offer developers a programming language to specify arbitrary smart contracts, and then the platforms ensures that they are executed exactly as specified.</p>
+          <p>Except the obvious financial applications, this can be used in lots of fields.</p>
+          <p>Just as an example, IBM has experimented with using a smart contract platform as the backbone for the internet of things, which seems very promising. This would allow connected devices to negotiate and decide on their behavior collectively, without relying on any servers.</p>
           </aside>
         </section>
         
@@ -99,14 +121,21 @@ function buy() {
         
         <section>
           <h2>Ethereum</h2>
-          <h3>A programmable smart contract platform</h3>
+          <h3>A smart contract platform</h3>
           <ul>
-            <li>P2P network executing...</li>
+            <li>Peer-to-peer network executing...</li>
             <li><strong>Arbitrary</strong> rules, leading to a...</li>
             <li><strong>Globally</strong> accepted state</li>
           </ul>
           <p class="fragment">Result: the rules enforce themselves</p>
           <aside class="notes">
+          <p>Ok, so we have used the smart contract platform Ethereum.</p>
+          <p>It is a peer-to-peer network. Who here is familiar with P2P networks?</p>
+          <p>(Ok, are you familiar with Bittorrent or Bitcoin? Ok, so both of those are P2P netowrks. It essentially means that all computers in the network are equal in terms of network control. There is no central server or anything else that coordinates the network, but all participants communicate directly with each other. Effectively, no particular computer is required for the network to operate. It is just enough that there are <i>some</i> computers in the network.)</p>
+          <p>Ok, so the participants in this P2P network execute arbitrary rules. These rules are the contracts on the platform and can be specified by anyone.</p>
+          <p>After executing the contract, the participants verify that they all got the same result. This result is published for the world to see.</p>
+          <p>This means that a network which no one controls is able to say "<strong>this</strong> is the result of executing these contracts", and if anyone disagrees, it is easy to prove them wrong</p>
+          <p>In summary, the contracts essentially execute themselves, without any need to trust the executor.</p>
           </aside>
         </section>
 <!--
