@@ -82,7 +82,7 @@ function buy() {
           <h2>Smart contracts</h2>
           <ul>
             <li>Self-enforcing contracts</li>
-            <li>Primitive example: vending machines</li>
+            <li>Primitive examples: vending machines, DRM</li>
             <li class="fragment">Now: programmable smart contract platforms</li>
             <li class="fragment">Applications: finance, IoT, commerce, computer protocols, gambling, ...</li>
           </ul>
@@ -148,6 +148,7 @@ contract NameRegistry {
   }
 }
           </code></pre>
+          <p class="fragment">Everyone executes this!</p>
           <aside class="notes">
           </aside>
         </section>
@@ -177,8 +178,7 @@ contract NameRegistry {
 <p>A game of two players. Joining costs exactly 10 ether.</p>
           <pre class="fragment"><code data-trim contenteditable>
 
-playerMove : Int ->
-            EthereumEff (success : Bool) { }
+playerMove : Int -> EthereumEff (success : Bool)
 playerMove move = do
   pc <- read playerCount
   if pc < 2
@@ -199,8 +199,7 @@ playerMove move = do
           <h2>Case study:<br>Rock-paper-scissors</h2>
           <p>Amended version</p>
           <pre><code data-trim contenteditable>
-playerMove : Int ->
-            EthereumEff (success : Bool) { }
+playerMove : Int -> EthereumEff (success : Bool)
 playerMove move = do
   pc <- read playerCount
   if pc < 2
@@ -268,9 +267,12 @@ playerMove move = do
             </p>
             <pre><code>
 playerMove : Int ->
-            EthereumEff (success : Bool)
-            { 
-            }
+             EthereumEff (success : Bool)
+              
+ 
+ 
+ 
+             
             </pre></code>
           </section>
           <section data-transition="fade-in fade-out" data-center="false">
@@ -280,12 +282,12 @@ playerMove : Int ->
             </p>
             <pre><code>
 playerMove : Int -> {auto p : LTE 10 value} ->
-            EthereumEff (success : Bool)
-            { VALUE   = value 
-            ; BALANCE = balance
-            ; TRANS   = trans
-            ; KEEP    = keep
-            }
+             EthereumEff (success : Bool)
+             { VALUE   = value 
+             ; BALANCE = balance
+             ; TRANS   = trans
+             ; KEEP    = keep
+             }
             </pre></code>
             <ul>
             <li>Function is undefined for value < 10</li>
@@ -298,12 +300,12 @@ playerMove : Int -> {auto p : LTE 10 value} ->
             </p>
             <pre><code>
 playerMove : Int -> {auto p : LTE 10 value} ->
-            EthereumEff (success : Bool)
-            { VALUE   = value 
-            ; BALANCE = balance
-            ; TRANS   = (if success then -10 else 0)
-            ; KEEP    = (if success then 0   else 10)
-            }
+             EthereumEff (success : Bool)
+             { VALUE   = value 
+             ; BALANCE = balance
+             ; TRANS   = (if success then (value-10) else value)
+             ; KEEP    = (if success then 10         else 0)
+             }
             </pre></code>
             <ul>
             <li>Transferred and kept ether defined for all paths</li>
@@ -317,12 +319,12 @@ playerMove : Int -> {auto p : LTE 10 value} ->
             </p>
             <pre><code>
 playerMove : Commit Int -> {auto p : LTE 10 value} ->
-            EthereumEff (success : Bool)
-            { VALUE   = value 
-            ; BALANCE = balance
-            ; TRANS   = (if success then -10 else 0)
-            ; KEEP    = (if success then 0   else 10)
-            }
+             EthereumEff (success : Bool)
+             { VALUE   = value 
+             ; BALANCE = balance
+             ; TRANS   = (if success then (value-10) else value)
+             ; KEEP    = (if success then 10         else 0)
+             }
             </pre></code>
             <ul>
             <li>Commitments part of the language</li>
@@ -339,12 +341,12 @@ open : Commit a -> a
           <h2>Type-correct implementation</h2>
           <pre><code class="Haskell" style="max-height: 500px;">
 playerMove : Commit Int -> {auto p : LTE 10 value} ->
-            EthereumEff (success : Bool)
-            { VALUE   = value 
-            ; BALANCE = balance
-            ; TRANS   = (if success then -10 else 0)
-            ; KEEP    = (if success then 0   else 10)
-            }
+             EthereumEff (success : Bool)
+             { VALUE   = value 
+             ; BALANCE = balance
+             ; TRANS   = (if success then (value-10) else value)
+             ; KEEP    = (if success then 10         else 0)
+             }
 playerMove {value} move = do
   pc <- playerCount
   if pc < 2
@@ -392,6 +394,7 @@ playerMove {value} move = do
         <section>
         <h2>Work in progress</h2>
          <ul>
+          <li>Proof-of-concept implementation</li>
           <li>Lots of future work</li>
          </ul>
           
