@@ -89,6 +89,13 @@ function buy() {
           </code></pre>
           <p class="fragment">Who executes this?</p>
           <aside class="notes">
+          <p>Just to give you an intuition, let's take a very common financial contract and try to encode it as a program.</p>
+          <p>We'll take a so-called European Option. They allow the holder to buy an asset at a fixed price, but only at a particular time.</p>
+          <p>Here is some object-oriented pseudocode that encodes these rules. If the holder wants to buy the asset, they simply call the buy function. The function checks the current time and transfers the asset and the money.</p>
+          <p>This is all very well, but there is one major question:<br/>
+          Who executes this code? On whose computer is it running? Can we trust that person?</p>
+          <p>If we should start to codify contracts, it is extremely important that they can't be modified by any third parties and that anyone can verify that they are executed correctly.</p>
+          <p>The perfect scenario would be if the code could "execute itself", without any possibility of interference.</p>
           </aside>
         </section>
         
