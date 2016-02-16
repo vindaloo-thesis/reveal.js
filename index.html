@@ -64,18 +64,12 @@
 
         <section data-transition="slide-in fade-out">
           <h2>Example contract:<br>European option</h2>
-<p>"At time T, party A may buy asset X from party B for price Y"</p>
+          <p>"At time <pre>t</pre>, party <pre>a</pre> may buy asset <pre>x</pre> from party <pre>b</pre> for price <pre>y</pre>"</p>
           <pre class="fragment"><code class="hljs" data-trim contenteditable>
-asset assetName;
-identity seller;
-time expiry;
-int amount;
-float price;
-
 function buy() {
-  if(currentTime == expiry) {
-    give(seller, price*amount);
-    take(seller, assetName, amount);
+  if(currentTime == t) {
+    a.give(b,y)
+    b.give(a,x)
   }
 }
           </code></pre>
