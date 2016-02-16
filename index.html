@@ -159,6 +159,15 @@ function buy() {
             <li class="fragment">LLL ≈ LISP</li>
           </ul>
           <aside class="notes">
+            All contracts on Ethereum run on a virtual machine, called the EVM. The EVM is Turing complete, so any business logic can be encoded as a smart contract. Anyone can upload contracts and anyone can call any uploaded contract.
+
+            Contracts are stored in a custom binary format, so if you want to write Ethereum smart contracts you will have to use a specific language. There currently exist three such languages:
+
+            * Solidity, which is the most mainstream and mature one. The syntax is very similar to JavaScript.
+            * Serpent, which looks like Python
+            * And LLL, which stands for Low-Level LISP. Most developers will not use LLL directly. It is used as an intermediary language that Serpent compiles down to.
+
+            So with that out of the way, let's look at how a simple contract can look in Solidity.
           </aside>
         </section>
         <section data-transition="slide-in fade-out">
@@ -170,20 +179,25 @@ contract NameRegistry {
   mapping (string => string) names;
   
   function register(string name, string value) returns boolean {
-    if(names[name] == 0) {
+    if(tx.origin == 598707698970987908) {
       names[name] = value;
       return true;
     }
     return false;
   }
   
-  function lookup(string name) returns string {
+  function get(string name) returns string {
     return names[name];
   }
 }
           </code></pre>
           <p class="fragment">Everyone executes this!</p>
           <aside class="notes">
+            In this particular case, we only want a single person to be allowed to register names, but anyone should be able to get them. Remember that in Ethereum, we don't need to trust the executor: We can say that EVRYONE executes this. 
+
+            We could add rules like allowing anyone to register, but only allow changes by the initial owners of those names. We could also add rules like expiry time, renewal costs, and so on.
+
+            So, since we are talking about costs: How does that get modeled in Ethereum?
           </aside>
         </section>
         <section>
@@ -196,6 +210,13 @@ contract NameRegistry {
           <aside class="notes">
           </aside>
         </section>
+          <aside class="notes">
+            In this particular case, we only want a single person to be allowed to register names, but anyone should be able to get them. Remember that in Ethereum, we don't need to trust the executor: We can say that EVRYONE executes this. 
+
+            We could add rules like allowing anyone to register, but only allow changes by the initial owners of those names. We could also add rules like expiry time, renewal costs, and so on.
+
+            So, since we are talking about costs: How does that get encoded in the system?
+          </aside>
  
         <section>
           <h2>Motivations</h2>
