@@ -23,6 +23,12 @@
     code {
       color: #a8c;
     }
+    section.jack h2, section.jack h3 {
+      color: #f33;
+    }
+    section.robert h2, section.robert h3 {
+      color: #a3f;
+    }
     </style>
 
     <!-- Printing and PDF exports -->
@@ -56,7 +62,7 @@
           
         </section>
 
-        <section>
+        <section class="jack">
           <h2>Contracts</h2>
           <ul>
             <li>Conditional agreements</li>
@@ -315,6 +321,9 @@ playerMove : Int ->
  
              
             </pre></code>
+          <aside class="notes">
+            Mention effects, that types can be parametrized by values, as in success.
+          </aside>
           </section>
           <section data-transition="fade-in fade-out" data-center="false">
             <h2>Catch errors using types</h2>
