@@ -289,7 +289,8 @@ joinGame move = do
           <aside class="notes">
             <p>Now we return the fee.</p>
             <p>Additionally, if the player <i>was</i> able to join the game, we return any excess ether that was sent.</p>
-            <p>This is better, but one bug remains. As you might recall from when Robert explained Ethereum, the state of the system is completely public.</p>
+            <p>As you can see, the solution was really easy, but detecting errors like these can be hard, especially in more complex contracts.</p>
+            <p>Anyway, this implementation is better, but one bug remains. As you might recall from when Robert explained Ethereum, the state of the system is completely public.</p>
             <p><strong><i>CLICK</i></strong></p>
             <p>So the second player will be able to read the first player's move before joining.</p>
             <p>We will not solve this right now because the solution is a bit complicated, but keep it in mind for later.</p>
@@ -304,17 +305,17 @@ joinGame move = do
             <thead>
               <tr>
                 <th>Mistake</th>
-                <th>Solution</th>
+                <th class="fragment" data-fragment-index="1">Solution</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td>No handling of ether</td>
-                <td>Encode ether flow in the type system</td>
+                <td class="fragment" data-fragment-index="1">Encode ether flow in the type system</td>
               </tr>
               <tr>
                 <td>Openly communicating secret information</td>
-                <td>Include crypto schemes in library and compiler</td>
+                <td class="fragment" data-fragment-index="1">Include crypto schemes in library and compiler</td>
               </tr>
               <!--
               <tr>
@@ -323,16 +324,35 @@ joinGame move = do
               </tr> -->
             </tbody>
           </table>
+          <aside class="notes">
+            <p>Ok, so we have showed you two classes of errors that are common for smart contract developers to make.</p>
+            <p>The first was that ether may not be handled properly, the second was that secret information is shared publicly.</p>
+            <p>Our thesis is that these problems can be solved at the language level by an extensive type system.</p>
+            <p><strong><i>CLICK</i></strong></p>
+            <p>In particular, we will show you how the type system can encode ether flow.<br/>
+            We will also show you how type annotations is a natural way to use cryptographic schemes that are built into the compiler.</p>
+            <p>(Explain type annotations)</p>
+            <p><strong><i>CLICK</i></strong></p>
+          </aside>
         </section>
         <section class="jack">
           <h2>Motivations</h2>
           <ul>
             <li>Catch bugs at compile time</li>
             <li>Enforce behavior using types</li>
-            <li class="fragment">Annotate types to help compiler</li>
+            <li>Annotate types to help compiler</li>
             <li class="fragment">Functional paradigm</li>
           </ul>
-          
+          <aside class="notes">
+            <p>Ok, so our main motivation for doing this is to catch bugs at compile time instead of run time.</p>
+            <p>To do this, we will use the type system in two ways. The first is to have it enforce how contracts are allowed to behave, and the second is to give the compiler information on which values should be secret.</p>
+            <p><strong><i>CLICK</i></strong></p>
+            <p>As you have seen in our examples so far, we also use a functional language.<br/>
+            As you may remember, we mentioned in the beginning that there already exist a lot of formal languages and libraries that are specialized on contracts.<br/>
+            Many of those are functional, so that's why our language is functional.</p>
+            <p>But just to be clear, our goal was <i>not</i> to design a new language or library specialized on contracts.<br/>
+            We wanted to do a general-purpose programming language on a smart contract platform. Using our language, it should be possible to run libraries like these without having to trust an executor.</p>
+          </aside>
         </section>
         <section>
           <section data-transition="slide-in fade-out" data-center="false">
