@@ -219,16 +219,6 @@ contract NameRegistry {
           </aside>
  
         <section>
-          <h2>Motivations</h2>
-          <ul>
-            <li>Catch bugs at compile time</li>
-            <li>What can be enforced using the type system?</li>
-            <li class="fragment">Annotate types to generate boilerplate code</li>
-            <li class="fragment">Functional paradigm</li>
-          </ul>
-          
-        </section>
-        <section>
           <section data-transition="slide-in fade-out">
           <h2>Case study:<br>Rock-paper-scissors</h2>
 <p>A game of two players. Joining costs exactly 10 ether.</p>
@@ -299,21 +289,16 @@ playerMove move = do
               </tr> -->
             </tbody>
           </table>
-
-          
         </section>
         <section>
-          <h2>Implementation</h2>
-          <h3>Language: Idris</h3>
+          <h2>Motivations</h2>
           <ul>
-            <li class="fragment">Very similar to Haskell, but...</li>
-            <li class="fragment">Dependent types</li>
-            <li class="fragment">Algebraic effects for environment interaction</li>
-            <li class="fragment">Strictly evaluated</li>
+            <li>Catch bugs at compile time</li>
+            <li>What can be enforced using the type system?</li>
+            <li class="fragment">Annotate types to generate boilerplate code</li>
+            <li class="fragment">Functional paradigm</li>
           </ul>
-
           
-
         </section>
         <section>
           <section data-transition="slide-in fade-out" data-center="false">
@@ -416,6 +401,19 @@ playerMove {value} move = do
             pureM False   
           </pre></code>
           
+        </section>
+        <section>
+          <h2>Implementation</h2>
+          <h3>Language: Idris</h3>
+          <ul>
+            <li class="fragment">Very similar to Haskell, but...</li>
+            <li class="fragment">Dependent types</li>
+            <li class="fragment">Algebraic effects for environment interaction</li>
+            <li class="fragment">Strictly evaluated</li>
+          </ul>
+
+          
+
         </section>
         <section>
           <h2>Implementation</h2>
