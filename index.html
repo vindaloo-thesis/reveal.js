@@ -261,11 +261,11 @@ joinGame move = do
             <p>As you can see, the return value is not a normal boolean though, but it is something called "EthereumEff" which contains a boolean.<br/>
             Basically, this says that the function doesn't <i>only</i> take an integer and return a boolean, it could also use the state of the Ethereum system in some way. Basically, the function doesn't return a boolean, but it returns instructions on how to use Ethereum to create a boolean.</p>
             <p>In this case for example, it has to check how many players are currently in the game. To do this, it has to <i>read</i> a value from the <i>state</i>, which is why the function returns an EthereumEff. The value that is read is saved in 'pc'.</p>
-            <p>Then we use this value to check that the game is not full. We also check that the player sent enough ether. The exclamation mark is not very important.<br/>
-            Just like this function doesn't return a simple boolean, 'value' doesn't return a simple integer. The exclamation mark basically allows us to treat it as if it was a simple integer.</p>
+            <p>Then we use this value to check that the game is not full. We also check that the player sent enough ether. The amount of ether that was included in the call is accessed using the variable 'value', as we can see here. The exclamation mark is not very important.<br/>
+            Just like this 'joinGame' function doesn't return a simple boolean, 'value' doesn't return a simple integer. The exclamation mark basically allows us to treat it as if it was a simple integer.</p>
             <p>So if the game is not full and the player payed enough ether, we should just save the player and its move, and increase the number of players and then return true. Otherwise we just return false.</p>
             <p>This might seem reasonable, but there are actually a few bugs here. <strong><i>CLICK</i></strong></p>
-            <p>For starters, what happens if the game was already full? Then we return false, but we don't return the fee for joining to the player! So let's fix this!</p>
+            <p>For starters, what happens if the game was already full? Then we return false, but we don't return the fee for joining the game! The player would lose the ether and not be able to retrieve it. So let's fix this! <strong><i>CLICK</i></strong></p>
           </aside>
           </section>
           <section data-transition="fade-in fade-out">
@@ -279,14 +279,22 @@ joinGame move = do
     then do
       write players pc (!sender,move)
       write playerCount (pc+1)
-      send (v-10) !sender
+      send (!value-10) !sender
       return True
     else do
-      send v !sender
+      send !value !sender
       return False
           </code></pre>
-                    <p class="fragment">Better, but the move is still revealed!</p>
-          
+          <p class="fragment">The move is still revealed!</p>
+          <aside class="notes">
+            <p>Now we return the fee.</p>
+            <p>Additionally, if the player <i>was</i> able to join the game, we return any excess ether that was sent.</p>
+            <p>This is better, but one bug remains. As you might recall from when Robert explained Ethereum, the state of the system is completely public.</p>
+            <p><strong><i>CLICK</i></strong></p>
+            <p>So the second player will be able to read the first player's move before joining.</p>
+            <p>We will not solve this right now because the solution is a bit complicated, but keep it in mind for later.</p>
+            <p><strong><i>CLICK</i></strong></p>
+          </aside>
           </section>
         </section>
 
@@ -320,8 +328,8 @@ joinGame move = do
           <h2>Motivations</h2>
           <ul>
             <li>Catch bugs at compile time</li>
-            <li>What can be enforced using the type system?</li>
-            <li class="fragment">Annotate types to generate boilerplate code</li>
+            <li>Enforce behavior using types</li>
+            <li class="fragment">Annotate types to help compiler</li>
             <li class="fragment">Functional paradigm</li>
           </ul>
           
