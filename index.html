@@ -79,6 +79,7 @@
           can we describe contracts using code and execute them?</p>
           <p>The answer is: Yes, we can!</p>
           <p>This has been known by computer scientists for a long time, and there exist many formal languages and libraries for specifying, executing and analyzing contracts.</p>
+          <strong><i>CLICK</i></strong>
           </aside>
         </section>
 
@@ -97,11 +98,13 @@ function buy() {
           <aside class="notes">
           <p>Just to give you an intuition, let's take a very common financial contract and try to encode it as a program.</p>
           <p>We'll take a so-called European Option. They allow the holder to buy an asset at a fixed price, but only at a particular time.</p>
+          <p><strong><i>CLICK</i></strong></p>
           <p>Here is some object-oriented pseudocode that encodes these rules. If the holder wants to buy the asset, they simply call the buy function. The function checks the current time and transfers the asset and the money.</p>
-          <p>This is all very well, but there is one major question:<br/>
+          <p>This is all very well, but there is one major question: <strong><i>CLICK</i></strong><br/>
           Who executes this code? On whose computer is it running? Can we trust that person?</p>
           <p>If we should start to codify contracts, it is extremely important that they can't be modified by anyone and that anyone can verify that they are executed correctly.</p>
           <p>The perfect scenario would be if the code could "execute itself", without any possibility of interference.</p>
+          <strong><i>CLICK</i></strong>
           </aside>
         </section>
         
@@ -110,17 +113,19 @@ function buy() {
           <ul>
             <li>Self-enforcing contracts</li>
             <li>Primitive example: vending machines</li>
-            <li class="fragment">Now: smart contract platforms</li>
-            <li class="fragment">Applications: finance, IoT, commerce, computer protocols, gambling, ...</li>
+            <li class="fragment" data-fragment-index="1">Now: smart contract platforms</li>
+            <li class="fragment" data-fragment-index="1">Applications: finance, IoT, commerce, computer protocols, gambling, ...</li>
           </ul>
           <aside class="notes">
           <p>That's what smart contracts are about!</p>
           <p>A primitive precursor to smart contracts can be found in a simple vending machine:<br />
             "If you deposit a coin, you will receive a soda"<br/>
             Of course, this is possible to interfere with, but it is not very easy and as I said, it's just a primitive precursor.</p>
-          <p>The last few years, programmable smart contract platforms have become a thing. They offer developers a programming language to specify arbitrary smart contracts, and then the platforms ensures that they are executed exactly as specified.</p>
+          <p><strong><i>CLICK</i></strong></p>
+          <p>The last few years, programmable smart contract platforms have become a thing. They offer developers a programming language to specify <i>arbitrary</i> smart contracts, and then the platform ensures that they are executed exactly as specified.</p>
           <p>Except the obvious financial applications, this can be used in lots of fields.</p>
-          <p>Just as an example, IBM has experimented with using a smart contract platform as the backbone for the internet of things, which seems very promising. This would allow connected devices to negotiate and decide on their behavior collectively, without relying on any servers.</p>
+          <p>Just as an example, IBM has experimented with using a smart contract platform as the backbone for the internet of things, which seems very promising. This would allow devices to negotiate and decide on their behavior in a kind of device democracy, without relying on any servers.</p>
+          <strong><i>CLICK</i></strong>
           </aside>
         </section>
         
@@ -231,40 +236,54 @@ contract NameRegistry {
 <p>A game of two players. Joining costs exactly 10 ether.</p>
           <pre class="fragment"><code data-trim contenteditable>
 
-playerMove : Int -> EthereumEff (success : Bool)
-playerMove move = do
+joinGame : Int -> EthereumEff (success : Bool)
+joinGame move = do
   pc <- read playerCount
-  if pc < 2
+  if pc < 2 && !value >= 10
     then do
-      write players pc !sender
-      write moves pc move
+      write players pc (!sender,move)
       write playerCount (pc+1)
 
-      pureM True
+      return True
     else do
 
-      pureM False
+      return False
           </code></pre>
           <p class="fragment">Ether is not handled correctly!</p>
-          
+          <aside class="notes">
+            <p>Ok, so now that we have explained the area we're working in, it's time to explain what we've been trying to do.</p>
+            <p>To do this, we will start with showing you a slightly more complicated contract that allows two participants to play the game rock-paper-scissors.</p>
+            <p>They will bet 10 ether each, and the winner takes it all.</p>
+            <p>Just a question beforehand: who here is familiar with purely functional programming?<br/>
+              (Ok, no worries, there shouldn't be too many strange things going on, but I'll make sure to explain the code properly anyway. You don't have to worry about the small details)</p>
+            <p><strong><i>CLICK</i></strong></p>
+            <p>Ok, so this is the function that players call to join the game. For simplicity we represent the moves as 0,1,2, so the function takes an integer and returns true if the player could join the game and false otherwise.</p>
+            <p>As you can see, the return value is not a normal boolean though, but it is something called "EthereumEff" which contains a boolean.<br/>
+            Basically, this says that the function doesn't <i>only</i> take an integer and return a boolean, it could also use the state of the Ethereum system in some way. Basically, the function doesn't return a boolean, but it returns instructions on how to use Ethereum to create a boolean.</p>
+            <p>In this case for example, it has to check how many players are currently in the game. To do this, it has to <i>read</i> a value from the <i>state</i>, which is why the function returns an EthereumEff. The value that is read is saved in 'pc'.</p>
+            <p>Then we use this value to check that the game is not full. We also check that the player sent enough ether. The exclamation mark is not very important.<br/>
+            Just like this function doesn't return a simple boolean, 'value' doesn't return a simple integer. The exclamation mark basically allows us to treat it as if it was a simple integer.</p>
+            <p>So if the game is not full and the player payed enough ether, we should just save the player and its move, and increase the number of players and then return true. Otherwise we just return false.</p>
+            <p>This might seem reasonable, but there are actually a few bugs here. <strong><i>CLICK</i></strong></p>
+            <p>For starters, what happens if the game was already full? Then we return false, but we don't return the fee for joining to the player! So let's fix this!</p>
+          </aside>
           </section>
           <section data-transition="fade-in fade-out">
           <h2>Case study:<br>Rock-paper-scissors</h2>
           <p>Amended version</p>
           <pre><code data-trim contenteditable>
-playerMove : Int -> EthereumEff (success : Bool)
-playerMove move = do
+joinGame : Int -> EthereumEff (success : Bool)
+joinGame move = do
   pc <- read playerCount
-  if pc < 2
+  if pc < 2 && !value >= 10
     then do
-      write players pc !sender
-      write moves pc move
+      write players pc (!sender,move)
       write playerCount (pc+1)
       send (v-10) !sender
-      pureM True
+      return True
     else do
       send v !sender
-      pureM False
+      return False
           </code></pre>
                     <p class="fragment">Better, but the move is still revealed!</p>
           
@@ -314,8 +333,8 @@ playerMove move = do
             &nbsp;
             </p>
             <pre><code>
-playerMove : Int ->
-             EthereumEff (success : Bool)
+joinGame : Int ->
+           EthereumEff (success : Bool)
               
  
  
@@ -332,13 +351,13 @@ playerMove : Int ->
               We start by including ether in the type signature:
             </p>
             <pre><code>
-playerMove : Int -> {auto p : LTE 10 value} ->
-             EthereumEff (success : Bool)
-             { VALUE   = value 
-             ; BALANCE = balance
-             ; TRANS   = trans
-             ; KEEP    = keep
-             }
+joinGame : Int -> {auto p : LTE 10 value} ->
+           EthereumEff (success : Bool)
+           { VALUE   = value 
+           ; BALANCE = balance
+           ; TRANS   = trans
+           ; KEEP    = keep
+           }
             </pre></code>
             <ul>
             <li>Function is undefined for value < 10</li>
@@ -350,13 +369,13 @@ playerMove : Int -> {auto p : LTE 10 value} ->
               We start by including ether in the type signature:
             </p>
             <pre><code>
-playerMove : Int -> {auto p : LTE 10 value} ->
-             EthereumEff (success : Bool)
-             { VALUE   = value 
-             ; BALANCE = balance
-             ; TRANS   = (if success then (value-10) else value)
-             ; KEEP    = (if success then 10         else 0)
-             }
+joinGame : Int -> {auto p : LTE 10 value} ->
+           EthereumEff (success : Bool)
+           { VALUE   = value 
+           ; BALANCE = balance
+           ; TRANS   = (if success then (value-10) else value)
+           ; KEEP    = (if success then 10         else 0)
+           }
             </pre></code>
             <ul>
             <li>Transferred and kept ether defined for all paths</li>
@@ -369,13 +388,13 @@ playerMove : Int -> {auto p : LTE 10 value} ->
               Hide player move
             </p>
             <pre><code>
-playerMove : Commit Int -> {auto p : LTE 10 value} ->
-             EthereumEff (success : Bool)
-             { VALUE   = value 
-             ; BALANCE = balance
-             ; TRANS   = (if success then (value-10) else value)
-             ; KEEP    = (if success then 10         else 0)
-             }
+joinGame : Commit Int -> {auto p : LTE 10 value} ->
+           EthereumEff (success : Bool)
+           { VALUE   = value 
+           ; BALANCE = balance
+           ; TRANS   = (if success then (value-10) else value)
+           ; KEEP    = (if success then 10         else 0)
+           }
             </pre></code>
             <ul>
             <li>Commitments part of the language</li>
@@ -391,18 +410,17 @@ open : Commit a -> a
         <section>
           <h2>Type-correct implementation</h2>
           <pre><code class="Haskell" style="max-height: 500px;">
-playerMove : Commit Int -> {auto p : LTE 10 value} ->
-             EthereumEff (success : Bool)
-             { VALUE   = value 
-             ; BALANCE = balance
-             ; TRANS   = (if success then (value-10) else value)
-             ; KEEP    = (if success then 10         else 0)
-             }
-playerMove {value} move = do
+joinGame : Commit Int -> {auto p : LTE 10 value} ->
+           EthereumEff (success : Bool)
+           { VALUE   = value 
+           ; BALANCE = balance
+           ; TRANS   = (if success then (value-10) else value)
+           ; KEEP    = (if success then 10         else 0)
+           }
+joinGame {value} move = do
   pc <- playerCount
   if pc < 2
-    then do write players pc !sender
-            write moves pc move
+    then do write players pc (!sender,move)
             write playerCount (pc+1)
             keep 10
             send (value-10) !sender
