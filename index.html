@@ -70,21 +70,19 @@
             <li>Possible to automate?</li>
           </ul>
           <aside class="notes">
-          <p>Ok, so contracts are very central to our current society. But what are they?
+          <p>Ok, so contracts are very central to our modern society. But what are they?
           They are essentially written agreements.</p>
-          <p>For example, "if you don't pay your rent, I have the right to kick you our of your apartment"</p>
-          <p>Of course most contracts are much more complicated than that, but at their core, they are more or less logical formulas:<br/>
-          "if x happens, y holds" or "at time x, perform y"</p>
-          <p>As we know, computers are very good at logic, so the question is:<br/>
+          <p>For example, "if you don't pay your rent, I have the right to kick you out of your apartment"</p>
+          <p>Of course most contracts are much more complicated than that, but at their core, they are more or less logical formulae:<br/>
+          "if x happens, y holds" or "at time t, perform z"</p>
+          <p>As we know, computers are very good at logic, so it is very natural to ask:<br/>
           can we describe contracts using code and execute them?</p>
           <p>The answer is: Yes, we can!</p>
           <p>This has been known by computer scientists for a long time, and there exist many formal languages and libraries for specifying, executing and analyzing contracts.</p>
-          <p>A vending machine can be seen as a primitive smart contract:<br />
-            "If you deposit a coin, you will receive a soda"</p>
           </aside>
         </section>
 
-        <section data-transition="slide-in fade-out">
+        <section data-transition="slide-in fade-out" class="jack">
           <h2>Example contract:<br>European option</h2>
           <p>"At time <code>t</code>, party <code>a</code> may buy asset <code>x</code> from party <code>b</code> for price <code>y</code>"</p>
           <pre class="fragment"><code class="hljs" data-trim contenteditable>
@@ -107,7 +105,7 @@ function buy() {
           </aside>
         </section>
         
-        <section>
+        <section class="jack">
           <h2>Smart contracts</h2>
           <ul>
             <li>Self-enforcing contracts</li>
@@ -117,6 +115,9 @@ function buy() {
           </ul>
           <aside class="notes">
           <p>That's what smart contracts are about!</p>
+          <p>A primitive precursor to smart contracts can be found in a simple vending machine:<br />
+            "If you deposit a coin, you will receive a soda"<br/>
+            Of course, this is possible to interfere with, but it is not very easy and as I said, it's just a primitive precursor.</p>
           <p>The last few years, programmable smart contract platforms have become a thing. They offer developers a programming language to specify arbitrary smart contracts, and then the platforms ensures that they are executed exactly as specified.</p>
           <p>Except the obvious financial applications, this can be used in lots of fields.</p>
           <p>Just as an example, IBM has experimented with using a smart contract platform as the backbone for the internet of things, which seems very promising. This would allow connected devices to negotiate and decide on their behavior collectively, without relying on any servers.</p>
@@ -129,18 +130,18 @@ function buy() {
           <h2>Ethereum</h2>
           <h3>A smart contract platform</h3>
           <ul>
-            <li>Peer-to-peer network executing...</li>
-            <li><strong>Arbitrary</strong> rules, leading to a...</li>
-            <li><strong>Globally</strong> accepted state</li>
+            <li><strong><i>Peer-to-peer</i></strong> network executing...</li>
+            <li><strong><i>Arbitrary</i></strong> rules, leading to a...</li>
+            <li><strong><i>Globally</i></strong> accepted state</li>
           </ul>
           <p class="fragment">Result: the rules enforce themselves</p>
           <aside class="notes">
           <p>Ok, so we have looked at the smart contract platform Ethereum.</p>
           <p>It is a peer-to-peer network. Who here is familiar with P2P networks?</p>
-          <p>(Ok, are you familiar with Bittorrent or Bitcoin? Ok, so both of those are P2P netowrks. It essentially means that all computers in the network are equal in terms of network control. There is no central server or anything else that coordinates the network, but all participants communicate directly with each other. Effectively, no particular computer is required for the network to operate. It is just enough that there are <i>some</i> computers in the network.)</p>
+          <p>(Ok, are you familiar with Bittorrent or Bitcoin? Ok, so both of those are P2P netowrks. It essentially means that all computers in the network are equal in terms of network control. There is no central server or anything else that coordinates the network, instead all participants communicate directly with each other. Effectively, no particular computer is required for the network to operate. It is just enough that there are <i>some</i> computers in the network.)</p>
           <p>Ok, so the participants in this P2P network execute arbitrary rules. These rules are the contracts on the platform and can be specified by anyone.</p>
-          <p>After executing the contract, the participants verify that they all got the same result. This result is published for the world to see.</p>
-          <p>This means that a network which no one controls is able to say "<strong>this</strong> is the result of executing these contracts", and if anyone disagrees, it is easy to prove them wrong</p>
+          <p>After executing a contract, the participants verify that they all got the same result. This result is published for the world to see.</p>
+          <p>This means that a network which no one controls is able to say "<strong>this</strong> is the result of executing this contract", and if anyone disagrees, it is easy to prove them wrong</p>
           <p>In summary, the contracts essentially execute themselves, without any need to trust the executor.</p>
           </aside>
         </section>
@@ -224,7 +225,7 @@ contract NameRegistry {
             So, since we are talking about costs: How does that get encoded in the system?
           </aside>
  
-        <section>
+        <section class="jack">
           <section data-transition="slide-in fade-out">
           <h2>Case study:<br>Rock-paper-scissors</h2>
 <p>A game of two players. Joining costs exactly 10 ether.</p>
@@ -267,10 +268,10 @@ playerMove move = do
           </code></pre>
                     <p class="fragment">Better, but the move is still revealed!</p>
           
-</section>
+          </section>
         </section>
 
-        <section>
+        <section class="jack">
           <h2>Common errors</h2>
           <table>
             <thead>
@@ -296,7 +297,7 @@ playerMove move = do
             </tbody>
           </table>
         </section>
-        <section>
+        <section class="jack">
           <h2>Motivations</h2>
           <ul>
             <li>Catch bugs at compile time</li>
