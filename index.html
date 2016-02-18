@@ -180,7 +180,7 @@ function buy() {
           <strong><i>CLICK</i></strong><br />
             <p>* Serpent, which looks like Python<br />
           <strong><i>CLICK</i></strong><br />
-            <p>* And LLL, which stands for Low-Level LISP. Most developers will not use LLL directly. It is used as an intermediary language that Serpent compiles down to.</p>
+            <p>* And LLL, which stands for Low-Level LISP.</p>
 <p></p>
             <p>So with that out of the way, let's look at how a simple contract can look in Solidity.</p>
           </aside>
@@ -189,7 +189,7 @@ function buy() {
           <h2>Example contract</h2>
           <h3>Name registry</h3>
           <p>Written in Solidity</p>
-          <pre class="fragment"><code class="hljs" data-trim contenteditable>
+          <pre><code class="hljs" data-trim contenteditable>
 contract NameRegistry {
   mapping (string => string) names;
   
@@ -224,14 +224,11 @@ contract NameRegistry {
             <li class="fragment">May be sent as part of function call</li>
           </ul>
           <aside class="notes">
-          </aside>
-        </section>
-          <aside class="notes">
             <p>In short, ethereum has an internal token called ether. Each user and contract on Ethereum have a specific balance of Ether. Both users and contracts can send any ether they have to any other contract or user.<br />
           <strong><i>CLICK</i></strong><br />
           <p>Ether can also be included as part of a call to a function in a contract, so contracts can behave differently depending on the amount of ether supplied.</p>
-
           </aside>
+        </section>
  
         <section class="jack">
           <section data-transition="slide-in fade-out">
@@ -271,7 +268,7 @@ joinGame move = do
             <p>The player would lose the ether and not be able to retrieve it. So let's fix this! <strong><i>CLICK</i></strong></p>
           </aside>
           </section>
-          <section class="robert" data-transition="fade-in fade-out">
+          <section class="jack" data-transition="fade-in fade-out">
           <h2>Case study:<br>Rock-paper-scissors</h2>
           <p>Amended version</p>
           <pre><code data-trim contenteditable>
@@ -394,7 +391,7 @@ joinGame : Int -> {auto p : LTE 10 value} ->
             <li>Function is undefined for value < 10</li>
             </ul>
           <aside class="notes">
-            <p>The Ethereum effect can include several optional parameters. In this example, we include:<br />
+            <p>The Ethereum effect has some optional parameters. In this example, we include:<br />
             the amount of incoming ether included for this call,<br />
             the ether balance of the contract, <br />
             the amount of outgoing ether transferred to other contracts during the call,<br />
@@ -424,9 +421,9 @@ joinGame : Int -> {auto p : LTE 10 value} ->
             </ul>
           <aside class="notes">
             <p>OK, so if the player joined the game, the contract should keep 10 ether and if they didn't, it should keep nothing. This is defined here. </p>
-            <p>We also specify that if the player joined, they should get back any amount of ether exceeding 10 and if they didn't, everything they sent should be returned. You can see that here.</p>
-            <p>Again, we are allowed to type check the returned value of the function and even include the result of a function in the type signature. Keep in mind that this check happens at compile time rather than run time.<br />
+            <p>We also specify that if the player joined, they should get back any amount of ether exceeding 10 and if they didn't, everything they sent should be returned. You can see that here.<br/>
             <strong><i>CLICK</i></strong><br />
+            Again, we are allowed to type check the returned value of the function and even include the result of a function in the type signature. Keep in mind that this check happens at compile time rather than run time.<br />
             <p><strong><i>CLICK</i></strong></p>
             <p>If we used this type for the first version of the implementation, it wouldn't compile, while the fixed version would.</p>
           </aside>
@@ -447,8 +444,9 @@ joinGame : Commit Int -> {auto p : LTE 10 value} ->
             </pre></code>
             <ul>
             <li>Commitments part of the language</li>
-            <li class="fragment">Revealing function is generated at compile-time:
-reveal : Int -> Int -> a -> EthereumEff (success : Bool) {}</li>
+            <li class="fragment">Revealing function is generated at compile-time:<pre><code>
+reveal : Int -> Int -> a -> EthereumEff (success : Bool) {}
+</code></pre></li>
             <li class="fragment">Accessed using a library function:<pre><code>
 open : Commit a -> EthereumEff (value : Maybe a) {}
             </code></pre></li>
@@ -512,7 +510,7 @@ joinGame {value} move = do
             <strong><i>CLICK</i></strong><br />
             <p>Since executing code on Ethereum is pretty expensive, we want something with minimal runtime overhead. Lazy evaluation, which Haskell uses by default, is too expensive. Idris uses strict evaluation by default, so we didn't have to hack around laziness in our code generator.<br />
             <strong><i>CLICK</i></strong><br />
-            <p>Finally, anyone who has tried to create a backend for GHC knows that it is not a very friendly API. Idris is designed to be easily extended with new backends and it has a comparatively friendly and well-documented library for this.</p>
+            <p>Finally, anyone who has tried to create a backend for GHC knows that it is not a very friendly API. Idris is designed to be easily extended with new backends<!-- and it has a comparatively friendly and well-documented library for this-->.</p>
             <p>So without further ado, let's look at what we've actually done.</p>
           </aside>
         </section>
@@ -558,12 +556,12 @@ joinGame {value} move = do
 <p></p>
             <p>This is an Idris implementation of the name registry I showed you before. Just a simple key value store.  We have one storage variable, db, to map integers to integers. As you can see, the "get" function uses the Store effect and returns the value stored for the given key.</p>
 <p></p>
-            <p>If we look at the "register" function, we can see that we also use the Environment effect. It takes three parameters, and the first two here are implicit and can be anything. But for the third one, representing the address of the user who initiated the call, we have supplied a fixed value. This means that it will be considered a type error if anyone else tries to register a value. Let's try to compile and run it.</p>
+            <p>If we look at the "register" function, we can see that we also use the Environment effect. It takes three parameters, and the first two here are implicit and can be anything. But for the third one, the address of the user who initiated the call, we have a fixed value. This means that it will be a type error if anyone else tries to register a value. Let's try to compile and run it.</p>
 <p></p>
             <p>$ make namecoin_eio</p>
             <p>$ vim Namecoin.se</p>
 <p></p>
-            <p>Here is the output from our code generator. As I mentioned, this is Serpent code. This will be fed to a Python script that does the final stage of compilation and runs a simulator to debug it.</p>
+            <p>Here is the output from our code generator. This is Serpent. This will be fed to a Python script that does the final stage of compilation and runs a simulator to debug it.</p>
 <p></p>
             <p>$ vim runner.py</p>
 <p></p>
@@ -571,7 +569,7 @@ joinGame {value} move = do
             <p>We read in the serpent source.</p>
             <p>Set up the environment.</p>
             <p>We try get and print a value with the key 1337, which has not been set yet.</p>
-            <p>We set the value</p>
+            <p>We set the value to 42.</p>
             <p>And try to read it again.</p>
 <p></p>
             <p>$ ./runner.py</p>
@@ -582,7 +580,7 @@ joinGame {value} move = do
             <p>$ make namecoin_eio</p>
             <p>$ ./runner.py</p>
 <p></p>
-            <p>Now it doesn't work anymore, since the origin check fails. </p>
+            <p>Now it doesn't work anymore.</p>
 <p></p>
             <p>So how is this actually enforced? Of course the runtime needs some way to know how to pass the proper arguments to "register" and when it can't and should fail.</p>
 <p></p>
@@ -590,7 +588,7 @@ joinGame {value} move = do
 <p></p>
             <p>$ vim Namecoin_EIO</p>
 <p></p>
-            <p>It's kind of verbose and we'll just glance through this. Let's look at "get". Since there are no types to enforce, we can just pass on the value. If we look at "register", you can see that we have to check if the origin is indeed the owner before passing it on to the actual function. This is also where we would pass in any proofs required by the type. Like the one from Rock Paper Scissors where the value had to be at least 10.</p>
+            <p>It's kind of verbose and we'll just glance through this. Let's look at "get". Since there are no types to enforce, we can just pass on the value. If we look at "register", we see that we have to check if the origin is indeed the owner before passing it on to the actual function. This is also where we would pass in any proofs required by the type. Like the one from Rock Paper Scissors where the ether value had to be at least 10.</p>
 <p></p>
             <p>Here you see a list of which functions should be accessible from the outside. Maybe a contract has internal functions that should not be callable directly.</p>
           </aside>
