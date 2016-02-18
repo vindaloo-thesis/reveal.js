@@ -159,7 +159,7 @@ function buy() {
           </ul>
           <p class="fragment">Result: the rules enforce themselves</p>
           <aside class="notes">
-          <p>Ok, so we have looked at the smart contract platform Ethereum.</p>
+          <p>Ok, so <i>we</i> have looked at the smart contract platform Ethereum.</p>
           <p>It is a peer-to-peer network. Is anyone here not familiar with P2P networks?</p>
           <p>(Ok, are you familiar with Bittorrent or Bitcoin? Ok, so both of those are decentralized P2P networks. It essentially means that all computers in the network are equal in terms of network control. There is no central server or anything else that coordinates the network. Instead all participants communicate directly with each other. This means that no particular computer is required for the network to operate. It is just enough that there are <i>some</i> computers in the network.)</p>
           <p>Ok, so the participants in this P2P network execute arbitrary rules. These rules are the contracts on the platform and can be specified by anyone.</p>
@@ -402,7 +402,7 @@ joinGame move = do
           </aside>
         </section>
         <section>
-          <section data-transition="slide-in fade-out" data-center="false" class="robert">
+          <section data-transition="slide-in fade-out" data-center="false" class="robert" style="font-size: 0.75em">
             <h2>Catch errors using types</h2>
             <p>
             &nbsp;
@@ -420,7 +420,7 @@ joinGame : Int ->
             So let's look at an example of how our solution works in practice. We'll modify the type of the joinGame function from rock paper scissors that we saw earlier. We want to keep the same functionality, but include the properties we want to enforce in the type signature. 
           </aside>
           </section>
-          <section data-transition="fade-in fade-out" data-center="false" class="robert">
+          <section data-transition="fade-in fade-out" data-center="false" class="robert" style="font-size: 0.75em">
             <h2>Catch errors using types</h2>
             <p>
               We start by including ether in the type signature:
@@ -448,7 +448,7 @@ joinGame : Int -> {auto p : LTE 10 value} ->
             <p>Now, the type system has made sure that only calls with at least 10 ether will execute this function. Let's see how we can also enforce that the proper amount of ether is kept and transferred.</p>
           </aside>
           </section>
-          <section data-transition="fade-in fade-out" data-center="false" class="robert">
+          <section data-transition="fade-in fade-out" data-center="false" class="robert" style="font-size: 0.75em">
             <h2>Catch errors using types</h2>
             <p>
               We start by including ether in the type signature:
@@ -470,12 +470,12 @@ joinGame : Int -> {auto p : LTE 10 value} ->
             <p>OK, so if the player joined the game, the contract should keep 10 ether and if they didn't, it should keep nothing. This is defined here. </p>
             <p>We also specify that if the player joined, they should get back any amount of ether exceeding 10 and if they didn't, everything they sent should be returned. You can see that here.<br/>
             <strong><i>CLICK</i></strong><br />
-            Again, we are allowed to type check the returned value of the function and even include the result of an expression in the type signature. Keep in mind that this check happens at compile time rather than run time.<br />
+            Again, we are allowed to type check the returned value of the function and even include the result of expressions in the type signature. Keep in mind that this check happens at compile time rather than run time.<br />
             <p><strong><i>CLICK</i></strong></p>
             <p>If we used this type for the first version of the implementation, it wouldn't compile, while the fixed version would.</p>
           </aside>
           </section>
-          <section data-transition="fade-in slide-out" class="robert">
+          <section data-transition="fade-in slide-out" class="robert" style="font-size: 0.75em">
             <h2>Catch errors using types</h2>
             <p>
               Hide player move
@@ -549,13 +549,13 @@ joinGame {value} move = do
           <aside class="notes">
             <p>So, now that you've seen how our solution works, let's get down to how we've implemented it. We chose to use an already existing language called Idris. Has anyone heard of it before?<br />
             <strong><i>CLICK</i></strong><br />
-            <p>For those of you who haven't, maybe you think the code we showed looked like Haskell. Idris is heavily inspired by Haskell, and the syntax is very similar. I'll just run through the main reasons why we think that Idris is a better fit for Ethereum than Haskell.<br />
+            <p>For those of you who haven't, maybe you think the code we showed looked like Haskell. Idris is heavily inspired by Haskell, and the syntax is very similar. I'll just run through the main reasons why we think that Idris is a better fit for Ethereum than Haskell. This is partly because at the start of the project, we were dead set on going from Haskell.<br />
             <strong><i>CLICK</i></strong><br />
             <p>The big thing is dependent types. This is what allowed us to be so expressive in the type signatures.<br />
             <strong><i>CLICK</i></strong><br />
             <p>Side effects are icky in any purely functional language. Idris models this using something called algebraic effects, and they are part of the core library. This allowed us to express interaction with the environment in a natural way.<br />
             <strong><i>CLICK</i></strong><br />
-            <p>Executing code on Ethereum is actually pretty expensive. So we want something with minimal runtime overhead. Haskell uses lazy evaluation, which is pretty expensive. Idris uses strict evaluation by default, so we didn't have to hack around laziness in our code generator.<br />
+            <p>Executing code on Ethereum is actually pretty expensive. So we want something with minimal runtime overhead. Haskell uses lazy evaluation, which is pretty expensive. Idris, on the other hand, uses strict evaluation by default, so we didn't have to hack around laziness in our code generator.<br />
             <strong><i>CLICK</i></strong><br />
             <p>Finally, Idris is designed to be easily extended to target new platforms. We looked quite a bit at GHC, the main Haskell compiler, and it is not very well documented how to do this with Haskell. </p>
             <p>So without further ado, let's look at what we've actually done.</p>
@@ -576,7 +576,7 @@ joinGame {value} move = do
             <li class="fragment">Only works for very simple contracts ATM</li>
           </ul>
           <aside class="notes">
-            <p>Our implementation consists of two main parts: A library of effects and a code generator. We have made three effects that can be used independently. They supply both the type checking and allows contract functions to use effectful operations in the implementation.
+            <p>Our implementation consists of two main parts: A library of effects and a code generator. We have made three effects that can be used independently. They supply both the type checking and allow contract functions to use effectful operations in the implementation.
             <br /><strong><i>CLICK</i></strong><br />
             The first effect is the one we used to handle the flow of ether in the joinGame function.<br />
             <strong><i>CLICK</i></strong><br />
@@ -601,14 +601,14 @@ joinGame {value} move = do
 <p></p>
             <p>$ vim Namecoin.idr</p>
 <p></p>
-            <p>This is an Idris implementation of the name registry I showed you before. Just a simple key value store.  We have one storage variable, db, to map integers to integers. As you can see, the "get" function uses the Store effect and returns the value stored for the given key.</p>
-<p></p>
-            <p>If we look at the "register" function, we can see that we also use the Environment effect. It takes three parameters, and the first two here are implicit and can be anything. But for the third one, the address of the user who initiated the call, we have a fixed value. This means that it will be a type error if anyone else tries to register a value. Let's try to compile and run it.</p>
+            <p>This is an Idris implementation of  a simple key value store. We have one storage variable, db, which is a mapping from integers to integers. If we look at the register function, you can see that we have specified that only the user with a hardcoded address is allowed to register values in the registry. This means that it will be a type error if anyone else tries to register a value. The get function is free for anyone to use. Let's try to compile and run it.</p>
+
 <p></p>
             <p>$ make namecoin_eio</p>
             <p>$ vim Namecoin.se</p>
 <p></p>
-            <p>Here is the output from our code generator. This is Serpent. This will be fed to a Python script that does the final stage of compilation and runs a simulator to debug it.</p>
+            <p>Here is the output from our code generator. This is Serpent. This will be fed to a Python script that does the final stage of the compilation and runs a simulator to debug it.</p>
+            <p>Let's take a lok at that.</p>
 <p></p>
             <p>$ vim runner.py</p>
 <p></p>
@@ -621,7 +621,7 @@ joinGame {value} move = do
 <p></p>
             <p>$ ./runner.py</p>
 <p></p>
-            <p>Looks like it works. Let's see what happens if the origin check would fail by changing the owner address.</p>
+            <p>Looks like it works. Let's see what happens if the sender check fails by changing the owner address.</p>
 <p></p>
             <p>* Change owner address</p>
             <p>$ make namecoin_eio</p>
@@ -635,9 +635,9 @@ joinGame {value} move = do
 <p></p>
             <p>$ vim Namecoin_EIO</p>
 <p></p>
-            <p>It's kind of verbose and we'll just glance through this. Let's look at "get". Since there are no types to enforce, we can just pass on the value. If we look at "register", we see that we have to check if the origin is indeed the owner before passing it on to the actual function. This is also where we would pass in any proofs required by the type. Like the one from Rock Paper Scissors where the ether value had to be at least 10.</p>
+            <p>It's kind of verbose and we'll just glance through this. Let's look at "get". Since there are no types to enforce, this is just boiler plate with the raw values for all effect parameters.  If we look at "register" on the other hand, we see that we have to check if the sender is indeed the owner before passing it on to the actual function. You can see that here. If it fails, nothing should happen. In this context, "nothing" includes returning all included ether to the sender. This is also where we would pass in any proofs required by the type. Like the one from Rock Paper Scissors where the ether value had to be at least 10.</p>
 <p></p>
-            <p>Here you see a list of which functions should be accessible from the outside. Maybe a contract has internal functions that should not be callable directly.</p>
+            <p>Here you see a list of which functions should be accessible from the outside. </p>
           </aside>
         </section>
         <section>
@@ -649,7 +649,7 @@ joinGame {value} move = do
           </ul>
         </p>
         <aside class="notes">
-          <p>Let's wrap things up. In summary, we have showed how we can use algebraic effects in combination with dependent types to specify in detail how a program is intended to work and catch bugs at compile time.<br />
+          <p>Let's wrap things up. In summary, we have showed how we can use algebraic effects in combination with dependent types to specify in detail how a smart contract is intended to work and catch bugs at compile time.<br />
             <strong><i>CLICK</i></strong><br />
             <p>Knowing so much about a programs intended behaviour at compile time also allows us to generate a significant amount of boilerplate code.</p>
         </aside>
