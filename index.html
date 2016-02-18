@@ -218,37 +218,38 @@ function buy() {
         </section>
         <section class="jack" data-transition="slide-in fade-out">
           <h2>Example contract</h2>
-          <h3>Name registry</h3>
+          <h3>Bank</h3>
           <p>Written in Solidity</p>
           <pre><code class="hljs" data-trim contenteditable>
-contract KeyValueStore {
-  mapping (int => int) store;
+contract Bank {
+  mapping (address => uint) balances;
   
-  function register(int key, int value) returns boolean {
-    if(msg.sender == 598707698970987908 && msg.value >= 10) {
-      store[key] = value;
-      return true;
-    }
-    return false;
+  function deposit() {
+    balances[msg.sender] += msg.value;
   }
   
-  function get(int key) returns int {
-    return store[key];
+  function withdraw(uint amount) returns (bool) {
+    if(amount <= balances[msg.sender]) {
+      msg.sender.send(amount);
+      balances[msg.sender] -= amount;
+      return true;
+    }
+
+    return false;
   }
 }
           </code></pre>
           <p class="fragment">Everyone executes this!</p>
           <aside class="notes">
-            <p>This is a simple key value store</p>
-            <p>All contracts have a persistent data storage that they can use to store arbitrary data. In this case, we declare a mapping from keys to values. Both the keys and the values are simple integers.</p>
-            <p>We only want a single person to be allowed to register values, which we check here by comparing the sender to a hard-coded address.<br/>
-              Also, to register a value has a price. Here we say that the price is 10.<br/>
-              And anyone can get values.<br />
+            <p>This is a simple contract that acts as a bank</p>
+            <p>All contracts have a persistent data storage that they can use to store arbitrary data. In this case, we declare a mapping from addresses to their balances. Addresses are unique identifiers of users and contracts on Ethereum.</p>
+            <p>So if someone wants to make a deposit, we access their address using 'msg.sender', and use it to<br/>increase their balance with the amount that they sent us. I'll explain exactly <i>what it is</i> they sent us soon, just see it as some money-like thing for now. We access it using 'msg.value'.<br />
+            And if anyone wants to 'withdraw' an 'amount', we check that they're not trying to overdraw, and then we send that amount to them and return true.
           <strong><i>CLICK</i></strong><br />
-            <p>Remember that in Ethereum, we don't need to trust the executor: We can say that EVERYONE executes this. So this is effectively like a kind of DNS that no one controls. ...Even though the rules are a bit strange for a DNS...</p>
-            <p>We could change the rules though. We could allow anyone to register, but only allow changes by the creator of each key. We could also add rules like expiry time, renewal costs, and so on.</p>
+            <p>Remember that in Ethereum, we don't need to trust the executor: We can say that EVERYONE executes this. So this is effectively like a bank that no one controls, even though it's extremely simple.</p>
+            <p>We could add rules though. We could require a fee for setting up an account, or loan a fraction of the contract's balance to other users or contracts and so on. You just have to figure out the business logic.</p>
 <p></p>
-            <p>But anyway, I mentioned prices and costs, so let's take a quick look at how that is modeled in Ethereum.</p>
+            <p>But anyway, I've talked about this money-like thing for a while now, so it's time to explain what it is.</p>
           </aside>
         </section>
         <section class="jack">
