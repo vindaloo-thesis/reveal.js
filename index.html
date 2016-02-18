@@ -526,24 +526,39 @@ joinGame {value} move = do
             <li class="fragment">Only works for very simple contracts ATM</li>
           </ul>
           <aside class="notes">
+            Our implementation consists of two main parts: A library of effects and a code generator. We have made three effects that can be used independently. They supply both the type checking and allows contract functions to use effectful operations in the implementation.
+            <strong><i>CLICK</i></strong>
+            The first effect, ETH, is the first we used to handle the flow of ether in the joinGame function.
+            <strong><i>CLICK</i></strong>
+            ENV allows us to get things from the environment. Stuff like the addresses of the sender and the contract, or the current time.
+            <strong><i>CLICK</i></strong>
+            STORE allows us to read and write from the persistant data store that each contract has.
+            The EthereumEff we saw before is syntactic sugar which includes all three. 
+            That about the library. Let's talk about the code generator.
+            <strong><i>CLICK</i></strong>
+            As I said, we use the Idris compiler API as a library to get an intermidiate abstract syntax tree representation of the contract as input.
+            <strong><i>CLICK</i></strong>
+            We actually don't output Ethereum byte code directly, but use the Pythonl-like Serpent as output language. The Serpent coompiler can then be used for the final step.
+            <strong><i>CLICK</i></strong>
+            The current version of the code generator is not complete. All the type checking works as intended, but it only generates working code for a subset of contracts. Let's look at how this is used in practice and see if it works.
           </aside>
         </section>
 
         <section class="robert">
           <h2>Demo time!</h2>
           <aside class="notes">
-            We'll now show you how our impkementation can be used. We'll use our code generator to compile a simple contract from Idris to Serpent and then run it on a simulated version of the Ethereum system supplied with Serpent. 
+            I'll use our code generator to compile a simple contract from Idris to Serpent and then run it on a simulated version of the Ethereum system supplied with Serpent. 
 
             $ vim Namecoin.idr
 
-            This is just a simple key value store.  We have one storage variable, db, to map integers to integers. As you can see, the "get" function uses the Store effect and returns the value stored for the given key.
+            This is an Idris implementation of the name registry I showed you before. Just a simple key value store.  We have one storage variable, db, to map integers to integers. As you can see, the "get" function uses the Store effect and returns the value stored for the given key.
 
             If we look at the "register" function, we can see that we also use the Environment effect. It takes three parameters, and the first two here are implicit and can be anything. But for the third one, representing the address of the user who initiated the call, we have supplied a fixed value. This means that it will be considered a type error if anyone else tries to register a value. Let's try to compile and run it.
 
             $ make namecoin_eio
             $ vim Namecoin.se
 
-            Here is the output from our code generator. This is Serpent, one of the existing contract languages for Ethereum that we mentioned before. This will be fed to a Python script that does the final stage of compilation and runs a simulator to debug it.
+            Here is the output from our code generator. As I mentioned, this is Serpent code. This will be fed to a Python script that does the final stage of compilation and runs a simulator to debug it.
 
             $ vim runner.py
 
@@ -556,7 +571,7 @@ joinGame {value} move = do
 
             $ ./runner.py
 
-            It works as intended. Let's try to see what happens if the origin check would fail by changing the owner address.
+            Looks like it works. Let's see what happens if the origin check would fail by changing the owner address.
 
             * Change owner address
             $ make namecoin_eio
@@ -566,22 +581,28 @@ joinGame {value} move = do
 
             So how is this actually enforced? Of course the runtime needs some way to know how to pass the proper arguments to "register" and when it can't and should fail.
 
-            We do this using something we call wrapper functions. This is something that should be possible to automatically generate, but in our current implementation the developer has to write these themselves. Let's have a look.
+            We do this using something we call wrapper functions. They should be possible to automatically generate, but right now you'd have to write them yourself. Let's have a look.
 
             $ vim Namecoin_EIO
 
             It's kind of verbose and we'll just glance through this. Let's look at "get". Since there are no types to enforce, we can just pass on the value. If we look at "register", you can see that we have to check if the origin is indeed the owner before passing it on to the actual function. This is also where we would pass in any proofs required by the type. Like the one from Rock Paper Scissors where the value had to be at least 10.
+
+            Here you see a list of which functions should be accessible from the outside. Maybe a contract has internal functions that should not be callable directly.
           </aside>
         </section>
         <section>
           <h2>Summary</h2>
-<p>An expressive type-system can...
+        <p>An expressive type-system can...
           <ul>
             <li>Catch large classes of errors at compile-time</li>
             <li class="fragment">Generate boiler-plate code</li>
           </ul>
-</p>
-          
+        </p>
+        <aside class="notes">
+          Let's wrap things up. In summary, we have showed how we can use algebraic effects in combination with dependent types to specify in detail how a program is intended to work and catch bugs at compile time.
+            <strong><i>CLICK</i></strong>
+            Knowing so much about a programs intended behaviour at compile time also allows us to generate a significant amount of boilerplate code.
+        </aside>
         </section>
         <section>
         <h2>Work in progress</h2>
@@ -590,9 +611,10 @@ joinGame {value} move = do
           <li>Lots of future work</li>
          </ul>
           
-
+        <aside class="notes">
+          So, we have laid down the theory and design for an implementation of this applying Idris to Ethereum. The implementation itself is still just a proof of concept and especially the code generator will probably have to be rewritten from scratch before it's ready for production use. We hope that someone will pick ball and build upon our work.
+        </aside>
         </section>
-
         <section style="text-align: left;">
           <h1>THANK YOU</h1>
             <p> - <a href="https://github.com/vindaloo-thesis/examples">https://github.com/vindaloo-thesis/idris-se</a> </p>
