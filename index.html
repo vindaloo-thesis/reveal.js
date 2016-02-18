@@ -325,8 +325,13 @@ joinGame move = do
           </table>
           <aside class="notes">
             <p>Ok, so we have showed you two classes of errors that are common for smart contract developers to make.</p>
+<<<<<<< HEAD
             <p>The first was that ether may not be handled properly, the second was to upload secret information.</p>
             <p>Our thesis is that these problems can be solved at the language level by an extensive type system.</p>
+=======
+            <p>The first was that ether may not be handled properly, the second was that secret information is shared publicly.</p>
+            <p>Our thesis is that these problems can be solved at the language level with an extensive type system.</p>
+>>>>>>> 862dd4c63ef25ea635193a70d50d805d9db29251
             <p><strong><i>CLICK</i></strong></p>
             <p>In particular, we will show you how the type system can encode ether flow.<br/>
             We will also show you why type annotations is a natural way to use cryptographic schemes that are built into the compiler.</p>
@@ -354,7 +359,7 @@ joinGame move = do
           </aside>
         </section>
         <section>
-          <section data-transition="slide-in fade-out" data-center="false">
+          <section data-transition="slide-in fade-out" data-center="false" class="robert">
             <h2>Catch errors using types</h2>
             <p>
             &nbsp;
@@ -369,10 +374,10 @@ joinGame : Int ->
              
             </pre></code>
           <aside class="notes">
-            Mention effects, that types can be parametrized by values, as in success.
+            So let's look at an example of how our solution works in practice by modifying the type to include the invariants we want to enforce while keeping the same functionality. 
           </aside>
           </section>
-          <section data-transition="fade-in fade-out" data-center="false">
+          <section data-transition="fade-in fade-out" data-center="false" class="robert">
             <h2>Catch errors using types</h2>
             <p>
               We start by including ether in the type signature:
@@ -389,8 +394,18 @@ joinGame : Int -> {auto p : LTE 10 value} ->
             <ul>
             <li>Function is undefined for value < 10</li>
             </ul>
+          <aside class="notes">
+            The Ethereum effect can include several optional parameters. In this example, we include
+            the amount of incoming ether included in the call,
+            the ether balance of the contract, 
+            the amount of outgoing ether transferred to other contracts during the call,
+            and the amount of incoming ether kept in the contract during the call.
+            As Jack mentioned, we want to make sure that the player can only join the game if they pay the fee of 10 ether. As you can see here, we take an additional parameter p that is a proof that value is at least 10. LTE stands for less-or-equal and the brackets mean that the parameter is implicit and should be inferred when possible.
+            You can also see that we are actually including the VALUE of the parameter value in the type signature, not just its type. We can do this because our language supports something called dependent types, in case you have heard of that before.
+            Now the type system has made sure that only calls with at least 10 ether can call this function. Let's see how we can also enforce that the proper amount of ether is kept and transferred.
+          </aside>
           </section>
-          <section data-transition="fade-in fade-out" data-center="false">
+          <section data-transition="fade-in fade-out" data-center="false" class="robert">
             <h2>Catch errors using types</h2>
             <p>
               We start by including ether in the type signature:
@@ -405,11 +420,18 @@ joinGame : Int -> {auto p : LTE 10 value} ->
            }
             </pre></code>
             <ul>
-            <li>Transferred and kept ether defined for all paths</li>
-            <li class="fragment">Previous implementation wouldn't type check</li>
+            <li class="fragment">Transferred and kept ether defined for all paths</li>
+            <li class="fragment">First implementation wouldn't type check</li>
             </ul>
+          <aside class="notes">
+            OK, so if the player joined the game, the contract should keep 10 ether and if they didn't, it should keep nothing. This is defined here. 
+            We also specify that if the player joined, they should get back any amount of ether exceeding 10 and if they didn't, everything they sent should be returned. You can see that here.
+            Again, we are allowed to type check the returned value of the function and even include the result of a function in the type signature. Keep in mind that this check happens at compile time rather than run time to see that the implementation works as specified.
+            <strong><i>CLICK</i></strong>
+            If we used this type for the first version of the implementation, it wouldn't compile, while the fixed version would.
+          </aside>
           </section>
-          <section data-transition="fade-in slide-out">
+          <section data-transition="fade-in slide-out" class="robert">
             <h2>Catch errors using types</h2>
             <p>
               Hide player move
@@ -431,7 +453,8 @@ open : Commit a -> a
             </code></pre></li>
             <li class="fragment">Not implemented</li>
             </ul>
-            
+          <aside class="notes">
+          </aside>
           </section>
         </section>
         <section>
