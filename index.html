@@ -531,17 +531,32 @@ joinGame {value} move = do
             <li class="fragment">Only works for very simple contracts ATM</li>
           </ul>
           <aside class="notes">
+            Our implementation consists of two main parts: A library of effects and a code generator. We have made three effects that can be used independently. They supply both the type checking and allows contract functions to use effectful operations in the implementation.
+            <strong><i>CLICK</i></strong>
+            The first effect, ETH, is the first we used to handle the flow of ether in the joinGame function.
+            <strong><i>CLICK</i></strong>
+            ENV allows us to get things from the environment. Stuff like the addresses of the sender and the contract, or the current time.
+            <strong><i>CLICK</i></strong>
+            STORE allows us to read and write from the persistant data store that each contract has.
+            The EthereumEff we saw before is syntactic sugar which includes all three. 
+            That about the library. Let's talk about the code generator.
+            <strong><i>CLICK</i></strong>
+            As I said, we use the Idris compiler API as a library to get an intermidiate abstract syntax tree representation of the contract as input.
+            <strong><i>CLICK</i></strong>
+            We actually don't output Ethereum byte code directly, but use the Pythonl-like Serpent as output language. The Serpent coompiler can then be used for the final step.
+            <strong><i>CLICK</i></strong>
+            The current version of the code generator is not complete. All the type checking works as intended, but it only generates working code for a subset of contracts. Let's look at how this is used in practice and see if it works.
           </aside>
         </section>
 
         <section class="robert">
           <h2>Demo time!</h2>
           <aside class="notes">
-            We'll now show you how our impkementation can be used. We'll use our code generator to compile a simple contract from Idris to Serpent and then run it on a simulated version of the Ethereum system supplied with Serpent. 
+            I'll use our code generator to compile a simple contract from Idris to Serpent and then run it on a simulated version of the Ethereum system supplied with Serpent. 
 
             $ vim Namecoin.idr
 
-            This is just a simple key value store.  We have one storage variable, db, to map integers to integers. As you can see, the "get" function uses the Store effect and returns the value stored for the given key.
+            This is an Idris implementation of the name registry I showed you before. Just a simple key value store.  We have one storage variable, db, to map integers to integers. As you can see, the "get" function uses the Store effect and returns the value stored for the given key.
 
             If we look at the "register" function, we can see that we also use the Environment effect. It takes three parameters, and the first two here are implicit and can be anything. But for the third one, representing the address of the user who initiated the call, we have supplied a fixed value. This means that it will be considered a type error if anyone else tries to register a value. Let's try to compile and run it.
 
