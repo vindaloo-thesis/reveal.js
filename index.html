@@ -143,10 +143,11 @@ function buy() {
           <aside class="notes">
           <p>Ok, so we have looked at the smart contract platform Ethereum.</p>
           <p>It is a peer-to-peer network. Who here is familiar with P2P networks?</p>
-          <p>(Ok, are you familiar with Bittorrent or Bitcoin? Ok, so both of those are P2P netowrks. It essentially means that all computers in the network are equal in terms of network control. There is no central server or anything else that coordinates the network, instead all participants communicate directly with each other. Effectively, no particular computer is required for the network to operate. It is just enough that there are <i>some</i> computers in the network.)</p>
+          <p>(Ok, are you familiar with Bittorrent or Bitcoin? Ok, so both of those are decentralized P2P networks. It essentially means that all computers in the network are equal in terms of network control. There is no central server or anything else that coordinates the network. Instead all participants communicate directly with each other. This means that no particular computer is required for the network to operate. It is just enough that there are <i>some</i> computers in the network.)</p>
           <p>Ok, so the participants in this P2P network execute arbitrary rules. These rules are the contracts on the platform and can be specified by anyone.</p>
           <p>After executing a contract, the participants verify that they all got the same result. This result is published for the world to see.</p>
           <p>This means that a network which no one controls is able to say "<strong>this</strong> is the result of executing this contract", and if anyone disagrees, it is easy to prove them wrong</p>
+          <p><strong><i>CLICK</i></strong></p>
           <p>In summary, the contracts essentially execute themselves, without any need to trust the executor.</p>
           </aside>
         </section>
@@ -171,15 +172,17 @@ function buy() {
             <li class="fragment">LLL ≈ LISP</li>
           </ul>
           <aside class="notes">
-            All contracts on Ethereum run on a virtual machine, called the EVM. The EVM is Turing complete, so any business logic can be encoded as a smart contract. Anyone can upload contracts and anyone can call any uploaded contract.
-
-            Contracts are stored in a custom binary format, so if you want to write Ethereum smart contracts you will have to use a specific language. There currently exist three such languages:
-
-            * Solidity, which is the most mainstream and mature one. The syntax is very similar to JavaScript.
-            * Serpent, which looks like Python
-            * And LLL, which stands for Low-Level LISP. Most developers will not use LLL directly. It is used as an intermediary language that Serpent compiles down to.
-
-            So with that out of the way, let's look at how a simple contract can look in Solidity.
+            <p>All contracts on Ethereum run on a virtual machine, called the EVM. The EVM is Turing complete, so any business logic can be encoded as a smart contract. Anyone can upload contracts and anyone can call any uploaded contract.</p>
+<p></p>
+            <p>Contracts are stored in a custom binary format, so if you want to write Ethereum smart contracts you will have to use a specific language. There currently exist three such languages:</p>
+          <p><strong><i>CLICK</i></strong></p>
+            <p>* Solidity, which is the most mainstream and mature one. The syntax is very similar to JavaScript.</p>
+          <p><strong><i>CLICK</i></strong></p>
+            <p>* Serpent, which looks like Python</p>
+          <p><strong><i>CLICK</i></strong></p>
+            <p>* And LLL, which stands for Low-Level LISP. Most developers will not use LLL directly. It is used as an intermediary language that Serpent compiles down to.</p>
+<p></p>
+            <p>So with that out of the way, let's look at how a simple contract can look in Solidity.</p>
           </aside>
         </section>
         <section class="robert" data-transition="slide-in fade-out">
@@ -205,11 +208,12 @@ contract NameRegistry {
           </code></pre>
           <p class="fragment">Everyone executes this!</p>
           <aside class="notes">
-            In this particular case, we only want a single person to be allowed to register names, but anyone should be able to get them. Remember that in Ethereum, we don't need to trust the executor: We can say that EVRYONE executes this. 
-
-            We could add rules like allowing anyone to register, but only allow changes by the initial owners of those names. We could also add rules like expiry time, renewal costs, and so on.
-
-            So, since we are talking about costs: How does that get modeled in Ethereum?
+            <p>This is a simple key value store</p>
+            <p>In this particular case, we only want a single person to be allowed to register names, but anyone should be able to get them. Remember that in Ethereum, we don't need to trust the executor: We can say that EVERYONE executes this. </p>
+          <p><strong><i>CLICK</i></strong></p>
+            <p>We could add rules like: allowing anyone to register, but only allow changes by the creator of each key. We could also add rules like expiry time, renewal costs, and so on.</p>
+<p></p>
+            <p>So, since we are talking about costs, let's look at how that is modeled in Ethereum.</p>
           </aside>
         </section>
         <section class="robert">
@@ -223,11 +227,10 @@ contract NameRegistry {
           </aside>
         </section>
           <aside class="notes">
-            In this particular case, we only want a single person to be allowed to register names, but anyone should be able to get them. Remember that in Ethereum, we don't need to trust the executor: We can say that EVRYONE executes this. 
+            <p>In short, ethereum has an internal token called ether. Each user and contract on Ethereum have a specific balance of Ether. Both users and contracts can send any ether they have to any other contract or user.</p>
+          <p><strong><i>CLICK</i></strong></p>
+          <p>Ether can also be included as part of a call to a function in a contract, so contracts can behave differently depending on the amount of ether supplied.</p>
 
-            We could add rules like allowing anyone to register, but only allow changes by the initial owners of those names. We could also add rules like expiry time, renewal costs, and so on.
-
-            So, since we are talking about costs: How does that get encoded in the system?
           </aside>
  
         <section class="jack">
@@ -369,7 +372,7 @@ joinGame : Int ->
              
             </pre></code>
           <aside class="notes">
-            So let's look at an example of how our solution works in practice by modifying the type to include the invariants we want to enforce while keeping the same functionality. 
+            So let's look at an example of how our solution works in practice. We'll modify the type to include the invariants we want to enforce and keep the same functionality. 
           </aside>
           </section>
           <section data-transition="fade-in fade-out" data-center="false" class="robert">
@@ -390,14 +393,14 @@ joinGame : Int -> {auto p : LTE 10 value} ->
             <li>Function is undefined for value < 10</li>
             </ul>
           <aside class="notes">
-            The Ethereum effect can include several optional parameters. In this example, we include
-            the amount of incoming ether included in the call,
-            the ether balance of the contract, 
-            the amount of outgoing ether transferred to other contracts during the call,
-            and the amount of incoming ether kept in the contract during the call.
-            As Jack mentioned, we want to make sure that the player can only join the game if they pay the fee of 10 ether. As you can see here, we take an additional parameter p that is a proof that value is at least 10. LTE stands for less-or-equal and the brackets mean that the parameter is implicit and should be inferred when possible.
-            You can also see that we are actually including the VALUE of the parameter value in the type signature, not just its type. We can do this because our language supports something called dependent types, in case you have heard of that before.
-            Now the type system has made sure that only calls with at least 10 ether can call this function. Let's see how we can also enforce that the proper amount of ether is kept and transferred.
+            <p>The Ethereum effect can include several optional parameters. In this example, we include:<br />
+            the amount of incoming ether included for this call,<br />
+            the ether balance of the contract, <br />
+            the amount of outgoing ether transferred to other contracts during the call,<br />
+            and the amount of incoming ether that's kept in the contract after the call.</p>
+            <p>As Jack mentioned, we want to make sure that the player can only join the game if they pay the fee of 10 ether. As you can see here, we take an additional parameter p. P is a proof that value is at least 10. LTE stands for less-or-equal and these brackets mean that p is implicit and should be inferred when possible.</p>
+            <p>You can also see that we are actually including the VALUE of the parameter value in the type signature, not just its type. We can do this because our language supports something called dependent types, in case you have heard of that before.</p>
+            <p>Now, the type system has made sure that only calls with at least 10 ether will execute this function. Let's see how we can also enforce that the proper amount of ether is kept and transferred.</p>
           </aside>
           </section>
           <section data-transition="fade-in fade-out" data-center="false" class="robert">
@@ -419,11 +422,12 @@ joinGame : Int -> {auto p : LTE 10 value} ->
             <li class="fragment">First implementation wouldn't type check</li>
             </ul>
           <aside class="notes">
-            OK, so if the player joined the game, the contract should keep 10 ether and if they didn't, it should keep nothing. This is defined here. 
-            We also specify that if the player joined, they should get back any amount of ether exceeding 10 and if they didn't, everything they sent should be returned. You can see that here.
-            Again, we are allowed to type check the returned value of the function and even include the result of a function in the type signature. Keep in mind that this check happens at compile time rather than run time to see that the implementation works as specified.
-            <strong><i>CLICK</i></strong>
-            If we used this type for the first version of the implementation, it wouldn't compile, while the fixed version would.
+            <p>OK, so if the player joined the game, the contract should keep 10 ether and if they didn't, it should keep nothing. This is defined here. </p>
+            <p>We also specify that if the player joined, they should get back any amount of ether exceeding 10 and if they didn't, everything they sent should be returned. You can see that here.</p>
+            <p>Again, we are allowed to type check the returned value of the function and even include the result of a function in the type signature. Keep in mind that this check happens at compile time rather than run time.</p>
+            <p><strong><i>CLICK</i></strong></p>
+            <p><strong><i>CLICK</i></strong></p>
+            <p>If we used this type for the first version of the implementation, it wouldn't compile, while the fixed version would.</p>
           </aside>
           </section>
           <section data-transition="fade-in slide-out" class="robert">
@@ -450,13 +454,13 @@ open : Commit a -> EthereumEff (value : Maybe a) {}
             <li class="fragment">Not implemented</li>
             </ul>
           <aside class="notes">
-            Now for the last problem that Jack mentioned; how to hide the player's move from being publicly read. This is done using a cryptographic construction called a commitment - basically, it means that a player can commit to a specific value without that value being known until they choose to reveal it. If we use the type Commit here, we signify to the compiler that it should generate the necessary code for this. 
-            <strong><i>CLICK</i></strong>
-            The library supplies two functions - the first takes in the necessary parameters to reveal the value that the player commited to. After this is run, the value can be used in the contract.
-            <strong><i>CLICK</i></strong>
-            The second function, open, returns the commited value if it has been revealed.
-            <strong><i>CLICK</i></strong>
-            Unfortunately, this is not yet part of our implementation, so this last part is not usable in practice yet. But it should not be too hairy to add.
+            <p>Now for the last problem that Jack mentioned; how to hide the player's move from being publicly read. This is done using a cryptographic construction called a commitment - basically, it means that a player can commit to a specific value without that value being known until they choose to reveal it. If we use the type Commit here, we signify to the compiler that it should generate the necessary code for this. </p>
+            <p><strong><i>CLICK</i></strong></p>
+            <p>The library supplies two functions - the first takes in the necessary parameters to reveal the value that the player commited to. After this is run, the value can be used in the contract.</p>
+            <p><strong><i>CLICK</i></strong></p>
+            <p>The second function, open, returns the commited value if it has been revealed.</p>
+            <p><strong><i>CLICK</i></strong></p>
+            <p>Unfortunately, this is not yet part of our implementation, so this last part is not usable in practice yet. But it should not be too hairy to add.</p>
           </aside>
           </section>
         </section>
@@ -497,18 +501,18 @@ joinGame {value} move = do
             <li class="fragment">Pluggable backends</li>
           </ul>
           <aside class="notes">
-            So, now that you've seen how our solution works, let's get down to how this is implemented. We chose to use an already existing language called Idris. Has anyone heard of it before?
-            <strong><i>CLICK</i></strong>
-            For those of you who haven't maybe you think the code we showed looked like Haskell. Idris is heavily inspired by Haskell, and the syntax is very similar. I'll just run through the main reasons why we think that Idris is a better fit for Ethereum than Haskell.
-            <strong><i>CLICK</i></strong>
-            The big thing is dependent effects. This is what allowed us to be so expressive in the type signatures.
-            <strong><i>CLICK</i></strong>
-            Side effects are icky in any purely functional language. Idris models this using something called algebraic effects, something that is part of the core library. This alowed us to express interaction with the environment in a natural way.
-            <strong><i>CLICK</i></strong>
-            Since executing code on Ethereum is currently pretty expensive, we want something with minimal runtime overhead. Lazy evaluation, which Haskell uses by default, is too expensive. Idris uses strict evaluation by default, so we didn't have to hack around laziness in our code generator.
-            <strong><i>CLICK</i></strong>
-            Finally, anyone who has tried to create a backend for GHC knows that it is not a very friendly API. Idris is designed to be easily extended with new backends and it has a comparatively friendly and well-documented library for this.
-            Now, let's look at what we've actually done.
+            <p>So, now that you've seen how our solution works, let's get down to how we've implemented it. We chose to use an already existing language called Idris. Has anyone heard of it before?</p>
+            <p><strong><i>CLICK</i></strong></p>
+            <p>For those of you who haven't, maybe you think the code we showed looked like Haskell. Idris is heavily inspired by Haskell, and the syntax is very similar. I'll just run through the main reasons why we think that Idris is a better fit for Ethereum than Haskell.</p>
+            <p><strong><i>CLICK</i></strong></p>
+            <p>The big thing is dependent types. This is what allowed us to be so expressive in the type signatures.</p>
+            <p><strong><i>CLICK</i></strong></p>
+            <p>Side effects are icky in any purely functional language. Idris models this using something called algebraic effects, and they are part of the core library. This allowed us to express interaction with the environment in a natural way.</p>
+            <p><strong><i>CLICK</i></strong></p>
+            <p>Since executing code on Ethereum is pretty expensive, we want something with minimal runtime overhead. Lazy evaluation, which Haskell uses by default, is too expensive. Idris uses strict evaluation by default, so we didn't have to hack around laziness in our code generator.</p>
+            <p><strong><i>CLICK</i></strong></p>
+            <p>Finally, anyone who has tried to create a backend for GHC knows that it is not a very friendly API. Idris is designed to be easily extended with new backends and it has a comparatively friendly and well-documented library for this.</p>
+            <p>So without further ado, let's look at what we've actually done.</p>
           </aside>
         </section>
         <section class="robert">
@@ -526,68 +530,68 @@ joinGame {value} move = do
             <li class="fragment">Only works for very simple contracts ATM</li>
           </ul>
           <aside class="notes">
-            Our implementation consists of two main parts: A library of effects and a code generator. We have made three effects that can be used independently. They supply both the type checking and allows contract functions to use effectful operations in the implementation.
-            <strong><i>CLICK</i></strong>
-            The first effect, ETH, is the first we used to handle the flow of ether in the joinGame function.
-            <strong><i>CLICK</i></strong>
-            ENV allows us to get things from the environment. Stuff like the addresses of the sender and the contract, or the current time.
-            <strong><i>CLICK</i></strong>
-            STORE allows us to read and write from the persistant data store that each contract has.
-            The EthereumEff we saw before is syntactic sugar which includes all three. 
-            That about the library. Let's talk about the code generator.
-            <strong><i>CLICK</i></strong>
-            As I said, we use the Idris compiler API as a library to get an intermidiate abstract syntax tree representation of the contract as input.
-            <strong><i>CLICK</i></strong>
-            We actually don't output Ethereum byte code directly, but use the Pythonl-like Serpent as output language. The Serpent coompiler can then be used for the final step.
-            <strong><i>CLICK</i></strong>
-            The current version of the code generator is not complete. All the type checking works as intended, but it only generates working code for a subset of contracts. Let's look at how this is used in practice and see if it works.
+            <p>Our implementation consists of two main parts: A library of effects and a code generator. We have made three effects that can be used independently. They supply both the type checking and allows contract functions to use effectful operations in the implementation.</p>
+            <p><strong><i>CLICK</i></strong></p>
+            <p>The first effect, ETH, is the first we used to handle the flow of ether in the joinGame function.</p>
+            <p><strong><i>CLICK</i></strong></p>
+            <p>ENV allows us to get things from the environment. Stuff like the addresses of the sender and the contract, or the current time.</p>
+            <p><strong><i>CLICK</i></strong></p>
+            <p>STORE allows us to read and write from the persistant data store that each contract has.</p>
+            <p>The EthereumEff we saw before is syntactic sugar which includes all three. </p>
+            <p>That about the library. Let's talk about the code generator.</p>
+            <p><strong><i>CLICK</i></strong></p>
+            <p>As I said, we use the Idris compiler API as a library to get an intermidiate abstract syntax tree representation of the contract as input.</p>
+            <p><strong><i>CLICK</i></strong></p>
+            <p>We actually don't output Ethereum byte code directly, but use the Pythonl-like Serpent as output language. The Serpent coompiler can then be used for the final step.</p>
+            <p><strong><i>CLICK</i></strong></p>
+            <p>The current version of the code generator is not complete. All the type checking works as intended, but it only generates working code for a subset of contracts. Let's look at how this is used in practice and see if it works.</p>
           </aside>
         </section>
 
         <section class="robert">
           <h2>Demo time!</h2>
           <aside class="notes">
-            I'll use our code generator to compile a simple contract from Idris to Serpent and then run it on a simulated version of the Ethereum system supplied with Serpent. 
-
-            $ vim Namecoin.idr
-
-            This is an Idris implementation of the name registry I showed you before. Just a simple key value store.  We have one storage variable, db, to map integers to integers. As you can see, the "get" function uses the Store effect and returns the value stored for the given key.
-
-            If we look at the "register" function, we can see that we also use the Environment effect. It takes three parameters, and the first two here are implicit and can be anything. But for the third one, representing the address of the user who initiated the call, we have supplied a fixed value. This means that it will be considered a type error if anyone else tries to register a value. Let's try to compile and run it.
-
-            $ make namecoin_eio
-            $ vim Namecoin.se
-
-            Here is the output from our code generator. As I mentioned, this is Serpent code. This will be fed to a Python script that does the final stage of compilation and runs a simulator to debug it.
-
-            $ vim runner.py
-
-            The details here are not too important.
-            We read in the serpent source.
-            Set up the environment.
-            We try get and print a value with the key 1337, which has not been set yet.
-            We set the value
-            And try to read it again.
-
-            $ ./runner.py
-
-            Looks like it works. Let's see what happens if the origin check would fail by changing the owner address.
-
-            * Change owner address
-            $ make namecoin_eio
-            $ ./runner.py
-
-            Now it doesn't work anymore, since the origin check fails. 
-
-            So how is this actually enforced? Of course the runtime needs some way to know how to pass the proper arguments to "register" and when it can't and should fail.
-
-            We do this using something we call wrapper functions. They should be possible to automatically generate, but right now you'd have to write them yourself. Let's have a look.
-
-            $ vim Namecoin_EIO
-
-            It's kind of verbose and we'll just glance through this. Let's look at "get". Since there are no types to enforce, we can just pass on the value. If we look at "register", you can see that we have to check if the origin is indeed the owner before passing it on to the actual function. This is also where we would pass in any proofs required by the type. Like the one from Rock Paper Scissors where the value had to be at least 10.
-
-            Here you see a list of which functions should be accessible from the outside. Maybe a contract has internal functions that should not be callable directly.
+            <p>I'll use our code generator to compile a simple contract from Idris to Serpent and then run it on a simulated version of the Ethereum system supplied with Serpent. </p>
+<p></p>
+            <p>$ vim Namecoin.idr</p>
+<p></p>
+            <p>This is an Idris implementation of the name registry I showed you before. Just a simple key value store.  We have one storage variable, db, to map integers to integers. As you can see, the "get" function uses the Store effect and returns the value stored for the given key.</p>
+<p></p>
+            <p>If we look at the "register" function, we can see that we also use the Environment effect. It takes three parameters, and the first two here are implicit and can be anything. But for the third one, representing the address of the user who initiated the call, we have supplied a fixed value. This means that it will be considered a type error if anyone else tries to register a value. Let's try to compile and run it.</p>
+<p></p>
+            <p>$ make namecoin_eio</p>
+            <p>$ vim Namecoin.se</p>
+<p></p>
+            <p>Here is the output from our code generator. As I mentioned, this is Serpent code. This will be fed to a Python script that does the final stage of compilation and runs a simulator to debug it.</p>
+<p></p>
+            <p>$ vim runner.py</p>
+<p></p>
+            <p>The details here are not too important.</p>
+            <p>We read in the serpent source.</p>
+            <p>Set up the environment.</p>
+            <p>We try get and print a value with the key 1337, which has not been set yet.</p>
+            <p>We set the value</p>
+            <p>And try to read it again.</p>
+<p></p>
+            <p>$ ./runner.py</p>
+<p></p>
+            <p>Looks like it works. Let's see what happens if the origin check would fail by changing the owner address.</p>
+<p></p>
+            <p>* Change owner address</p>
+            <p>$ make namecoin_eio</p>
+            <p>$ ./runner.py</p>
+<p></p>
+            <p>Now it doesn't work anymore, since the origin check fails. </p>
+<p></p>
+            <p>So how is this actually enforced? Of course the runtime needs some way to know how to pass the proper arguments to "register" and when it can't and should fail.</p>
+<p></p>
+            <p>We do this using something we call wrapper functions. They should be possible to automatically generate, but right now you'd have to write them yourself. Let's have a look.</p>
+<p></p>
+            <p>$ vim Namecoin_EIO</p>
+<p></p>
+            <p>It's kind of verbose and we'll just glance through this. Let's look at "get". Since there are no types to enforce, we can just pass on the value. If we look at "register", you can see that we have to check if the origin is indeed the owner before passing it on to the actual function. This is also where we would pass in any proofs required by the type. Like the one from Rock Paper Scissors where the value had to be at least 10.</p>
+<p></p>
+            <p>Here you see a list of which functions should be accessible from the outside. Maybe a contract has internal functions that should not be callable directly.</p>
           </aside>
         </section>
         <section>
@@ -599,9 +603,9 @@ joinGame {value} move = do
           </ul>
         </p>
         <aside class="notes">
-          Let's wrap things up. In summary, we have showed how we can use algebraic effects in combination with dependent types to specify in detail how a program is intended to work and catch bugs at compile time.
-            <strong><i>CLICK</i></strong>
-            Knowing so much about a programs intended behaviour at compile time also allows us to generate a significant amount of boilerplate code.
+          <p>Let's wrap things up. In summary, we have showed how we can use algebraic effects in combination with dependent types to specify in detail how a program is intended to work and catch bugs at compile time.</p>
+            <p><strong><i>CLICK</i></strong></p>
+            <p>Knowing so much about a programs intended behaviour at compile time also allows us to generate a significant amount of boilerplate code.</p>
         </aside>
         </section>
         <section>
