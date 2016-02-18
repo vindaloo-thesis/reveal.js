@@ -558,7 +558,7 @@ joinGame {value} move = do
             $ make namecoin_eio
             $ vim Namecoin.se
 
-            Here is the output from our code generator. This is Serpent, one of the existing contract languages for Ethereum that we mentioned before. This will be fed to a Python script that does the final stage of compilation and runs a simulator to debug it.
+            Here is the output from our code generator. As I mentioned, this is Serpent code. This will be fed to a Python script that does the final stage of compilation and runs a simulator to debug it.
 
             $ vim runner.py
 
@@ -571,7 +571,7 @@ joinGame {value} move = do
 
             $ ./runner.py
 
-            It works as intended. Let's try to see what happens if the origin check would fail by changing the owner address.
+            Looks like it works. Let's see what happens if the origin check would fail by changing the owner address.
 
             * Change owner address
             $ make namecoin_eio
@@ -581,22 +581,28 @@ joinGame {value} move = do
 
             So how is this actually enforced? Of course the runtime needs some way to know how to pass the proper arguments to "register" and when it can't and should fail.
 
-            We do this using something we call wrapper functions. This is something that should be possible to automatically generate, but in our current implementation the developer has to write these themselves. Let's have a look.
+            We do this using something we call wrapper functions. They should be possible to automatically generate, but right now you'd have to write them yourself. Let's have a look.
 
             $ vim Namecoin_EIO
 
             It's kind of verbose and we'll just glance through this. Let's look at "get". Since there are no types to enforce, we can just pass on the value. If we look at "register", you can see that we have to check if the origin is indeed the owner before passing it on to the actual function. This is also where we would pass in any proofs required by the type. Like the one from Rock Paper Scissors where the value had to be at least 10.
+
+            Here you see a list of which functions should be accessible from the outside. Maybe a contract has internal functions that should not be callable directly.
           </aside>
         </section>
         <section>
           <h2>Summary</h2>
-<p>An expressive type-system can...
+        <p>An expressive type-system can...
           <ul>
             <li>Catch large classes of errors at compile-time</li>
             <li class="fragment">Generate boiler-plate code</li>
           </ul>
-</p>
-          
+        </p>
+        <aside class="notes">
+          Let's wrap things up. In summary, we have showed how we can use algebraic effects in combination with dependent types to specify in detail how a program is intended to work and catch bugs at compile time.
+            <strong><i>CLICK</i></strong>
+            Knowing so much about a programs intended behaviour at compile time also allows us to generate a significant amount of boilerplate code.
+        </aside>
         </section>
         <section>
         <h2>Work in progress</h2>
@@ -605,9 +611,10 @@ joinGame {value} move = do
           <li>Lots of future work</li>
          </ul>
           
-
+        <aside class="notes">
+          So, we have laid down the theory and design for an implementation of this applying Idris to Ethereum. The implementation itself is still just a proof of concept and especially the code generator will probably have to be rewritten from scratch before it's ready for production use. We hope that someone will pick ball and build upon our work.
+        </aside>
         </section>
-
         <section style="text-align: left;">
           <h1>THANK YOU</h1>
             <p> - <a href="https://github.com/vindaloo-thesis/examples">https://github.com/vindaloo-thesis/idris-se</a> </p>
