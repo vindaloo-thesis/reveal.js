@@ -59,7 +59,13 @@
             <small>MSc thesis at Chalmers University of Technology</small>
           </div>
           </p>
-          
+          <aside class="notes">
+            <p>Hi! I'm Jack, and this is Robert.</p>
+            <p>Today we're gonna talk a little bit about our master's thesis, which is called<br/>
+              Safer smart contracts through type-driven development (quite a mouthful isn't it...)</p>
+            <p>I'm guessing most of you understand roughly what "type-driven development" might mean. I'm also guessing that most of you don't really know what smart contracts are.</p>
+            <p>But that's alright, we're gonna explain it to you soon!</p>
+          </aside>
         </section>
 
         <section style="text-align: left;">
@@ -68,17 +74,22 @@
             <ol>
               <li>Contracts</li>
               <li>Smart contracts</li>
-              <li>Ethereum</li>
               <li>Common errors</li>
               <li>Our solutions</li>
-              <li>The Idris programming language</li>
               <li>Our implementation</li>
               <li>Demo</li>
               <li>Summary</li>
               <li>Questions</li>
             </ol>
           </p>
-          
+          <aside class="notes">
+          <p>So, first we're gonna talk a little bit about contracts.</p>
+          <p>Then we'll transition from there into <i>smart</i> contracts, and also Ethereum, the smart contract <i>platform</i> that we've been using.</p>
+          <p>Then we'll talk about errors that developers tend to make when they transition into smart contract development.</p>
+          <p>And then, at last, we'll explain how we solve those.</p>
+          <p>Our solution uses a programming language called Idris, so we will talk about that, and explain the implementation.</p>
+          <p>Then we will do a simple demo, before rounding up and finishing with questions!</p>
+          </aside>
         </section>
         <section class="jack">
           <h2>Contracts</h2>
@@ -88,15 +99,15 @@
             <li>Possible to automate?</li>
           </ul>
           <aside class="notes">
-          <p>Ok, so let's begin by talking a little bit about contracts. Contracts are very central to our modern society. But what are they?
-          Essentially, they are written agreements.</p>
+          <p>Ok, so...contracts. They are very important to our society, but what are they, exactly?<br/>
+          Well, essentially, they are written agreements.</p>
           <p>For example, "if <i>you</i> don't pay your rent, then <i>I</i> have the right to kick you out of your apartment"</p>
           <p>Of course, most contracts are much more complicated than that, but at their core, they are more or less logical formulae.<br/>
           For example: "<i>if</i> x happens, y holds" or "<i>at</i> time t, perform z"</p>
           <p>As we know, computers are very good at logic, so it's natural to ask:<br/>
           <i>can</i> we describe contracts using code and execute them?</p>
           <p>The answer is: Yes, we can!</p>
-          <p>Computer scientists have known this for a long time. There actually exist many formal languages and libraries that are specialized on specifying, executing and analyzing contracts.</p>
+          <p>Computer scientists have known this for ages. There actually exist many formal languages and libraries that are specialized on describing contracts, in order to execute or analyze them.</p>
           <strong><i>CLICK</i></strong>
           </aside>
         </section>
@@ -114,14 +125,15 @@ function buy() {
           </code></pre>
           <p class="fragment">Who executes this?</p>
           <aside class="notes">
-          <p>Ok, so let's say that we wanted to turn all the contracts in the world into code. Just to give you an intuition of how that might look, let's take a very common financial contract and try to encode it as a program.</p>
-          <p>We'll take a so-called European Option. They allow the holder to buy an asset at a fixed price, but only at a particular time. Or: "at time t, party a may buy asset x from party b for price y"<br />
+          <p>So let's say that we wanted to turn all the contracts in the world into code. Just to give you an intuition of how that might look, let's take a very common financial contract and try to encode it as a program.</p>
+          <p>We'll take a so-called European Option. They allow the holder to buy an asset at a fixed price, but only at a particular time.<br/>
+          Or: "at time t, party a may buy asset x from party b for price y"<br />
           <strong><i>CLICK</i></strong><br />
           <p>Here is some object-oriented pseudocode that encodes these rules. If the holder wants to buy the asset, they simply call the buy function. The function checks the current time and transfers the money and the asset.</p>
           <p>This is all very well, but there is one major question: <strong><i>CLICK</i></strong><br/>
           Who <i>executes</i> this code? On <i>whose</i> computer is it running? Can both parties <i>trust</i> the executor?</p>
-          <p><i>If</i> we should start to codify contracts at a large scale, it is extremely important that they can't be modified by anyone and that anyone can verify that they are executed correctly.</p>
-          <p>The perfect scenario would be if the code could "execute itself", without any possibility of interference.</p>
+          <p><i>If</i> we should start to codify contracts at a large scale, it is extremely important that they can't be modified by anyone. And that anyone can verify that they are executed correctly.</p>
+          <p>The perfect scenario would be if the code could "execute itself" so to speak, without any possibility of interference.</p>
           <strong><i>CLICK</i></strong>
           </aside>
         </section>
@@ -142,7 +154,8 @@ function buy() {
           <strong><i>CLICK</i></strong><br />
           <p>But as it turns out, the last few years, <i>programmable</i> smart contract <i>platforms</i> have become a thing. They offer developers a programming language to specify <i>arbitrary</i> smart contracts in, and then the <i>platform</i> ensures that they are executed <i>exactly</i> as specified.</p>
           <p>This is <i>extremely</i> powerful. It can be used in <i>a lot</i> of fields, and not just finance.</p>
-          <p>Just as an example, IBM has experimented with using a smart contract platform as the backbone for the internet of things. And based on what <i>they</i> say, it seems very promising. What they are doing is basically to allow devices to <i>negotiate</i> with each other and decide on their behavior in a kind of <i>device democracy</i>, without relying on any servers.</p>
+          <p>Just as an example, IBM has experimented with using a smart contract platform as the backbone for the internet of things. And based on what <i>they</i> say, it seems very promising. What they are doing is basically allowing devices to <i>negotiate</i> with each other and decide on their behavior in a kind of <i>device democracy</i>, without relying on any servers.</p>
+          <p>And now Robert will talk a bit about Ethereum, the smart contract platform that both we and IBM have used.</p>
           <strong><i>CLICK</i></strong>
           </aside>
         </section>
@@ -227,7 +240,7 @@ contract KeyValueStore {
           <p class="fragment">Everyone executes this!</p>
           <aside class="notes">
             <p>This is a simple key value store</p>
-            <p>All contracts have a persistent data storage that they can use to store arbitrary data. In this case, we declare a mapping from keys to values. Both the keys and values are simple integers.</p>
+            <p>All contracts have a persistent data storage that they can use to store arbitrary data. In this case, we declare a mapping from keys to values. Both the keys and the values are simple integers.</p>
             <p>We only want a single person to be allowed to register values, which we check here by comparing the sender to a hard-coded address.<br/>
               Also, to register a value has a price. Here we say that the price is 10.<br/>
               And anyone can get values.<br />
@@ -246,17 +259,20 @@ contract KeyValueStore {
             <li class="fragment" data-fragment-index="1">May be sent as part of function call</li>
           </ul>
           <aside class="notes">
-            <p>In short, ethereum has an internal token called ether which can be used to transfer real value. Each user and contract on Ethereum have a specific balance of Ether. Both users and contracts can send any ether they own to any other contract or user.<br />
-          <strong><i>CLICK</i></strong><br />
-          <p>Ether can also be included when calling a contract function, so contracts can behave differently depending on how much ether that was included.</p>
-          <p>Has anyone heard of Bitcoin but not of Ethereum? (Ether is to Ethereum what the currency bitcoin is to the Bitcoin network.)</p>
+            <p>In short, ethereum has an internal token called ether which can be used to transfer real value. Each user and contract on Ethereum has a specific balance of Ether.<br />
+            <strong><i>CLICK</i></strong></p>
+            <p>Both users and contracts can send any ether they own to any other contract or user.
+            </p>
+          
+          <p>Ether can also be included when calling a contract function, so contracts can behave differently depending on how much ether that was included, as we just saw.</p>
+          <p>By the way, has anyone here heard of Bitcoin but not of Ethereum? (Ether is to Ethereum what the currency bitcoin is to the Bitcoin network.)</p>
           </aside>
         </section>
  
         <section class="jack">
           <section data-transition="slide-in fade-out">
           <h2>Case study:<br>Rock-paper-scissors</h2>
-<p>A game of two players. Joining costs exactly 10 ether.</p>
+<p>A game of two players. Joining costs 10 ether.</p>
           <pre class="fragment"><code data-trim contenteditable>
 
 joinGame : Int -> EthereumEff (success : Bool)
@@ -268,58 +284,32 @@ joinGame move = do
       write playerCount (pc+1)
 
       return True
-    else do
+    else
 
       return False
           </code></pre>
           <p class="fragment">Ether is not handled correctly!</p>
           <aside class="notes">
             <p>Ok, so now that we have explained the area that we're working <i>in</i>, it's time to explain what <i>we've</i> been trying to do.</p>
-            <p>To do this, we will start with showing you a <i>slightly</i> more complicated contract. It's a game. You might know it, it's called rock-paper-scissors. Basically, two players send their moves and 10 ether each to a contract, which pays the winner 20 ether.</p>
+            <p>To do this, we will start with showing you a <i>slightly</i> more complicated contract. It's a game. You might know it, it's called rock-paper-scissors. Basically, two players send their moves and 10 ether each to a contract, which plays the game for them, and pays the winner 20 ether.</p>
             <p>Just a question beforehand: is anyone here not familiar with functional programming?<br/>
               (Ok, no worries, there shouldn't be too many strange things going on, but I'll make sure to explain the code properly anyway. You don't have to worry about the small details)<br />
             <strong><i>CLICK</i></strong><br />
             <p>Ok, so this is the function that players call to join the game. For simplicity, we represent the moves as integers, so the function takes an integer and returns true if the player could join the game and false otherwise.</p>
-            <p>As you can see though, the return type is not a <i>normal</i> boolean, but it is something called "EthereumEff" which <i>contains</i> a boolean.<br/>
-            Basically, this says that the function doesn't <i>only</i> take an integer and return a boolean, it could <i>also</i> use the state of the Ethereum system in some way. Basically, the function doesn't return a boolean, but it returns <i>instructions</i> on how to <i>use</i> Ethereum to <i>create</i> a boolean.</p>
-            <p>In this case for example, it has to check how many players are already in the game. To do this, it has to <i>read</i> a value from the <i>state</i>, which is why the function returns an EthereumEff. The value that is read is saved in 'pc'.</p>
-            <p>Then we use 'pc' to check that the game is not full. We <i>also</i> have to check that the player sent enough ether. The amount of ether that was included in the call is accessed using the variable 'value', as we can see here.<br/>     
-
-Contracts
-
-    Written agreements
-    Essentially formal
-    Possible to automate?
-
-Example contract:
-European option
-
-"At time t, party a may buy asset x from party b for price y"
-
-
+            <p>As you can see though, the return type is not a <i>normal</i> boolean, but it is something called "EthereumEff" which <i>"contains"</i> a boolean.<br/>
+            "EthereumEff" stands for "ethereum effects" and basically, this says that the function might use the state of the Ethereum system in some way.</p>
+            <p>In this case for example, it has to check how many players are already in the game. To do this, it has to <i>read</i> a value from the <i>data store</i>, which is why the return type has to be an EthereumEff. The value that is read is saved in 'pc'.</p>
+            <p>Then we use 'pc' to check that the game is not full. We <i>also</i> have to check that the player sent enough ether. The amount of ether that was included in the call is accessed using the variable 'value', as we can see here.<br/>
             Just like this 'joinGame' function doesn't return a simple boolean, 'value' doesn't return a simple integer. The exclamation mark basically allows us to treat it as if it was a simple integer.</p>
             <p>So if the game is not full <i>and</i> the player payed enough ether, we should just save the player and its move, increase the number of players and then return true. Otherwise we just return false.</p>
             <p>This might <i>seem</i> reasonable, but there are actually a few bugs here.</p>
-            <p>For starters, what happens if the game was already full? Then we return false, but we don't return the fee for joining the game!<strong><i>CLICK</i></strong></p>
+            <p>For example, what happens if the game was already full? Then we return false, but we don't return the fee for joining the game!<strong><i>CLICK</i></strong></p>
             <p>The player would lose the ether and not be able to retrieve it. So let's fix this! <strong><i>CLICK</i></strong></p>
           </aside>
           </section>
           <section class="jack" data-transition="fade-in fade-out">
           <h2>Case study:<br>Rock-paper-scissors</h2>
           <p>Amended version</p>     
-
-Contracts
-
-    Written agreements
-    Essentially formal
-    Possible to automate?
-
-Example contract:
-European option
-
-"At time t, party a may buy asset x from party b for price y"
-
-
           <pre><code data-trim contenteditable>
 joinGame : Int -> EthereumEff (success : Bool)
 joinGame move = do
@@ -342,7 +332,7 @@ joinGame move = do
             <p>Anyway, this implementation is better, but one bug remains. As you might recall from when Robert explained Ethereum, the state of the system is completely public.<br />
             <strong><i>CLICK</i></strong><br />
             <p>So the <i>second</i> player will be able to see the <i>first</i> player's move <i>before</i> joining the game.</p>
-            <p>We won't solve this right now because the solution is a bit complicated, but keep it in mind for later.<br />
+            <p>The solution to this is something called cryptographic commitments. We won't show those right now, but keep this in mind for later.<br />
             <strong><i>CLICK</i></strong><br />
           </aside>
           </section>
@@ -376,12 +366,12 @@ joinGame move = do
           <aside class="notes">
             <p>Ok, so we have showed you two classes of errors that are common for smart contract developers to make.</p>
             <p>The first was to not handle ether properly, and the second was to upload secret information.</p>
-            <p><i>Our thesis</i> is that these problems can be solved at the language level with an extensive type system.<br />
-            <strong><i>CLICK</i></strong><br />
-            <p>In particular, we will show you <i>how</i> the type system can encode ether flow.<br/>
-            We will <i>also</i> show you why type annotations is a natural way to use cryptographic schemes that are built into the compiler.</p>
-            <p>(Explain type annotations)<br />
-            <strong><i>CLICK</i></strong><br />
+            <p><i>Our thesis</i> is that these problems can be solved at the language level with an extensive type system.</p>
+            <p><strong><i>CLICK</i></strong></p>
+            <p>To do this, we will use the type system in <i>two</i> ways.<br/>
+            The <i>first</i> is to use types to enforce how contracts are allowed to behave.<br/>
+            The <i>second</i> is to use types to tell the compiler which values that are secret, and then the compiler can handle the rest for us.<br />
+            <strong><i>CLICK</i></strong></p>
           </aside>
         </section>
         <section class="jack">
@@ -391,14 +381,16 @@ joinGame move = do
             <li class="fragment">Functional paradigm</li>
           </ul>
           <aside class="notes">
-            <p>Ok, so our main motivation for doing this is to catch bugs at compile time instead of run time.</p>
-            <p>To do this, we will use the type system in <i>two</i> ways. The <i>first</i> is to use types to enforce how contracts are allowed to behave. The <i>second</i> is to use types to tell the compiler which values that are secret.<br />
-            <strong><i>CLICK</i></strong><br />
+            <p>And our main motivation for doing this is to catch bugs at compile time instead of <i>discovering them</i> at run time. This is what we use the type system for.</p>
+            <strong><i>CLICK</i></strong>
             <p>And as you've seen in our examples so far, we also use a functional language.<br/>
-            As you may remember, we mentioned in the beginning that there already exist a lot of formal languages and libraries that are <i>specialized</i> on contracts.<br/>
-            Many of <i>those</i> are in fact functional, so that's why <i>our</i> language is functional.</p>
+            As you may remember, I mentioned in the beginning that there already exist a lot of libraries and stuff that are <i>specialized</i> on describing contracts.<br/>
+            It turns out that many of <i>those</i> are functional, so that's why <i>our</i> language is also functional.</p>
             <p>But just to be clear, our goal was <i>not</i> to design a new language or library specialized on contracts.<br/>
             We wanted to do a <i>general-purpose</i> programming language on a <i>smart contract</i> platform. <i>However</i>, our language <i>should</i> make it possible to <i>implement</i> those libraries in an environment where you <i>don't</i> have to trust an executor.</p>
+            <p>And now Robert will show what our solutions look like.</p>
+            <p><strong><i>CLICK</i></strong>
+</p>
           </aside>
         </section>
         <section>
