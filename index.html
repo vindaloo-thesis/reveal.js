@@ -495,8 +495,21 @@ joinGame {value} move = do
             <li class="fragment">Dependent types</li>
             <li class="fragment">Algebraic effects for environment interaction</li>
             <li class="fragment">Strictly evaluated</li>
+            <li class="fragment">Pluggable backends</li>
           </ul>
           <aside class="notes">
+            So, now that you've seen how our solution works, let's get down to how this is implemented. We chose to use an already existing language called Idris. Has anyone heard of it before?
+            <strong><i>CLICK</i></strong>
+            For those of you who haven't maybe you think the code we showed looked like Haskell. Idris is heavily inspired by Haskell, and the syntax is very similar. I'll just run through the main reasons why we think that Idris is a better fit for Ethereum than Haskell.
+            <strong><i>CLICK</i></strong>
+            The big thing is dependent effects. This is what allowed us to be so expressive in the type signatures.
+            <strong><i>CLICK</i></strong>
+            Side effects are icky in any purely functional language. Idris models this using something called algebraic effects, something that is part of the core library. This alowed us to express interaction with the environment in a natural way.
+            <strong><i>CLICK</i></strong>
+            Since executing code on Ethereum is currently pretty expensive, we want something with minimal runtime overhead. Lazy evaluation, which Haskell uses by default, is too expensive. Idris uses strict evaluation by default, so we didn't have to hack around laziness in our code generator.
+            <strong><i>CLICK</i></strong>
+            Finally, anyone who has tried to create a backend for GHC knows that it is not a very friendly API. Idris is designed to be easily extended with new backends and it has a comparatively friendly and well-documented library for this.
+            Now, let's look at what we've actually done.
           </aside>
         </section>
         <section class="robert">
