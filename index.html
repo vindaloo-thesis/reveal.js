@@ -38,7 +38,7 @@
       link.type = 'text/css';
       link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
       document.getElementsByTagName( 'head' )[0].appendChild( link );
-    </script>
+    </script>kell Compilation Sy
 
     <!--[if lt IE 9]>
     <script src="lib/js/html5shiv.js"></script>
@@ -62,6 +62,24 @@
           
         </section>
 
+        <section style="text-align: left;">
+          <h2>Agenda</h2>
+          <p>
+            <ol>
+              <li>Contracts</li>
+              <li>Smart contracts</li>
+              <li>Ethereum</li>
+              <li>Common errors</li>
+              <li>Our solutions</li>
+              <li>The Idris programming language</li>
+              <li>Our implementation</li>
+              <li>Demo</li>
+              <li>Summary</li>
+              <li>Questions</li>
+            </ol>
+          </p>
+          
+        </section>
         <section class="jack">
           <h2>Contracts</h2>
           <ul>
@@ -142,13 +160,13 @@ function buy() {
           <p class="fragment">Result: the rules enforce themselves</p>
           <aside class="notes">
           <p>Ok, so we have looked at the smart contract platform Ethereum.</p>
-          <p>It is a peer-to-peer network. Who here is familiar with P2P networks?</p>
+          <p>It is a peer-to-peer network. Is anyone here not familiar with P2P networks?</p>
           <p>(Ok, are you familiar with Bittorrent or Bitcoin? Ok, so both of those are decentralized P2P networks. It essentially means that all computers in the network are equal in terms of network control. There is no central server or anything else that coordinates the network. Instead all participants communicate directly with each other. This means that no particular computer is required for the network to operate. It is just enough that there are <i>some</i> computers in the network.)</p>
           <p>Ok, so the participants in this P2P network execute arbitrary rules. These rules are the contracts on the platform and can be specified by anyone.</p>
           <p>After executing a contract, the participants verify that they all got the same result. This result is published for the world to see.</p>
           <p>This means that a network which no one controls is able to say "<strong>this</strong> is the result of executing this contract", and if anyone disagrees, it is easy to prove them wrong<br />
           <strong><i>CLICK</i></strong><br />
-          <p>In summary, the contracts essentially execute themselves, without any need to trust the executor.</p>
+          <p>So just like we wished for, the contracts essentially execute themselves, without any need to trust the executor.</p>
           </aside>
         </section>
 <!--
@@ -174,7 +192,7 @@ function buy() {
           <aside class="notes">
             <p>All contracts on Ethereum run on a virtual machine, called the EVM. The EVM is Turing complete, so any business logic can be encoded as a smart contract. Anyone can upload contracts and anyone can call any uploaded contract.</p>
 <p></p>
-            <p>Contracts are stored in a custom binary format, so if you want to write Ethereum smart contracts you will have to use a specific language. There currently exist three such languages:<br />
+            <p>Contracts are stored in a custom binary format, so if you want to write Ethereum smart contracts you will have to use a language that compiles down to this. There currently exist three such languages:<br />
           <strong><i>CLICK</i></strong><br />
             <p>* Solidity, which is the most mainstream and mature one. The syntax is very similar to JavaScript.<br />
           <strong><i>CLICK</i></strong><br />
@@ -185,48 +203,53 @@ function buy() {
             <p>So with that out of the way, let's look at how a simple contract can look in Solidity.</p>
           </aside>
         </section>
-        <section class="robert" data-transition="slide-in fade-out">
+        <section class="jack" data-transition="slide-in fade-out">
           <h2>Example contract</h2>
           <h3>Name registry</h3>
           <p>Written in Solidity</p>
           <pre><code class="hljs" data-trim contenteditable>
-contract NameRegistry {
-  mapping (string => string) names;
+contract KeyValueStore {
+  mapping (int => int) store;
   
-  function register(string name, string value) returns boolean {
-    if(tx.origin == 598707698970987908) {
-      names[name] = value;
+  function register(int key, int value) returns boolean {
+    if(msg.sender == 598707698970987908 && msg.value >= 10) {
+      store[key] = value;
       return true;
     }
     return false;
   }
   
-  function get(string name) returns string {
-    return names[name];
+  function get(int key) returns int {
+    return store[key];
   }
 }
           </code></pre>
           <p class="fragment">Everyone executes this!</p>
           <aside class="notes">
             <p>This is a simple key value store</p>
-            <p>In this particular case, we only want a single person to be allowed to register names, but anyone should be able to get them. Remember that in Ethereum, we don't need to trust the executor: We can say that EVERYONE executes this. <br />
+            <p>All contracts have a persistent data storage that they can use to store arbitrary data. In this case, we declare a mapping from keys to values. Both the keys and values are simple integers.</p>
+            <p>We only want a single person to be allowed to register values, which we check here by comparing the sender to a hard-coded address.<br/>
+              Also, to register a value has a price. Here we say that the price is 10.<br/>
+              And anyone can get values.<br />
           <strong><i>CLICK</i></strong><br />
-            <p>We could add rules like: allowing anyone to register, but only allow changes by the creator of each key. We could also add rules like expiry time, renewal costs, and so on.</p>
+            <p>Remember that in Ethereum, we don't need to trust the executor: We can say that EVERYONE executes this. So this is effectively like a kind of DNS that no one controls. ...Even though the rules are a bit strange for a DNS...</p>
+            <p>We could change the rules though. We could allow anyone to register, but only allow changes by the creator of each key. We could also add rules like expiry time, renewal costs, and so on.</p>
 <p></p>
-            <p>So, since we are talking about costs, let's look at how that is modeled in Ethereum.</p>
+            <p>But anyway, I mentioned prices and costs, so let's take a quick look at how that is modeled in Ethereum.</p>
           </aside>
         </section>
-        <section class="robert">
+        <section class="jack">
           <h2>Ether</h2>
           <ul>
             <li>Currency/token</li>
-            <li class="fragment">May be sent separately</li>
-            <li class="fragment">May be sent as part of function call</li>
+            <li class="fragment" data-fragment-index="1">May be sent separately</li>
+            <li class="fragment" data-fragment-index="1">May be sent as part of function call</li>
           </ul>
           <aside class="notes">
-            <p>In short, ethereum has an internal token called ether. Each user and contract on Ethereum have a specific balance of Ether. Both users and contracts can send any ether they have to any other contract or user.<br />
+            <p>In short, ethereum has an internal token called ether which can be used to transfer real value. Each user and contract on Ethereum have a specific balance of Ether. Both users and contracts can send any ether they own to any other contract or user.<br />
           <strong><i>CLICK</i></strong><br />
-          <p>Ether can also be included as part of a call to a function in a contract, so contracts can behave differently depending on the amount of ether supplied.</p>
+          <p>Ether can also be included when calling a contract function, so contracts can behave differently depending on how much ether that was included.</p>
+          <p>Has anyone heard of Bitcoin but not of Ethereum? (Ether is to Ethereum what the currency bitcoin is to the Bitcoin network.)</p>
           </aside>
         </section>
  
@@ -253,14 +276,27 @@ joinGame move = do
           <aside class="notes">
             <p>Ok, so now that we have explained the area that we're working <i>in</i>, it's time to explain what <i>we've</i> been trying to do.</p>
             <p>To do this, we will start with showing you a <i>slightly</i> more complicated contract. It's a game. You might know it, it's called rock-paper-scissors. Basically, two players send their moves and 10 ether each to a contract, which pays the winner 20 ether.</p>
-            <p>Just a question beforehand: who here is familiar with functional programming?<br/>
+            <p>Just a question beforehand: is anyone here not familiar with functional programming?<br/>
               (Ok, no worries, there shouldn't be too many strange things going on, but I'll make sure to explain the code properly anyway. You don't have to worry about the small details)<br />
             <strong><i>CLICK</i></strong><br />
-            <p>Ok, so this is the function that players call to join the game. For simplicity, we represent the moves as 0, 1 and 2, so the function takes an integer and returns true if the player could join the game and false otherwise.</p>
+            <p>Ok, so this is the function that players call to join the game. For simplicity, we represent the moves as integers, so the function takes an integer and returns true if the player could join the game and false otherwise.</p>
             <p>As you can see though, the return type is not a <i>normal</i> boolean, but it is something called "EthereumEff" which <i>contains</i> a boolean.<br/>
             Basically, this says that the function doesn't <i>only</i> take an integer and return a boolean, it could <i>also</i> use the state of the Ethereum system in some way. Basically, the function doesn't return a boolean, but it returns <i>instructions</i> on how to <i>use</i> Ethereum to <i>create</i> a boolean.</p>
             <p>In this case for example, it has to check how many players are already in the game. To do this, it has to <i>read</i> a value from the <i>state</i>, which is why the function returns an EthereumEff. The value that is read is saved in 'pc'.</p>
-            <p>Then we use 'pc' to check that the game is not full. We <i>also</i> have to check that the player sent enough ether. The amount of ether that was included in the call is accessed using the variable 'value', as we can see here. The exclamation mark is not very important.<br/>
+            <p>Then we use 'pc' to check that the game is not full. We <i>also</i> have to check that the player sent enough ether. The amount of ether that was included in the call is accessed using the variable 'value', as we can see here.<br/>     
+
+Contracts
+
+    Written agreements
+    Essentially formal
+    Possible to automate?
+
+Example contract:
+European option
+
+"At time t, party a may buy asset x from party b for price y"
+
+
             Just like this 'joinGame' function doesn't return a simple boolean, 'value' doesn't return a simple integer. The exclamation mark basically allows us to treat it as if it was a simple integer.</p>
             <p>So if the game is not full <i>and</i> the player payed enough ether, we should just save the player and its move, increase the number of players and then return true. Otherwise we just return false.</p>
             <p>This might <i>seem</i> reasonable, but there are actually a few bugs here.</p>
@@ -270,7 +306,20 @@ joinGame move = do
           </section>
           <section class="jack" data-transition="fade-in fade-out">
           <h2>Case study:<br>Rock-paper-scissors</h2>
-          <p>Amended version</p>
+          <p>Amended version</p>     
+
+Contracts
+
+    Written agreements
+    Essentially formal
+    Possible to automate?
+
+Example contract:
+European option
+
+"At time t, party a may buy asset x from party b for price y"
+
+
           <pre><code data-trim contenteditable>
 joinGame : Int -> EthereumEff (success : Bool)
 joinGame move = do
@@ -338,9 +387,7 @@ joinGame move = do
         <section class="jack">
           <h2>Motivations</h2>
           <ul>
-            <li>Catch bugs at compile time</li>
-            <li>Enforce behavior using types</li>
-            <li>Annotate types to help compiler</li>
+            <li>Catch bugs using type system</li>
             <li class="fragment">Functional paradigm</li>
           </ul>
           <aside class="notes">
@@ -370,7 +417,7 @@ joinGame : Int ->
              
             </pre></code>
           <aside class="notes">
-            So let's look at an example of how our solution works in practice. We'll modify the type to include the invariants we want to enforce and keep the same functionality. 
+            So let's look at an example of how our solution works in practice. We'll modify the type of the joinGame function from rock paper scissors that we saw earlier. We want to keep the same functionality, but include the properties we want to enforce in the type signature. 
           </aside>
           </section>
           <section data-transition="fade-in fade-out" data-center="false" class="robert">
@@ -392,12 +439,12 @@ joinGame : Int -> {auto p : LTE 10 value} ->
             </ul>
           <aside class="notes">
             <p>The Ethereum effect has some optional parameters. In this example, we include:<br />
-            the amount of incoming ether included for this call,<br />
+            the amount of ether included for this call,<br />
             the ether balance of the contract, <br />
-            the amount of outgoing ether transferred to other contracts during the call,<br />
+            the amount of outgoing ether transferred to others during the call,<br />
             and the amount of incoming ether that's kept in the contract after the call.</p>
-            <p>As Jack mentioned, we want to make sure that the player can only join the game if they pay the fee of 10 ether. As you can see here, we take an additional parameter p. P is a proof that value is at least 10. LTE stands for less-or-equal and these brackets mean that p is implicit and should be inferred when possible.</p>
-            <p>You can also see that we are actually including the VALUE of the parameter value in the type signature, not just its type. We can do this because our language supports something called dependent types, in case you have heard of that before.</p>
+            <p>As Jack mentioned, we want to make sure that the player can only join the game if they pay the fee of 10 ether. As you can see here, we take an additional parameter p. P is a proof that value is at least 10. LTE stands for less-than-or-equal and these curly brackets mean that p is implicit and should be inferred when possible.</p>
+            <p>You can also see that we are actually including the VALUE of the parameter value in the type signature, not just its type. In case you're familiar with dependent types, we can do this because our language supports them.</p>
             <p>Now, the type system has made sure that only calls with at least 10 ether will execute this function. Let's see how we can also enforce that the proper amount of ether is kept and transferred.</p>
           </aside>
           </section>
@@ -423,7 +470,7 @@ joinGame : Int -> {auto p : LTE 10 value} ->
             <p>OK, so if the player joined the game, the contract should keep 10 ether and if they didn't, it should keep nothing. This is defined here. </p>
             <p>We also specify that if the player joined, they should get back any amount of ether exceeding 10 and if they didn't, everything they sent should be returned. You can see that here.<br/>
             <strong><i>CLICK</i></strong><br />
-            Again, we are allowed to type check the returned value of the function and even include the result of a function in the type signature. Keep in mind that this check happens at compile time rather than run time.<br />
+            Again, we are allowed to type check the returned value of the function and even include the result of an expression in the type signature. Keep in mind that this check happens at compile time rather than run time.<br />
             <p><strong><i>CLICK</i></strong></p>
             <p>If we used this type for the first version of the implementation, it wouldn't compile, while the fixed version would.</p>
           </aside>
@@ -486,7 +533,7 @@ joinGame {value} move = do
           </pre></code>
           
           <aside class="notes">
-            So here is the complete joinGame function. Obviously, we also need code for resolving the winner and so on, but hopefully this is enough to give you an idea of what's going on.
+            So here is the complete joinGame function. The implementation is exactly the same as we saw before, with one small change. pureM is exactly the same as return, but allows us to have differing output effects depending on the return value. Obviously, we would also need code for resolving the winner and so on, but hopefully this is enough to give you an idea of what's going on.
           </aside>
         </section>
         <section class="robert">
@@ -508,9 +555,9 @@ joinGame {value} move = do
             <strong><i>CLICK</i></strong><br />
             <p>Side effects are icky in any purely functional language. Idris models this using something called algebraic effects, and they are part of the core library. This allowed us to express interaction with the environment in a natural way.<br />
             <strong><i>CLICK</i></strong><br />
-            <p>Since executing code on Ethereum is pretty expensive, we want something with minimal runtime overhead. Lazy evaluation, which Haskell uses by default, is too expensive. Idris uses strict evaluation by default, so we didn't have to hack around laziness in our code generator.<br />
+            <p>Executing code on Ethereum is actually pretty expensive. So we want something with minimal runtime overhead. Haskell uses lazy evaluation, which is pretty expensive. Idris uses strict evaluation by default, so we didn't have to hack around laziness in our code generator.<br />
             <strong><i>CLICK</i></strong><br />
-            <p>Finally, anyone who has tried to create a backend for GHC knows that it is not a very friendly API. Idris is designed to be easily extended with new backends<!-- and it has a comparatively friendly and well-documented library for this-->.</p>
+            <p>Finally, Idris is designed to be easily extended to target new platforms. We looked quite a bit at GHC, the main Haskell compiler, and it is not very well documented how to do this with Haskell. </p>
             <p>So without further ado, let's look at what we've actually done.</p>
           </aside>
         </section>
@@ -520,7 +567,7 @@ joinGame {value} move = do
           <ul>
             <li class="fragment">ETH: Handle ether flow</li>
             <li class="fragment">ENV: Depend on the environment</li>
-            <li class="fragment">STORE: Read to and save from data store</li>
+            <li class="fragment">STORE: Read from and save to data store</li>
           </ul>
           <h3 style="margin-top: 1.5em">Code generator</h3>
           <ul>
@@ -531,17 +578,17 @@ joinGame {value} move = do
           <aside class="notes">
             <p>Our implementation consists of two main parts: A library of effects and a code generator. We have made three effects that can be used independently. They supply both the type checking and allows contract functions to use effectful operations in the implementation.
             <br /><strong><i>CLICK</i></strong><br />
-            The first effect is the first we used to handle the flow of ether in the joinGame function.<br />
+            The first effect is the one we used to handle the flow of ether in the joinGame function.<br />
             <strong><i>CLICK</i></strong><br />
             <p>ENV allows us to get things from the environment. Stuff like the addresses of the sender and the contract, or the current time.<br />
             <strong><i>CLICK</i></strong><br />
-            <p>Each contract has a persitent data store. STORE allows us to read from and write to it.</p>
+            <p>STORE allows us to interact with the contract's data store.</p>
             <p>The EthereumEff we saw before is just syntactic sugar which includes all three.</p>
             <p>That about the library. Let's talk about the code generator.<br />
             <strong><i>CLICK</i></strong><br />
             <p>As I said, we use the Idris compiler API as a library to get an intermidiate abstract syntax tree representation of the contract as input.<br />
             <strong><i>CLICK</i></strong><br />
-            <p>We actually don't output Ethereum byte code directly, but use the Python-like Serpent as output language. The Serpent compiler can then be used for the final step.<br />
+            <p>We actually don't output Ethereum byte code directly, but instead we output Serpent code. Serpent is the Python-like smart contract language. The Serpent compiler can then be used for the final step.<br />
             <strong><i>CLICK</i></strong><br />
             <p>The current version of the code generator is not complete. All the type checking works as intended, but it only generates working code for a subset of contracts. Let's look at how this is used in practice and see if it works.</p>
           </aside>
@@ -618,12 +665,11 @@ joinGame {value} move = do
           So, we have laid down the theory and design for an implementation of this applying Idris to Ethereum. The implementation itself is still just a proof of concept and especially the code generator will probably have to be rewritten from scratch before it's ready for production use. We hope that someone will pick ball and build upon our work.
         </aside>
         </section>
-        <section style="text-align: left;">
+        <section style="">
           <h1>THANK YOU</h1>
-            <p> - <a href="https://github.com/vindaloo-thesis/examples">https://github.com/vindaloo-thesis/idris-se</a> </p>
-            <p>- Questions? Feedback? Ideas? Talk to us! :)</p>
-            <p>- <a href="mailto:jack.pettersson@consensys.net">jack.pettersson@consensys.net</a>, <a href="mailto:robert@cacti.se">robert@cacti.se</a></p>
-          </p>
+          <h2>Questions?</h2>
+              <footer><a href="https://github.com/vindaloo-thesis" target="_blank">https://github.com/vindaloo-thesis</a></footer>
+            </ul>
           
         </section>
 
