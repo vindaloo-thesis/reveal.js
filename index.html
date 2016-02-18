@@ -442,13 +442,21 @@ joinGame : Commit Int -> {auto p : LTE 10 value} ->
             </pre></code>
             <ul>
             <li>Commitments part of the language</li>
-            <li class="fragment">Revealing function is generated at compile-time</li>
+            <li class="fragment">Revealing function is generated at compile-time:
+reveal : Int -> Int -> a -> EthereumEff (success : Bool) {}</li>
             <li class="fragment">Accessed using a library function:<pre><code>
-open : Commit a -> a
+open : Commit a -> EthereumEff (value : Maybe a) {}
             </code></pre></li>
             <li class="fragment">Not implemented</li>
             </ul>
           <aside class="notes">
+            Now for the last problem that Jack mentioned; how to hide the player's move from being publicly read. This is done using a cryptographic construction called a commitment - basically, it means that a player can commit to a specific value without that value being known until they choose to reveal it. If we use the type Commit here, we signify to the compiler that it should generate the necessary code for this. 
+            <strong><i>CLICK</i></strong>
+            The library supplies two functions - the first takes in the necessary parameters to reveal the value that the player commited to. After this is run, the value can be used in the contract.
+            <strong><i>CLICK</i></strong>
+            The second function, open, returns the commited value if it has been revealed.
+            <strong><i>CLICK</i></strong>
+            Unfortunately, this is not yet part of our implementation, so this last part is not usable in practice yet. But it should not be too hairy to add.
           </aside>
           </section>
         </section>
@@ -474,8 +482,11 @@ joinGame {value} move = do
             pureM False   
           </pre></code>
           
+          <aside class="notes">
+            So here is the complete joinGame function. Obviously, we also need code for resolving the winner and so on, but hopefully this is enough to give you an idea of what's going on.
+          </aside>
         </section>
-        <section>
+        <section class="robert">
           <h2>Implementation</h2>
           <h3>Language: Idris</h3>
           <ul>
@@ -483,12 +494,24 @@ joinGame {value} move = do
             <li class="fragment">Dependent types</li>
             <li class="fragment">Algebraic effects for environment interaction</li>
             <li class="fragment">Strictly evaluated</li>
+            <li class="fragment">Pluggable backends</li>
           </ul>
-
-          
-
+          <aside class="notes">
+            So, now that you've seen how our solution works, let's get down to how this is implemented. We chose to use an already existing language called Idris. Has anyone heard of it before?
+            <strong><i>CLICK</i></strong>
+            For those of you who haven't maybe you think the code we showed looked like Haskell. Idris is heavily inspired by Haskell, and the syntax is very similar. I'll just run through the main reasons why we think that Idris is a better fit for Ethereum than Haskell.
+            <strong><i>CLICK</i></strong>
+            The big thing is dependent effects. This is what allowed us to be so expressive in the type signatures.
+            <strong><i>CLICK</i></strong>
+            Side effects are icky in any purely functional language. Idris models this using something called algebraic effects, something that is part of the core library. This alowed us to express interaction with the environment in a natural way.
+            <strong><i>CLICK</i></strong>
+            Since executing code on Ethereum is currently pretty expensive, we want something with minimal runtime overhead. Lazy evaluation, which Haskell uses by default, is too expensive. Idris uses strict evaluation by default, so we didn't have to hack around laziness in our code generator.
+            <strong><i>CLICK</i></strong>
+            Finally, anyone who has tried to create a backend for GHC knows that it is not a very friendly API. Idris is designed to be easily extended with new backends and it has a comparatively friendly and well-documented library for this.
+            Now, let's look at what we've actually done.
+          </aside>
         </section>
-        <section>
+        <section class="robert">
           <h2>Implementation</h2>
           <h3>Library: Effects</h3>
           <ul>
@@ -502,9 +525,11 @@ joinGame {value} move = do
             <li class="fragment">Outputs Serpent</li>
             <li class="fragment">Only works for very simple contracts ATM</li>
           </ul>
+          <aside class="notes">
+          </aside>
         </section>
 
-        <section>
+        <section class="robert">
           <h2>Demo time!</h2>
           <aside class="notes">
             We'll now show you how our impkementation can be used. We'll use our code generator to compile a simple contract from Idris to Serpent and then run it on a simulated version of the Ethereum system supplied with Serpent. 
@@ -546,10 +571,6 @@ joinGame {value} move = do
             $ vim Namecoin_EIO
 
             It's kind of verbose and we'll just glance through this. Let's look at "get". Since there are no types to enforce, we can just pass on the value. If we look at "register", you can see that we have to check if the origin is indeed the owner before passing it on to the actual function. This is also where we would pass in any proofs required by the type. Like the one from Rock Paper Scissors where the value had to be at least 10.
-
-
-
-
           </aside>
         </section>
         <section>
