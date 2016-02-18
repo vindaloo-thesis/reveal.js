@@ -1,3 +1,4 @@
+#!/usr/bin/python2
 import serpent
 from ethereum import tester, utils, abi
 
@@ -13,10 +14,11 @@ c = s.abi_contract(serpent_code)
 print("Code added to block chain")
 
 #Test contract
+
 o = c.get(1337)
 print("The value stored with key 1337 is " + str(o))
-o = c.register(1337, 42, value=10)
-print("register returned " + str(o))
+
+o = c.register(1337, 42)
 
 o = c.get(1337)
 print("The value stored with key 1337 is " + str(o))
