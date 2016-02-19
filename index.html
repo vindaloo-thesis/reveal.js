@@ -64,7 +64,7 @@
             <p>Today we're gonna talk a little bit about our master's thesis, which is called<br/>
               Safer smart contracts through type-driven development (quite a mouthful isn't it...)</p>
             <p>I'm guessing most of you understand roughly what "type-driven development" might mean. I'm also guessing that most of you don't really know what smart contracts are.</p>
-            <p>But that's alright, we're gonna explain it to you soon!</p>
+            <p>But that's alright, because I'm gonna explain it to you in a few minutes!</p>
           </aside>
         </section>
 
@@ -86,7 +86,7 @@
           <p>So, first we're gonna talk a little bit about contracts.</p>
           <p>Then we'll transition from there into <i>smart</i> contracts, and also Ethereum, the smart contract <i>platform</i> that we've been using.</p>
           <p>Then we'll talk about errors that developers tend to make when they transition into smart contract development.</p>
-          <p>And then, at last, we'll explain how we solve those.</p>
+          <p>And then, we'll explain how we solve those.</p>
           <p>Our solution uses a programming language called Idris, so we will talk about that, and explain the implementation.</p>
           <p>Then we will do a simple demo, before rounding up and finishing with questions!</p>
           </aside>
@@ -153,7 +153,7 @@ function buy() {
             Of course, vending machines <i>are</i> possible to interfere with, but it isn't very easy and as I said, it's just a primitive precursor.<br />
           <strong><i>CLICK</i></strong><br />
           <p>But as it turns out, the last few years, <i>programmable</i> smart contract <i>platforms</i> have become a thing. They offer developers a programming language to specify <i>arbitrary</i> smart contracts in, and then the <i>platform</i> ensures that they are executed <i>exactly</i> as specified.</p>
-          <p>This is <i>extremely</i> powerful. It can be used in <i>a lot</i> of fields, and not just finance.</p>
+          <p>This is <i>extremely</i> powerful. It has applications in <i>several</i> fields, and not just finance.</p>
           <p>Just as an example, IBM has experimented with using a smart contract platform as the backbone for the internet of things. And based on what <i>they</i> say, it seems very promising. What they are doing is basically allowing devices to <i>negotiate</i> with each other and decide on their behavior in a kind of <i>device democracy</i>, without relying on any servers.</p>
           <p>And now Robert will talk a bit about Ethereum, the smart contract platform that both we and IBM have used.</p>
           <strong><i>CLICK</i></strong>
@@ -243,8 +243,8 @@ contract Bank {
           <aside class="notes">
             <p>This is a simple contract that acts as a bank</p>
             <p>All contracts have a persistent data storage that they can use to store arbitrary data. In this case, we declare a mapping from addresses to their balances. Addresses are unique identifiers of users and contracts on Ethereum.</p>
-            <p>So if someone wants to make a deposit, we access their address using 'msg.sender', and use it to<br/>increase their balance with the amount that they sent us. I'll explain exactly <i>what it is</i> they sent us soon, just see it as some money-like thing for now. We access it using 'msg.value'.<br />
-            And if anyone wants to 'withdraw' an 'amount', we check that they're not trying to overdraw, and then we send that amount to them and return true.
+            <p>So if someone wants to make a deposit, we access their address using 'msg.sender', and use it to<br/>increase their balance with the amount that they sent us. I'll explain exactly <i>what it is</i> they sent us soon, just see it as some money-like thing for now. We access it using 'msg.value'.</p>
+            <p>And if anyone wants to 'withdraw' an 'amount', we check that they're not trying to overdraw, and then we send that amount to them and return true.</p>
           <strong><i>CLICK</i></strong><br />
             <p>Remember that in Ethereum, we don't need to trust the executor: We can say that EVERYONE executes this. So this is effectively like a bank that no one controls, even though it's extremely simple.</p>
             <p>We could add rules though. We could require a fee for setting up an account, or loan a fraction of the contract's balance to other users or contracts and so on. You just have to figure out the business logic.</p>
