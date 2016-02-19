@@ -124,7 +124,8 @@
           <p>So, first we'll talk a bit about the background to our work. This includes smart contracts, a smart contract platform called Ethereum and the problems that we've been trying to solve.</p>
           <p>Then, we'll explain how we solve those problems.</p>
           <p>After that we'll talk a little bit about the programming language Idris and how we have implemented our solutions.</p>
-          <p>Then we will do a simple demo, before rounding up and finishing with questions!</p>
+          <p>Then we will do a simple demo and round things up.</p>
+          <p>And please save your questions, we'll have lots of time afterwards!</p>
           </aside>
         </section>
         <section class="jack">
@@ -162,7 +163,7 @@ function buy() {
           <p class="fragment">Do both parties trust the executor?</p>
           <aside class="notes">
           <p>So let's say that we wanted to turn all the contracts in the world into code. Just to give you an intuition of how that might look, let's take a very common financial contract and try to encode it as a program.</p>
-          <p>We'll take a so-called European Option. They allow the holder to buy an asset at a fixed price, but only at a particular time.<br/>
+          <p>The contract we'll look at allows the holder to buy an asset at a fixed price, but only at a particular time.<br/>
           Or: "at time t, party a may buy asset x from party b for price y"<br />
           <strong><i>CLICK</i></strong><br />
           <p>Here is some object-oriented pseudocode that encodes these rules. If the holder wants to buy the asset, they simply call the buy function. The function checks the current time and transfers the money and the asset.</p>
