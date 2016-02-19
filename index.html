@@ -342,7 +342,7 @@ joinGame move = do
           <section class="jack" data-transition="fade-in fade-out">
           <h2>Case study:<br><span style="font-size:70%">Rock-paper-scissors</span></h2>
           <p>Amended version</p>     
-          <pre><code data-trim  class="nohighlight">
+          <pre><code data-trim  class="nohighlight" data-noescape>
 joinGame : Int -> EthereumEff (success : Bool)
 joinGame move = do
   pc <- read playerCount
@@ -350,10 +350,10 @@ joinGame move = do
     then do
       write players pc (!sender,move)
       write playerCount (pc+1)
-      send (!value-10) !sender
+      <span class="highlight-purple">send (!value-10) !sender</span>
       return True
     else do
-      send !value !sender
+      <span class="highlight-purple">send !value !sender</span>
       return False
           </code></pre>
           <p class="fragment"><span style="color:red">Error: </span> The move is revealed!</p>
