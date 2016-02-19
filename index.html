@@ -62,9 +62,7 @@
           <aside class="notes">
             <p>Hi! I'm Jack, and this is Robert.</p>
             <p>Today we're gonna talk a little bit about our master's thesis, which is called<br/>
-              Safer smart contracts through type-driven development (quite a mouthful isn't it...)</p>
-            <p>I'm guessing most of you understand roughly what "type-driven development" might mean. I'm also guessing that most of you don't really know what smart contracts are.</p>
-            <p>But that's alright, because I'm gonna explain it to you in a few minutes!</p>
+              Safer smart contracts through type-driven development</p>
           </aside>
         </section>
 
@@ -72,22 +70,18 @@
           <h2>Agenda</h2>
           <p>
             <ol>
-              <li>Contracts</li>
-              <li>Smart contracts</li>
-              <li>Common errors</li>
-              <li>Our solutions</li>
-              <li>Our implementation</li>
+              <li>Background</li>
+              <li>Conceptual solution</li>
+              <li>Implementation</li>
               <li>Demo</li>
               <li>Summary</li>
               <li>Questions</li>
             </ol>
           </p>
           <aside class="notes">
-          <p>So, first we're gonna talk a little bit about contracts.</p>
-          <p>Then we'll transition from there into <i>smart</i> contracts, and also Ethereum, the smart contract <i>platform</i> that we've been using.</p>
-          <p>Then we'll talk about errors that developers tend to make when they transition into smart contract development.</p>
-          <p>And then, we'll explain how we solve those.</p>
-          <p>Our solution uses a programming language called Idris, so we will talk about that, and explain the implementation.</p>
+          <p>So, first we'll talk a bit about the background to our work. This includes smart contracts, a platform called Ethereum and the problems that we've been trying to solve.</p>
+          <p>Then, we'll explain how we solve those problems.</p>
+          <p>After that we'll talk a little bit about the programming language Idris and how we have implemented our solutions.</p>
           <p>Then we will do a simple demo, before rounding up and finishing with questions!</p>
           </aside>
         </section>
@@ -113,7 +107,7 @@
         </section>
 
         <section data-transition="slide-in fade-out" class="jack">
-          <h2>Example contract:<br>European option</h2>
+          <h2>Example contract</h2>
           <p>"At time <code>t</code>, party <code>a</code> may buy asset <code>x</code> from party <code>b</code> for price <code>y</code>"</p>
           <pre class="fragment"><code class="hljs" data-trim contenteditable>
 function buy() {
@@ -123,7 +117,7 @@ function buy() {
   }
 }
           </code></pre>
-          <p class="fragment">Who executes this?</p>
+          <p class="fragment">Do both parties trust the executor?</p>
           <aside class="notes">
           <p>So let's say that we wanted to turn all the contracts in the world into code. Just to give you an intuition of how that might look, let's take a very common financial contract and try to encode it as a program.</p>
           <p>We'll take a so-called European Option. They allow the holder to buy an asset at a fixed price, but only at a particular time.<br/>
@@ -139,11 +133,10 @@ function buy() {
         </section>
         
         <section class="jack">
-          <h2>Smart contracts</h2>
+          <h2>Smart ( = self-enforcing) contracts</h2>
           <ul>
-            <li>Self-enforcing contracts</li>
-            <li>Primitive example: vending machines</li>
-            <li class="fragment" data-fragment-index="1">Now: smart contract platforms</li>
+            <li>Precursor: vending machines</li>
+            <li class="fragment" data-fragment-index="1">State of the art: smart contract platforms</li>
             <li class="fragment" data-fragment-index="1">Applications: finance, IoT, commerce, computer protocols, gambling, ...</li>
           </ul>
           <aside class="notes">
@@ -217,9 +210,8 @@ function buy() {
           </aside>
         </section>
         <section class="jack" data-transition="slide-in fade-out">
-          <h2>Example contract</h2>
-          <h3>Bank</h3>
-          <p>Written in Solidity</p>
+          <h2>Example contract: Bank</h2>
+          <p>(Written in Solidity)</p>
           <pre><code class="hljs" data-trim contenteditable>
 contract Bank {
   mapping (address => uint) balances;
@@ -239,25 +231,23 @@ contract Bank {
   }
 }
           </code></pre>
-          <p class="fragment">Everyone executes this!</p>
+          <p class="fragment">What is deposited and withdrawn?</p>
           <aside class="notes">
             <p>This is a simple contract that acts as a bank</p>
             <p>All contracts have a persistent data storage that they can use to store arbitrary data. In this case, we declare a mapping from addresses to their balances. Addresses are unique identifiers of users and contracts on Ethereum.</p>
             <p>So if someone wants to make a deposit, we access their address using 'msg.sender', and use it to<br/>increase their balance with the amount that they sent us. I'll explain exactly <i>what it is</i> they sent us soon, just see it as some money-like thing for now. We access it using 'msg.value'.</p>
             <p>And if anyone wants to 'withdraw' an 'amount', we check that they're not trying to overdraw, and then we send that amount to them and return true.</p>
-          <strong><i>CLICK</i></strong><br />
             <p>Remember that in Ethereum, we don't need to trust the executor: We can say that EVERYONE executes this. So this is effectively like a bank that no one controls, even though it's extremely simple.</p>
             <p>We could add rules though. We could require a fee for setting up an account, or loan a fraction of the contract's balance to other users or contracts and so on. You just have to figure out the business logic.</p>
-<p></p>
+            <strong><i>CLICK</i></strong><br />
             <p>But anyway, I've talked about this money-like thing for a while now, so it's time to explain what it is.</p>
           </aside>
         </section>
         <section class="jack">
-          <h2>Ether</h2>
+          <h2><i>Ether</i> is deposited and withdrawn!</h2>
           <ul>
             <li>Currency/token</li>
-            <li class="fragment" data-fragment-index="1">May be sent separately</li>
-            <li class="fragment" data-fragment-index="1">May be sent as part of function call</li>
+            <li class="fragment" data-fragment-index="1">May be sent separately, or with a function call</li>
           </ul>
           <aside class="notes">
             <p>In short, ethereum has an internal token called ether which can be used to transfer real value. Each user and contract on Ethereum has a specific balance of Ether.<br />
@@ -275,7 +265,6 @@ contract Bank {
           <h2>Case study:<br>Rock-paper-scissors</h2>
 <p>A game of two players. Joining costs 10 ether.</p>
           <pre class="fragment"><code data-trim contenteditable>
-
 joinGame : Int -> EthereumEff (success : Bool)
 joinGame move = do
   pc <- read playerCount
@@ -289,7 +278,7 @@ joinGame move = do
 
       return False
           </code></pre>
-          <p class="fragment">Ether is not handled correctly!</p>
+          <p class="fragment"><span style="color:red">Error: </span> Ether is not handled correctly!</p>
           <aside class="notes">
             <p>Ok, so now that we have explained the area that we're working <i>in</i>, it's time to explain what <i>we've</i> been trying to do.</p>
             <p>To do this, we will start with showing you a <i>slightly</i> more complicated contract. It's a game. You might know it, it's called rock-paper-scissors. Basically, two players send their moves and 10 ether each to a contract, which plays the game for them, and pays the winner 20 ether.</p>
@@ -325,7 +314,7 @@ joinGame move = do
       send !value !sender
       return False
           </code></pre>
-          <p class="fragment">The move is revealed!</p>
+          <p class="fragment"><span style="color:red">Error: </span> The move is revealed!</p>
           <aside class="notes">
             <p>Ok, so now we return the fee.</p>
             <p>And <i>also</i>, if the player <i>was</i> able to join the game, we return any excess ether.</p>
@@ -490,7 +479,6 @@ reveal : Int -> Int -> a -> EthereumEff (success : Bool) {}
             <li class="fragment">Accessed using a library function:<pre><code>
 open : Commit a -> EthereumEff (value : Maybe a) {}
             </code></pre></li>
-            <li class="fragment">Not implemented</li>
             </ul>
           <aside class="notes">
             <p>Now for the last problem that Jack mentioned; how to hide the player's move from being publicly read. This is done using a cryptographic construction called a commitment - basically, it means that a player can commit to a specific value without that value being known until they choose to reveal it. If we use the type Commit here, we signify to the compiler that it should generate the necessary code for this. <br />
@@ -567,6 +555,7 @@ joinGame {value} move = do
             <li class="fragment">Plugs into Idris compiler API</li>
             <li class="fragment">Outputs Serpent</li>
             <li class="fragment">Only works for very simple contracts ATM</li>
+            <li class="fragment">Commitments not yet implemented</li>
           </ul>
           <aside class="notes">
             <p>Our implementation consists of two main parts: A library of effects and a code generator. We have made three effects that can be used independently. They supply both the type checking and allow contract functions to use effectful operations in the implementation.
