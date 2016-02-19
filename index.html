@@ -55,6 +55,15 @@
     .borderless td {
       border: none;
     }
+    footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      text-align: center;
+    }
+    section {
+      min-height: 90%;
+    }
     </style>
     </style>
 
@@ -498,25 +507,19 @@ joinGame : Commit Int -> {auto p : LTE 10 value} ->
             </pre></code>
             <ul>
             <li>Commitments part of the language</li>
-            <li class="fragment">Revealing function is generated at compile-time:<pre><code>
-reveal : Int -> Int -> a -> EthereumEff (success : Bool) {}
-</code></pre></li>
-            <li class="fragment">Accessed using a library function:<pre><code>
-open : Commit a -> EthereumEff (value : Maybe a) {}
-            </code></pre></li>
+            <li class="fragment">Revealing function <code>reveal</code> is generated at compile-time.</li>
+            <li class="fragment">Accessed using a library function <code>open</code>.</li>
             </ul>
           <aside class="notes">
             <p>Now for the last problem that Jack mentioned; how to hide the player's move from being publicly read. This is done using a cryptographic construction called a commitment - basically, it means that a player can commit to a specific value without that value being known until they choose to reveal it. If we use the type Commit here, we signify to the compiler that it should generate the necessary code for this. <br />
             <strong><i>CLICK</i></strong><br />
             <p>The library supplies two functions - the first takes in the necessary parameters to reveal the value that the player commited to. After this is run, the value can be used in the contract.<br />
             <strong><i>CLICK</i></strong><br />
-            <p>The second function, open, returns the commited value if it has been revealed.<br />
-            <strong><i>CLICK</i></strong><br />
-            <p>Unfortunately, this is not yet part of our implementation, so this last part is not usable in practice yet. But it should not be too hairy to add.</p>
+            <p>The second function, open, returns the commited value if it has been previously revealed.<br />
           </aside>
           </section>
         </section>
-        <section>
+        <section class="robert">
           <h2>Type-correct version</h2>
           <pre><code class="nohighlight" data-noescape>
 joinGame : Commit Int -> {auto p : LTE 10 value} ->
@@ -647,7 +650,7 @@ joinGame {value} move = do
             <p>Here you see a list of which functions should be accessible from the outside. </p>
           </aside>
         </section>
-        <section>
+        <section class="robert">
           <h2>Summary</h2>
         <p>An expressive type-system can...
           <ul>
@@ -672,7 +675,7 @@ joinGame {value} move = do
           So, we have laid down the theory and design for an implementation of this applying Idris to Ethereum. The implementation itself is still just a proof of concept and especially the code generator will probably have to be rewritten from scratch before it's ready for production use. We hope that someone will pick ball and build upon our work.
         </aside>
         </section>
-        <section style="">
+        <section>
           <h1>THANK YOU</h1>
           <h2>Questions?</h2>
               <footer><a href="https://github.com/vindaloo-thesis" target="_blank">https://github.com/vindaloo-thesis</a></footer>
