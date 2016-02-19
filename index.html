@@ -488,7 +488,7 @@ joinGame : Int -> {auto p : LTE 10 value} ->
             <li class="fragment">Ether-swallowing implementation wouldn't type check</li>
             </ul>
           <aside class="notes">
-            <p>OK, so if the player joined the game, the contract should keep 10 ether and if they didn't, it should keep nothing. This is defined here. </p>
+            <p>If the player joined the game, the contract should keep 10 ether and if they didn't, it should keep nothing. This is defined here. </p>
             <p>We also specify that if the player joined, they should get back any amount of ether exceeding 10 and if they didn't, everything they sent should be returned. You can see that here.<br/>
             <strong><i>CLICK</i></strong><br />
             Again, we are allowed to type check the returned value of the function and even include the result of expressions in the type signature. Keep in mind that this check happens at compile time rather than run time.<br />
@@ -549,7 +549,12 @@ joinGame {value} move = do
           </code></pre>
           
           <aside class="notes">
-            So here is the complete joinGame function. The implementation is exactly the same as we saw before, with one small change. pureM is exactly the same as return, but allows us to have differing output effects depending on the return value. Obviously, we would also need code for resolving the winner and so on, but hopefully this is enough to give you an idea of what's going on.
+            <p>Here is the complete joinGame function. The implementation is exactly the same as we saw before, with two small changes.<br />
+            <strong><i>CLICK</i></strong><br />
+            We need to explicitly define when we keep ether in the contract to make it type check.<br />
+            <strong><i>CLICK</i></strong><br />
+            pureM is exactly the same as return, but allows us to have differing output effects depending on the return value.</p>
+            <p>Obviously, we would also need code for resolving the winner and so on, but hopefully this is enough to give you an idea of what's going on.
           </aside>
         </section>
         <section class="robert">
@@ -584,30 +589,34 @@ joinGame {value} move = do
             <li class="fragment">ETH: Handle ether flow</li>
             <li class="fragment">ENV: Depend on the environment</li>
             <li class="fragment">STORE: Read from and save to data store</li>
+            <li class="fragment">Fully implemented</li>
           </ul>
           <h3 style="margin-top: 1.5em">Code generator</h3>
           <ul>
             <li class="fragment">Plugs into Idris compiler API</li>
             <li class="fragment">Outputs Serpent</li>
-            <li class="fragment">Only works for very simple contracts ATM</li>
             <li class="fragment">Commitments not yet implemented</li>
+            <li class="fragment">Only works for very simple contracts ATM</li>
           </ul>
           <aside class="notes">
             <p>Our implementation consists of two main parts: A library of effects and a code generator. We have made three effects that can be used independently. They supply both the type checking and allow contract functions to use effectful operations in the implementation.
             <br /><strong><i>CLICK</i></strong><br />
             The first effect is the one we used to handle the flow of ether in the joinGame function.<br />
             <strong><i>CLICK</i></strong><br />
-            <p>ENV allows us to get things from the environment. Stuff like the addresses of the sender and the contract, or the current time.<br />
+            ENV allows us to get things from the environment. Stuff like the addresses of the sender and the contract, or the current time.<br />
             <strong><i>CLICK</i></strong><br />
-            <p>STORE allows us to interact with the contract's data store.</p>
+            STORE allows us to interact with the contract's data store.</p>
             <p>The EthereumEff we saw before is just syntactic sugar which includes all three.</p>
-            <p>That about the library. Let's talk about the code generator.<br />
             <strong><i>CLICK</i></strong><br />
-            <p>As I said, we use the Idris compiler API as a library to get an intermidiate abstract syntax tree representation of the contract as input.<br />
+            All of these are fully as Idris libraries. That about the library. Let's talk about the code generator.<br />
             <strong><i>CLICK</i></strong><br />
-            <p>We actually don't output Ethereum byte code directly, but instead we output Serpent code. Serpent is the Python-like smart contract language. The Serpent compiler can then be used for the final step.<br />
+            As I said, we use the Idris compiler API as a library to get an intermidiate abstract syntax tree representation of the contract as input.<br />
             <strong><i>CLICK</i></strong><br />
-            <p>The current version of the code generator is not complete. All the type checking works as intended, but it only generates working code for a subset of contracts. Let's look at how this is used in practice and see if it works.</p>
+            We actually don't output Ethereum byte code directly, but instead we output Serpent code. Serpent is the Python-like smart contract language. The Serpent compiler can then be used for the final step.<br />
+            <strong><i>CLICK</i></strong><br />
+            The current version of the code generator is not complete. We haven't implemented functinoality to generate the open and reveal functions for commitments that we talked about earlier.<br />
+            <strong><i>CLICK</i></strong><br />
+             Apart from that, all type checking works as intended, but it only generates working code for a subset of contracts. Let's look at how this is used in practice and see if it works.</p>
           </aside>
         </section>
 
