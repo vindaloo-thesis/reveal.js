@@ -93,7 +93,7 @@
           <p>
             <ol>
               <li>Background</li>
-              <li>Conceptual solution</li>
+              <li>Solution</li>
               <li>Implementation</li>
               <li>Demo</li>
               <li>Summary</li>
@@ -101,7 +101,7 @@
             </ol>
           </p>
           <aside class="notes">
-          <p>So, first we'll talk a bit about the background to our work. This includes smart contracts, a platform called Ethereum and the problems that we've been trying to solve.</p>
+          <p>So, first we'll talk a bit about the background to our work. This includes smart contracts, a smart contract platform called Ethereum and the problems that we've been trying to solve.</p>
           <p>Then, we'll explain how we solve those problems.</p>
           <p>After that we'll talk a little bit about the programming language Idris and how we have implemented our solutions.</p>
           <p>Then we will do a simple demo, before rounding up and finishing with questions!</p>
@@ -284,7 +284,7 @@ contract Bank {
  
         <section class="jack">
           <section data-transition="slide-in fade-out">
-          <h2>Case study:<br>Rock-paper-scissors</h2>
+          <h2>Case study:<br><span style="font-size:70%">Rock-paper-scissors</span></h2>
 <p>A game of two players. Joining costs 10 ether.</p>
           <pre class="fragment"><code data-trim class="nohighlight">
 joinGame : Int -> EthereumEff (success : Bool)
@@ -314,13 +314,13 @@ joinGame move = do
             <p>Then we use 'pc' to check that the game is not full. We <i>also</i> have to check that the player sent enough ether. The amount of ether that was included in the call is accessed using the variable 'value', as we can see here.<br/>
             Just like this 'joinGame' function doesn't return a simple boolean, 'value' doesn't return a simple integer. The exclamation mark basically allows us to treat it as if it was a simple integer.</p>
             <p>So if the game is not full <i>and</i> the player payed enough ether, we should just save the player and its move, increase the number of players and then return true. Otherwise we just return false.</p>
-            <p>This might <i>seem</i> reasonable, but there are actually a few bugs here.</p>
+            <p>This might <i>seem</i> reasonable, but there are actually a few errors here.</p>
             <p>For example, what happens if the game was already full? Then we return false, but we don't return the fee for joining the game!<strong><i>CLICK</i></strong></p>
             <p>The player would lose the ether and not be able to retrieve it. So let's fix this! <strong><i>CLICK</i></strong></p>
           </aside>
           </section>
           <section class="jack" data-transition="fade-in fade-out">
-          <h2>Case study:<br>Rock-paper-scissors</h2>
+          <h2>Case study:<br><span style="font-size:70%">Rock-paper-scissors</span></h2>
           <p>Amended version</p>     
           <pre><code data-trim  class="nohighlight">
 joinGame : Int -> EthereumEff (success : Bool)
@@ -341,10 +341,10 @@ joinGame move = do
             <p>Ok, so now we return the fee.</p>
             <p>And <i>also</i>, if the player <i>was</i> able to join the game, we return any excess ether.</p>
             <p>As you can see, the solution was really easy, but detecting errors like these can be <i>hard</i>, especially in more complex contracts.</p>
-            <p>Anyway, this implementation is better, but one bug remains. As you might recall from when Robert explained Ethereum, the state of the system is completely public.<br />
+            <p>Anyway, this implementation is better, but one error remains. As you might recall from when Robert explained Ethereum, the state of the system is completely public.<br />
             <strong><i>CLICK</i></strong><br />
             <p>So the <i>second</i> player will be able to see the <i>first</i> player's move <i>before</i> joining the game.</p>
-            <p>The solution to this is something called cryptographic commitments. We won't show those right now, but keep this in mind for later.<br />
+            <p>The solution to this is to use something called cryptographic commitments. We won't show those right now, but keep this example in mind for later.<br />
             <strong><i>CLICK</i></strong><br />
           </aside>
           </section>
@@ -389,11 +389,11 @@ joinGame move = do
         <section class="jack">
           <h2>Motivations</h2>
           <ul>
-            <li>Catch bugs using type system</li>
+            <li>Catch errors using type system</li>
             <li class="fragment">Functional paradigm</li>
           </ul>
           <aside class="notes">
-            <p>And our main motivation for doing this is to catch bugs at compile time instead of <i>discovering them</i> at run time. This is what we use the type system for.</p>
+            <p>And our main motivation for doing this is to catch errors at compile time instead of <i>discovering them</i> at run time. This is what we use the type system for.</p>
             <strong><i>CLICK</i></strong>
             <p>And as you've seen in our examples so far, we also use a functional language.<br/>
             As you may remember, I mentioned in the beginning that there already exist a lot of libraries and stuff that are <i>specialized</i> on describing contracts.<br/>
@@ -438,9 +438,7 @@ joinGame : Int -> {auto p : LTE 10 value} ->
            ; KEEP    = keep
            }
             </pre></code>
-            <ul>
-            <li>Function is undefined for value < 10</li>
-            </ul>
+            <p>Function is undefined for value < 10</p>
           <aside class="notes">
             <p>The Ethereum effect has some optional parameters. In this example, we include:<br />
             the amount of ether included for this call,<br />
@@ -653,7 +651,7 @@ joinGame {value} move = do
           </ul>
         </p>
         <aside class="notes">
-          <p>Let's wrap things up. In summary, we have showed how we can use algebraic effects in combination with dependent types to specify in detail how a smart contract is intended to work and catch bugs at compile time.<br />
+          <p>Let's wrap things up. In summary, we have showed how we can use algebraic effects in combination with dependent types to specify in detail how a smart contract is intended to work and catch errors at compile time.<br />
             <strong><i>CLICK</i></strong><br />
             <p>Knowing so much about a programs intended behaviour at compile time also allows us to generate a significant amount of boilerplate code.</p>
         </aside>
