@@ -29,6 +29,17 @@
     section.robert h2, section.robert h3 {
       color: #a3f;
     }
+    .reveal .progress {
+        top: 0 !important;
+        height: 20px !important;
+    }
+    .reveal .progress span {
+        background-color: #a3f !important;
+        font-size: 0.5em;
+        padding-left: 13px;
+        padding-top: 2px;
+    }
+    </style>
     </style>
 
     <!-- Printing and PDF exports -->
@@ -38,7 +49,7 @@
       link.type = 'text/css';
       link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
       document.getElementsByTagName( 'head' )[0].appendChild( link );
-    </script>kell Compilation Sy
+    </script>
 
     <!--[if lt IE 9]>
     <script src="lib/js/html5shiv.js"></script>
@@ -492,7 +503,7 @@ open : Commit a -> EthereumEff (value : Maybe a) {}
           </section>
         </section>
         <section>
-          <h2>Type-correct implementation</h2>
+          <h2>Type-correct version</h2>
           <pre><code class="Haskell" style="max-height: 500px;">
 joinGame : Commit Int -> {auto p : LTE 10 value} ->
            EthereumEff (success : Bool)
@@ -681,6 +692,7 @@ joinGame {value} move = do
 
         // Optional reveal.js plugins
         dependencies: [
+          { src : 'lib/js/jquery-2.2.0.min.js', async: true},
           { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
           { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
           { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
@@ -689,9 +701,32 @@ joinGame {value} move = do
           { src: 'plugin/notes/notes.js', async: true }
         ]
       });
+var changeTitle = function(title) {
+  console.log($('.progress span'));
+  $('.progress span').html(title);
+};
 
+Reveal.addEventListener( 'slidechanged', function( event ) {
+  console.log(event.indexh);
+  if(event.indexh <= 1) {
+      changeTitle('')
+  } else if(event.indexh <= 10) {
+      changeTitle('1.&nbsp;Background')
+  } else if(event.indexh <= 13) {
+      changeTitle('2. Solution')
+  } else if(event.indexh <= 15) {
+      changeTitle('3. Implementation')
+  } else if(event.indexh <= 16) {
+      changeTitle('4. Demonstration')
+  } else if(event.indexh <= 18) {
+      changeTitle('5. Summary')
+  } else {
+    changeTitle('6. Questions')
+  }
+    // event.previousSlide, event.currentSlide, event.indexh, event.indexv
+} );
 window.addEventListener("mousedown", handleClick, false);
-window.addEventListener("contextmenu", function(e) { e.preventDefault(); }, false);
+//window.addEventListener("contextmenu", function(e) { e.preventDefault(); }, false);
 
 function handleClick(e) {
   e.preventDefault();
