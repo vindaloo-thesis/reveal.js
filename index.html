@@ -48,7 +48,12 @@
     }
     .reveal pre code {
       overflow: visible !important;
-      color: #ccc;
+      color: #dcdcdc;
+      max-height: 600px !important;
+      background: #3f3f3f none repeat scroll 0 0;
+    }
+    .borderless td {
+      border: none;
     }
     </style>
     </style>
@@ -131,7 +136,7 @@
         <section data-transition="slide-in fade-out" class="jack">
           <h2>Example contract</h2>
           <p>"At time <code>t</code>, party <code>a</code> may buy asset <code>x</code> from party <code>b</code> for price <code>y</code>"</p>
-          <pre class="fragment"><code class="hljs" data-trim contenteditable>
+          <pre class="fragment"><code class="hljs" data-trim>
 function buy() {
   if(currentTime == t) {
     a.give(b,y)
@@ -156,11 +161,11 @@ function buy() {
         
         <section class="jack">
           <h2>Smart <span style="font-size:70%">( = self-enforcing)</span> contracts</h2>
-          <ul>
-            <li>Precursor: vending machines</li>
-            <li class="fragment" data-fragment-index="1">State of the art: smart contract platforms</li>
-            <li class="fragment" data-fragment-index="1">Applications: finance, IoT, commerce, computer protocols, gambling, ...</li>
-          </ul>
+          <table class="borderless">
+            <tr><td>Precursor:</td><td>vending machines</td></tr>
+            <tr class="fragment" data-fragment-index="1"><td>State&nbsp;of&nbsp;the&nbsp;art:</td><td>smart contract platforms</td></tr>
+            <tr class="fragment" data-fragment-index="1"><td>Applications:</td><td>finance, IoT, commerce, computer protocols, gambling, ...</td></tr>
+          </table>
           <aside class="notes">
           <p>...And that's <i>exactly</i> what smart contracts are about!</p>
           <p>A primitive precursor to smart contracts can be found in a simple vending machine:<br />
@@ -266,7 +271,7 @@ contract Bank {
           </aside>
         </section>
         <section class="jack">
-          <h2><i>Ether</i> is deposited and withdrawn!</h2>
+          <h3><i>Ether</i>&nbsp;is&nbsp;deposited&nbsp;and&nbsp;withdrawn!</h3>
           <ul>
             <li>Currency/token</li>
             <li class="fragment" data-fragment-index="1">May be sent separately, or with a function call</li>
@@ -406,7 +411,7 @@ joinGame move = do
           </aside>
         </section>
         <section>
-          <section data-transition="slide-in fade-out" data-center="false" class="robert" style="font-size: 0.75em">
+          <section data-transition="slide-in fade-out" data-center="false" class="robert">
             <h2>Catch errors using types</h2>
             <p>
             &nbsp;
@@ -424,7 +429,7 @@ joinGame : Int ->
             So let's look at an example of how our solution works in practice. We'll modify the type of the joinGame function from rock paper scissors that we saw earlier. We want to keep the same functionality, but include the properties we want to enforce in the type signature. 
           </aside>
           </section>
-          <section data-transition="fade-in fade-out" data-center="false" class="robert" style="font-size: 0.75em">
+          <section data-transition="fade-in fade-out" data-center="false" class="robert">
             <h2>Catch errors using types</h2>
             <p>
               We start by including ether in the type signature:
@@ -450,7 +455,7 @@ joinGame : Int -> {auto p : LTE 10 value} ->
             <p>Now, the type system has made sure that only calls with at least 10 ether will execute this function. Let's see how we can also enforce that the proper amount of ether is kept and transferred.</p>
           </aside>
           </section>
-          <section data-transition="fade-in fade-out" data-center="false" class="robert" style="font-size: 0.75em">
+          <section data-transition="fade-in fade-out" data-center="false" class="robert">
             <h2>Catch errors using types</h2>
             <p>
               We start by including ether in the type signature:
@@ -477,7 +482,7 @@ joinGame : Int -> {auto p : LTE 10 value} ->
             <p>If we used this type for the first version of the implementation, it wouldn't compile, while the fixed version would.</p>
           </aside>
           </section>
-          <section data-transition="fade-in slide-out" class="robert" style="font-size: 0.75em">
+          <section data-transition="fade-in slide-out" class="robert"> 
             <h2>Catch errors using types</h2>
             <p>
               Hide player move
