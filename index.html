@@ -160,7 +160,7 @@ function buy() {
         </section>
         
         <section class="jack">
-          <h2>Smart <span style="font-size:70%">( = self-enforcing)</span> contracts</h2>
+          <h2>Smart <span style="font-size:70%">(self-enforcing)</span> contracts</h2>
           <table class="borderless">
             <tr><td>Precursor:</td><td>vending machines</td></tr>
             <tr class="fragment" data-fragment-index="1"><td>State&nbsp;of&nbsp;the&nbsp;art:</td><td>smart contract platforms</td></tr>
@@ -412,7 +412,8 @@ joinGame move = do
         </section>
         <section>
           <section data-transition="slide-in fade-out" data-center="false" class="robert">
-            <h2>Catch errors using types</h2>
+            <!--<h2>Catch errors using types</h2>-->
+            <h2>Case study:<br><span style="font-size:70%">Rock-paper-scissors</span></h2>
             <p>
             &nbsp;
             </p>
@@ -430,18 +431,19 @@ joinGame : Int ->
           </aside>
           </section>
           <section data-transition="fade-in fade-out" data-center="false" class="robert">
-            <h2>Catch errors using types</h2>
+            <!--<h2>Catch errors using types</h2>-->
+            <h2>Case study:<br><span style="font-size:70%">Rock-paper-scissors</span></h2>
             <p>
-              We start by including ether in the type signature:
+              Include ether in the type signature:
             </p>
-            <pre><code class="nohighlight">
-joinGame : Int -> {auto p : LTE 10 value} ->
+            <pre><code class="nohighlight" data-noescape>
+joinGame : Int -> <span class="highlight-purple">{auto p : LTE 10 value}</span> ->
            EthereumEff (success : Bool)
-           { VALUE   = value 
+           <span class="highlight-purple">{ VALUE   = value 
            ; BALANCE = balance
            ; TRANS   = trans
            ; KEEP    = keep
-           }
+           }</span>
             </pre></code>
             <p>Function is undefined for value < 10</p>
           <aside class="notes">
@@ -456,17 +458,18 @@ joinGame : Int -> {auto p : LTE 10 value} ->
           </aside>
           </section>
           <section data-transition="fade-in fade-out" data-center="false" class="robert">
-            <h2>Catch errors using types</h2>
+            <!--<h2>Catch errors using types</h2>-->
+            <h2>Case study:<br><span style="font-size:70%">Rock-paper-scissors</span></h2>
             <p>
-              We start by including ether in the type signature:
+              Decide behavior based on return value:
             </p>
-            <pre><code class="nohighlight">
+            <pre><code class="nohighlight" data-noescape>
 joinGame : Int -> {auto p : LTE 10 value} ->
            EthereumEff (success : Bool)
            { VALUE   = value 
            ; BALANCE = balance
-           ; TRANS   = (if success then (value-10) else value)
-           ; KEEP    = (if success then 10         else 0)
+           ; TRANS   = <span class="highlight-purple">(if success then (value-10) else value)</span>
+           ; KEEP    = <span class="highlight-purple">(if success then 10         else 0)</span>
            }
             </pre></code>
             <ul>
@@ -483,12 +486,13 @@ joinGame : Int -> {auto p : LTE 10 value} ->
           </aside>
           </section>
           <section data-transition="fade-in slide-out" class="robert"> 
-            <h2>Catch errors using types</h2>
+            <!--<h2>Catch errors using types</h2>-->
+            <h2>Case study:<br><span style="font-size:70%">Rock-paper-scissors</span></h2>
             <p>
-              Hide player move
+              Annotate the types of secret values:
             </p>
-            <pre><code class="nohighlight">
-joinGame : Commit Int -> {auto p : LTE 10 value} ->
+            <pre><code class="nohighlight" data-noescape>
+joinGame : <span class="highlight-purple">Commit</span> Int -> {auto p : LTE 10 value} ->
            EthereumEff (success : Bool)
            { VALUE   = value 
            ; BALANCE = balance
@@ -517,7 +521,8 @@ open : Commit a -> EthereumEff (value : Maybe a) {}
           </section>
         </section>
         <section>
-          <h2>Type-correct version</h2>
+          <h2>Case study:<br><span style="font-size:70%">Rock-paper-scissors</span></h2>
+          <p>Type-correct version</p>
           <pre><code class="nohighlight" data-noescape>
 joinGame : Commit Int -> {auto p : LTE 10 value} ->
            EthereumEff (success : Bool)
