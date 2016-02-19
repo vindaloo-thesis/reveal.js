@@ -39,6 +39,17 @@
         padding-left: 13px;
         padding-top: 2px;
     }
+    .reveal .slides section .fragment.highlight-purple {
+      opacity: 1;
+      visibility: visible;
+    }
+    .reveal .slides section .fragment.highlight-purple.visible {
+      color: #d5f !important;
+    }
+    .reveal pre code {
+      overflow: visible !important;
+      color: #ccc;
+    }
     </style>
     </style>
 
@@ -275,7 +286,7 @@ contract Bank {
           <section data-transition="slide-in fade-out">
           <h2>Case study:<br>Rock-paper-scissors</h2>
 <p>A game of two players. Joining costs 10 ether.</p>
-          <pre class="fragment"><code data-trim contenteditable>
+          <pre class="fragment"><code data-trim class="nohighlight">
 joinGame : Int -> EthereumEff (success : Bool)
 joinGame move = do
   pc <- read playerCount
@@ -311,7 +322,7 @@ joinGame move = do
           <section class="jack" data-transition="fade-in fade-out">
           <h2>Case study:<br>Rock-paper-scissors</h2>
           <p>Amended version</p>     
-          <pre><code data-trim contenteditable>
+          <pre><code data-trim  class="nohighlight">
 joinGame : Int -> EthereumEff (success : Bool)
 joinGame move = do
   pc <- read playerCount
@@ -400,7 +411,7 @@ joinGame move = do
             <p>
             &nbsp;
             </p>
-            <pre><code>
+            <pre><code class="nohighlight">
 joinGame : Int ->
            EthereumEff (success : Bool)
               
@@ -418,7 +429,7 @@ joinGame : Int ->
             <p>
               We start by including ether in the type signature:
             </p>
-            <pre><code>
+            <pre><code class="nohighlight">
 joinGame : Int -> {auto p : LTE 10 value} ->
            EthereumEff (success : Bool)
            { VALUE   = value 
@@ -446,7 +457,7 @@ joinGame : Int -> {auto p : LTE 10 value} ->
             <p>
               We start by including ether in the type signature:
             </p>
-            <pre><code>
+            <pre><code class="nohighlight">
 joinGame : Int -> {auto p : LTE 10 value} ->
            EthereumEff (success : Bool)
            { VALUE   = value 
@@ -473,7 +484,7 @@ joinGame : Int -> {auto p : LTE 10 value} ->
             <p>
               Hide player move
             </p>
-            <pre><code>
+            <pre><code class="nohighlight">
 joinGame : Commit Int -> {auto p : LTE 10 value} ->
            EthereumEff (success : Bool)
            { VALUE   = value 
@@ -504,7 +515,7 @@ open : Commit a -> EthereumEff (value : Maybe a) {}
         </section>
         <section>
           <h2>Type-correct version</h2>
-          <pre><code class="Haskell" style="max-height: 500px;">
+          <pre><code class="nohighlight" data-noescape>
 joinGame : Commit Int -> {auto p : LTE 10 value} ->
            EthereumEff (success : Bool)
            { VALUE   = value 
@@ -518,11 +529,11 @@ joinGame {value} move = do
     then do write players pc (!sender,move)
             write playerCount (pc+1)
             send (value-10) !sender
-            keep 10
-            pureM True
+            <span class="fragment highlight-purple" data-fragment-index="1">keep 10</span>
+            <span class="fragment highlight-purple" data-fragment-index="2">pureM True</span>
     else do send value !sender
-            pureM False   
-          </pre></code>
+            <span class="fragment highlight-purple" data-fragment-index="2">pureM False</span>
+          </code></pre>
           
           <aside class="notes">
             So here is the complete joinGame function. The implementation is exactly the same as we saw before, with one small change. pureM is exactly the same as return, but allows us to have differing output effects depending on the return value. Obviously, we would also need code for resolving the winner and so on, but hopefully this is enough to give you an idea of what's going on.
