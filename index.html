@@ -517,8 +517,8 @@ joinGame {value} move = do
   if pc < 2
     then do write players pc (!sender,move)
             write playerCount (pc+1)
-            keep 10
             send (value-10) !sender
+            keep 10
             pureM True
     else do send value !sender
             pureM False   
