@@ -667,10 +667,15 @@ joinGame {value} move = do
       // Full list of configuration options available at:
       // https://github.com/hakimel/reveal.js#configuration
       Reveal.initialize({
-        controls: true,
+        controls: false,
         progress: true,
         history: true,
         center: false,
+        touch: true,
+        overview: true,
+        mouseWheel: true,
+        hideAddressbar: true,
+
 
         transition: 'slide', // none/fade/slide/convex/concave/zoom
 
@@ -685,6 +690,14 @@ joinGame {value} move = do
         ]
       });
 
+window.addEventListener("mousedown", handleClick, false);
+window.addEventListener("contextmenu", function(e) { e.preventDefault(); }, false);
+
+function handleClick(e) {
+  e.preventDefault();
+  if(e.button === 0) Reveal.next(); 
+  //if(e.button === 2) Reveal.prev(); 
+}
     </script>
 
   </body>
