@@ -441,7 +441,8 @@ joinGame : Int ->
              
             </pre></code>
           <aside class="notes">
-            Let's look at an example of how our solution can be used in practice. We'll modify the type of the joinGame function from rock paper scissors that we saw earlier. We want to keep the same functionality, but include the properties we want to enforce in the type signature rather than checking them at run time. 
+            <p>Let's look at an example of how our solution can be used in practice.</p>
+            <p>We'll modify the type of the joinGame function from rock paper scissors that we saw earlier. We want to keep the same functionality, but instead of checking the properties we want to enforce at runtime, we'll include them in the type signature. 
           </aside>
           </section>
           <section data-transition="fade-in fade-out" data-center="false" class="robert">
@@ -452,15 +453,15 @@ joinGame : Int ->
             <pre><code class="nohighlight" data-noescape>
 joinGame : Int -> 
            EthereumEff (success : Bool)
-           <span class="highlight-purple">{ VALUE   = value 
-           ; BALANCE = balance
-           ; TRANS   = trans
-           ; KEEP    = keep
+           { <span class="fragment highlight-purple highlight-once">VALUE   = value</span>
+           ; <span class="fragment highlight-purple">BALANCE = balance</span>
+           ; <span class="fragment highlight-purple">TRANS   = trans</span>
+           ; <span class="fragment highlight-purple">KEEP    = keep</span>
            }</span>
             </pre></code>
             <p>&nbsp;</p>
           <aside class="notes">
-            <p>The Ethereum effect has some optional parameters. In this example, we include:<br />
+            <p>Our Ethereum effect has some optional parameters. In this example, we include:<br />
             the amount of ether included for this call,<br />
             the ether balance of the contract, <br />
             the amount of outgoing ether transferred to others during the call,<br />
@@ -484,12 +485,30 @@ joinGame : Int -> <span class="highlight-purple">{auto p : LTE 10 value}</span> 
             <p>Function is undefined for value < 10</p>
           <aside class="notes">
             <p>As Jack mentioned, we want to make sure that the player can only join the game if they pay the fee of 10 ether. As you can see here, we take an additional parameter p. P is a proof that value is at least 10. LTE stands for less-than-or-equal and these curly brackets mean that p is implicit and should be inferred when possible.</p>
-            <p>You can also see that we are actually including the VALUE of the parameter value in the type signature, not just its type. In case you're familiar with dependent types, we can do this because our language supports those.</p>
-            <p>Now, the type system has made sure that only calls with at least 10 ether will execute this function. Let's see how we can also enforce that the proper amount of ether is kept and transferred.</p>
+            <p>You can also see that we are not including the type of the parameter "value" here, but actually including the VALUE of it. In case you're familiar with dependent types, we can do this because our language supports them.</p>
+            <p>So now, the type system has made sure that only calls with at least 10 ether will execute this function. Let's see how we can also enforce that the proper amount of ether is kept and transferred.</p>
           </aside>
           </section>
           <section data-transition="fade-in fade-out" data-center="false" class="robert">
-            <!--<h2>Catch errors using types</h2>-->
+            <h2>Case study:<br><span style="font-size:70%">Rock-paper-scissors</span></h2>
+            <p>
+              Decide behavior based on return value:
+            </p>
+            <pre><code class="nohighlight" data-noescape>
+joinGame : Int -> {auto p : LTE 10 value} ->
+           EthereumEff (success : Bool)
+           { VALUE   = value 
+           ; BALANCE = balance
+           ; TRANS   = trans
+           ; KEEP    = <span class="highlight-purple">(if success then 10         else 0)</span>
+           }
+            </pre></code>
+          <aside class="notes">
+            <p>Let's reiterate where we want the ether to go depending on if the player joined the game or not.</p>
+            <p>If the player joined the game, the contract should keep 10 ether and if they didn't, it should keep nothing. This is defined here, at the bottom. </p>
+          </aside>
+          </section>
+          <section data-transition="fade-in fade-out" data-center="false" class="robert">
             <h2>Case study:<br><span style="font-size:70%">Rock-paper-scissors</span></h2>
             <p>
               Decide behavior based on return value:
@@ -500,7 +519,7 @@ joinGame : Int -> {auto p : LTE 10 value} ->
            { VALUE   = value 
            ; BALANCE = balance
            ; TRANS   = <span class="highlight-purple">(if success then (value-10) else value)</span>
-           ; KEEP    = <span class="highlight-purple">(if success then 10         else 0)</span>
+           ; KEEP    = (if success then 10         else 0)
            }
             </pre></code>
             <ul>
@@ -508,7 +527,6 @@ joinGame : Int -> {auto p : LTE 10 value} ->
             <li class="fragment">Ether-swallowing implementation wouldn't type check</li>
             </ul>
           <aside class="notes">
-            <p>If the player joined the game, the contract should keep 10 ether and if they didn't, it should keep nothing. This is defined here. </p>
             <p>We also specify that if the player joined, they should get back any amount of ether exceeding 10 and if they didn't, everything they sent should be returned. You can see that here.<br/>
             <strong><i>CLICK</i></strong><br />
             Again, we are allowed to type check the returned value of the function and even include the result of expressions in the type signature. Keep in mind that this check happens at compile time rather than run time.<br />
