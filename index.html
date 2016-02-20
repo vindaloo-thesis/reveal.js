@@ -504,8 +504,7 @@ joinGame : Int -> {auto p : LTE 10 value} ->
            }
             </pre></code>
           <aside class="notes">
-            <p>Let's reiterate where we want the ether to go depending on if the player joined the game or not.</p>
-            <p>If the player joined the game, the contract should keep 10 ether and if they didn't, it should keep nothing. This is defined here, at the bottom. </p>
+            <p>If the player joined the game, the contract should keep 10 ether and if they didn't, it should keep nothing. This is defined here. </p>
           </aside>
           </section>
           <section data-transition="fade-in fade-out" data-center="false" class="robert">
@@ -555,11 +554,11 @@ joinGame : <span class="highlight-purple">Commit</span> Int -> {auto p : LTE 10 
             <li class="fragment">Accessed using a library function <code>open</code>.</li>
             </ul>
           <aside class="notes">
-            <p>Now for the last problem that Jack mentioned; how to hide the player's move from being publicly read. This is done using a cryptographic construction called a commitment - basically, it means that a player can commit to a specific value without that value being known until they choose to reveal it. If we use the type Commit here, we signify to the compiler that it should generate the necessary code for this. <br />
+            <p>Now for the last problem that Jack mentioned; how to hide the player's move from being publicly read.</p><p>This is done using a cryptographic construction called a commitment - basically, it means that a player can commit to a specific value without that value being known until they choose to reveal it. If we use the type Commit here, we signify to the compiler that it should generate the necessary code for this. <br />
             <strong><i>CLICK</i></strong><br />
-            <p>The library supplies two functions - the first takes in the necessary parameters to reveal the value that the player commited to. After this is run, the value can be used in the contract.<br />
+            <p>The library supplies two functions - the first takes a secret from the user in order to reveal the value that they commited to. After this is run, the value can be used in the contract.<br />
             <strong><i>CLICK</i></strong><br />
-            <p>The second function, open, returns the commited value if it has been previously revealed.<br />
+            <p>This is done using the second function, open. It returns the commited value if it has been previously revealed.<br />
           </aside>
           </section>
         </section>
@@ -606,7 +605,7 @@ joinGame {value} move = do
             <li class="fragment">Pluggable backends</li>
           </ul>
           <aside class="notes">
-            <p>So, now that you've seen how our solution works, let's get down to how we've implemented it. We chose to use an already existing language called Idris. Has anyone heard of it before?<br />
+            <p>So, now that you've seen how our solution is used, let's get down to how we've implemented it. We chose to use an already existing language called Idris. Has anyone heard of it before?<br />
             <strong><i>CLICK</i></strong><br />
             <p>For those of you who haven't, maybe you think the code we showed looked like Haskell. Idris is heavily inspired by Haskell, and the syntax is very similar. I'll just run through the main reasons why we think that Idris is a better fit for Ethereum than Haskell. This is partly because at the start of the project, we were dead set on going from Haskell.<br />
             <strong><i>CLICK</i></strong><br />
