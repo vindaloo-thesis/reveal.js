@@ -209,14 +209,14 @@ function buy() {
           </ul>
           <p class="fragment">Result: the rules enforce themselves</p>
           <aside class="notes">
-          <p>Ok, so <i>we</i> have been looking at the smart contract platform Ethereum.</p>
+          <p> <i>We</i> have been looking at the smart contract platform Ethereum.</p>
           <p>It is a peer-to-peer network. Is anyone here not familiar with P2P networks?</p>
-          <p>(Ok, are you familiar with Bittorrent or Bitcoin? Ok, so both of those are decentralized P2P networks. It essentially means that all computers in the network are equal in terms of network control. There is no central server or anything else that coordinates the network. Instead all participants communicate directly with each other. This means that no particular computer is required for the network to operate. It is enough that there are <i>some</i> computers in the network.)</p>
-          <p>So the participants in this particular P2P network execute arbitrary rules. These rules are the contracts on the platform and can be specified by anyone.</p>
+          <p>(Are you familiar with Bittorrent or Bitcoin? Both of those are decentralized P2P networks. It essentially means that all computers in the network are equal in terms of network control. There is no central server or anything else that coordinates the network. All participants communicate directly with each other. This means that no particular computer is required for the network to operate. It is enough that there are <i>some</i> computers in the network.)</p>
+          <p>The participants in this particular P2P network execute arbitrary rules. These rules are the contracts on the platform and can be specified by anyone.</p>
           <p>After executing a contract, the participants verify that they all got the same result. This result is published for the world to see.</p>
           <p>This means that a network which no one controls is able to say "<strong>this</strong> is the result of executing this contract", and if anyone disagrees, it is easy to prove them wrong<br />
           <strong><i>CLICK</i></strong><br />
-          <p>So just like we wished for, the contracts essentially execute themselves, without any need to trust the executor.</p>
+          <p>Just like we wished for, the contracts essentially execute themselves, without any need to trust the executor.</p>
           </aside>
         </section>
 <!--
@@ -441,17 +441,16 @@ joinGame : Int ->
              
             </pre></code>
           <aside class="notes">
-            So let's look at an example of how our solution works in practice. We'll modify the type of the joinGame function from rock paper scissors that we saw earlier. We want to keep the same functionality, but include the properties we want to enforce in the type signature. 
+            Let's look at an example of how our solution can be used in practice. We'll modify the type of the joinGame function from rock paper scissors that we saw earlier. We want to keep the same functionality, but include the properties we want to enforce in the type signature rather than checking them at run time. 
           </aside>
           </section>
           <section data-transition="fade-in fade-out" data-center="false" class="robert">
-            <!--<h2>Catch errors using types</h2>-->
             <h2>Case study:<br><span style="font-size:70%">Rock-paper-scissors</span></h2>
             <p>
               Include ether in the type signature:
             </p>
             <pre><code class="nohighlight" data-noescape>
-joinGame : Int -> <span class="highlight-purple">{auto p : LTE 10 value}</span> ->
+joinGame : Int -> 
            EthereumEff (success : Bool)
            <span class="highlight-purple">{ VALUE   = value 
            ; BALANCE = balance
@@ -459,13 +458,31 @@ joinGame : Int -> <span class="highlight-purple">{auto p : LTE 10 value}</span> 
            ; KEEP    = keep
            }</span>
             </pre></code>
-            <p>Function is undefined for value < 10</p>
+            <p>&nbsp;</p>
           <aside class="notes">
             <p>The Ethereum effect has some optional parameters. In this example, we include:<br />
             the amount of ether included for this call,<br />
             the ether balance of the contract, <br />
             the amount of outgoing ether transferred to others during the call,<br />
             and the amount of incoming ether that's kept in the contract after the call.</p>
+          </aside>
+          </section>
+          <section data-transition="fade-in fade-out" data-center="false" class="robert">
+            <h2>Case study:<br><span style="font-size:70%">Rock-paper-scissors</span></h2>
+            <p>
+              Include ether in the type signature:
+            </p>
+            <pre><code class="nohighlight" data-noescape>
+joinGame : Int -> <span class="highlight-purple">{auto p : LTE 10 value}</span> ->
+           EthereumEff (success : Bool)
+           { VALUE   = value 
+           ; BALANCE = balance
+           ; TRANS   = trans
+           ; KEEP    = keep
+           }
+            </pre></code>
+            <p>Function is undefined for value < 10</p>
+          <aside class="notes">
             <p>As Jack mentioned, we want to make sure that the player can only join the game if they pay the fee of 10 ether. As you can see here, we take an additional parameter p. P is a proof that value is at least 10. LTE stands for less-than-or-equal and these curly brackets mean that p is implicit and should be inferred when possible.</p>
             <p>You can also see that we are actually including the VALUE of the parameter value in the type signature, not just its type. In case you're familiar with dependent types, we can do this because our language supports those.</p>
             <p>Now, the type system has made sure that only calls with at least 10 ether will execute this function. Let's see how we can also enforce that the proper amount of ether is kept and transferred.</p>
