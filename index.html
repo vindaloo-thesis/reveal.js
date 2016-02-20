@@ -31,11 +31,11 @@
     }
     .reveal .progress {
         top: 0 !important;
-        height: 20px !important;
+        height: 42px !important;
     }
     .reveal .progress span {
-        background-color: #a3f !important;
-        font-size: 0.5em;
+        background-color: #62a !important;
+        font-size: 1.0em;
         padding-left: 13px;
         padding-top: 2px;
     }
@@ -70,7 +70,6 @@
     section {
       min-height: 90%;
     }
-    </style>
     </style>
 
     <!-- Printing and PDF exports -->
@@ -593,7 +592,7 @@ joinGame {value} move = do
           <h3 style="margin-top: 1.5em">Code generator</h3>
           <ul>
             <li class="fragment">Plugs into Idris compiler API</li>
-            <li class="fragment">Outputs Serpent</li>
+            <li class="fragment">Outputs Serpent (≈Python)</li>
             <li class="fragment">Commitments not yet implemented</li>
             <li class="fragment">Only works for very simple contracts ATM</li>
           </ul>
@@ -743,9 +742,9 @@ Reveal.addEventListener( 'slidechanged', function( event ) {
   if(event.indexh <= 1) {
       changeTitle('')
   } else if(event.indexh <= 10) {
-      changeTitle('1.&nbsp;Background')
+      changeTitle('1.&nbsp;Problem')
   } else if(event.indexh <= 13) {
-      changeTitle('2. Solution')
+      changeTitle('2.&nbsp;Solution')
   } else if(event.indexh <= 15) {
       changeTitle('3. Implementation')
   } else if(event.indexh <= 16) {

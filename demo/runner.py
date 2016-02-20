@@ -18,6 +18,7 @@ print("Code added to block chain")
 o = c.get(1337)
 print("The value stored with key 1337 is " + str(o))
 
+print("Trying to register 1337 = 42.")
 o = c.register(1337, 42)
 
 o = c.get(1337)
