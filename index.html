@@ -105,6 +105,7 @@
             <p>Hi! I'm Jack, and this is Robert.</p>
             <p>Today we're gonna talk a little bit about our master's thesis, which is called<br/>
               Safer smart contracts through type-driven development</p>
+            <p>So, before we begin, let's just have a quick look at what we'll talk about today.</p>
           </aside>
         </section>
 
@@ -121,9 +122,9 @@
             </ol>
           </p>
           <aside class="notes">
-          <p>So, first we'll talk a bit about the background to our work. This includes smart contracts, a smart contract platform called Ethereum and the problems that we've been trying to solve.</p>
+          <p>So, first we'll explain the problem that we're trying to solve. To do this, we will have to talk a bit about smart contracts, kind of explain what they are. And also a smart contract <i>platform</i> called Ethereum.</p>
           <p>Then, we'll explain how we solve those problems.</p>
-          <p>After that we'll talk a little bit about the programming language Idris and how we have implemented our solutions.</p>
+          <p>And our solution uses a programming language called Idris, so we will talk about that and also how we have implemented our solutions.</p>
           <p>Then we will do a simple demo and round things up.</p>
           <p>And please save your questions, we'll have lots of time afterwards!</p>
           </aside>
@@ -279,7 +280,7 @@ contract Bank {
             <p>This is a simple contract that acts as a bank</p>
             <p>All contracts have a persistent data storage that they can use to store arbitrary data. In this case, we declare a mapping from addresses to their balances. Addresses are unique identifiers of users and contracts on Ethereum.</p>
             <p>So if someone wants to make a deposit, we access their address using 'msg.sender', and use it to<br/>increase their balance with the amount that they sent us. I'll explain exactly <i>what it is</i> they sent us soon, just see it as some money-like thing for now. We access it using 'msg.value'.</p>
-            <p>And if anyone wants to 'withdraw' an 'amount', we check that they're not trying to overdraw, and then we send that amount to them and return true.</p>
+            <p>And if anyone wants to 'withdraw' an 'amount', we check that they have have enough in their account, and then we send the amount to them and return true.</p>
             <p>Remember that in Ethereum, we don't need to trust the executor: We can say that EVERYONE executes this. So this is effectively like a bank that no one controls, even though it's extremely simple.</p>
             <p>We could add rules though. We could require a fee for setting up an account, or loan a fraction of the contract's balance to other users or contracts and so on. You just have to figure out the business logic.</p>
             <strong><i>CLICK</i></strong><br />
