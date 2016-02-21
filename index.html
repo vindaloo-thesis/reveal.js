@@ -169,7 +169,7 @@ function buy() {
           <p>Here is some object-oriented pseudocode that encodes these rules. If the holder wants to buy the asset, they simply call the buy function. The function checks the current time and transfers the money and the asset.</p>
           <p>This is all very well, but there is one major question: <strong><i>CLICK</i></strong><br/>
           Who <i>executes</i> this code? On <i>whose</i> computer is it running? Can both parties <i>trust</i> the executor?</p>
-          <p><i>If</i> we should start to codify contracts at a large scale, it is extremely important that they can't be modified by anyone. And that anyone can verify that they are executed correctly.</p>
+          <p><i>If</i> we should start to codify contracts at a large scale, it is <i>extremely</i> important that they can't be modified. And that anyone can verify that they are executed correctly.</p>
           <p>The perfect scenario would be if the code could "execute itself" so to speak, without any possibility of interference.</p>
           <strong><i>CLICK</i></strong>
           </aside>
@@ -300,8 +300,8 @@ contract Bank {
             <p>Both users and contracts can send any ether they own to any other contract or user.
             </p>
           
-          <p>Ether can also be included when calling a contract function, so contracts can behave differently depending on how much ether that was included, as we just saw.</p>
-          <p>By the way, has anyone here heard of Bitcoin but not of Ethereum? (Ether is to Ethereum what the currency bitcoin is to the Bitcoin network.)</p>
+          <p>Ether can also be included when calling a contract function. So functions can behave differently depending on how much ether they receive.</p>
+          <p>By the way, has anyone here heard of Bitcoin but not of Ethereum? (Ether is to Ethereum what the currency bitcoin is to the Bitcoin network, but the Bitcoin network is specialized on only keeping track of this currency.)</p>
           </aside>
         </section>
  
@@ -325,7 +325,7 @@ joinGame move = do
           </code></pre>
           <p class="fragment"><span style="color:red">Error: </span> Ether is not returned!</p>
           <aside class="notes">
-            <p>Ok, so now that we have explained the area that we're working <i>in</i>, it's time to explain what <i>we've</i> been trying to do.</p>
+            <p>Ok, so now that we have explained the area that we're working <i>in</i>, it's time to explain the problems that <i>we've</i> been trying to solve.</p>
             <p>To do this, we will start with showing you a <i>slightly</i> more complicated contract. It's a game. You might know it, it's called rock-paper-scissors. Basically, two players send their moves and 10 ether each to a contract, which plays the game for them, and pays the winner 20 ether.</p>
             <p>Just a question beforehand: is anyone here not familiar with functional programming?<br/>
               (Ok, no worries, there shouldn't be too many strange things going on, but I'll make sure to explain the code properly anyway. You don't have to worry about the small details)<br />
@@ -418,7 +418,7 @@ joinGame move = do
             It turns out that many of <i>those</i> are functional, so that's why <i>our</i> language is also functional.</p>
             <p>But just to be clear, our goal was <i>not</i> to design a new language or library specialized on contracts.<br/>
             We wanted to do a <i>general-purpose</i> programming language on a <i>smart contract</i> platform. <i>However</i>, our language <i>should</i> make it possible to <i>implement</i> those libraries in an environment where you <i>don't</i> have to trust an executor.</p>
-            <p>And now Robert will show what our solutions look like.</p>
+            <p>And now Robert will show what our solutions look like in practice.</p>
             <p><strong><i>CLICK</i></strong>
             <strong><i>ROBERT</i></strong>
 </p>
