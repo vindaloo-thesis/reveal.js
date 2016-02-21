@@ -177,11 +177,13 @@ function buy() {
         
         <section class="jack">
           <h2>Smart <span style="font-size:70%">(self-enforcing)</span> contracts</h2>
-          <table class="borderless">
-            <tr><td>Precursor:</td><td>vending machines</td></tr>
-            <tr class="fragment" data-fragment-index="1"><td>State&nbsp;of&nbsp;the&nbsp;art:</td><td>smart contract platforms</td></tr>
-            <tr class="fragment" data-fragment-index="1"><td>Applications:</td><td>finance, IoT, commerce, computer protocols, gambling, ...</td></tr>
-          </table>
+          <ul>
+          	<li>Precursor: Vending machines</li>
+          	<li class="fragment" data-fragment-index="1">State of the art: Smart contract platforms</li>
+          	<ul class="fragment" data-fragment-index="1">
+          		<li >Applications: Finance, IoT, commerce, computer protocols, gambling, ...</li>
+          	</ul>
+          </ul>
           <aside class="notes">
           <p>...And that's <i>exactly</i> what smart contracts are about!</p>
           <p>A primitive precursor to smart contracts can be found in a simple vending machine:<br />
@@ -280,10 +282,10 @@ contract Bank {
           <aside class="notes">
             <p>This is a simple contract that acts as a bank</p>
             <p>All contracts have a persistent data storage that they can use to store arbitrary data. In this case, we declare a mapping from addresses to their balances. Addresses are unique identifiers of users and contracts on Ethereum.</p>
-            <p>So if someone wants to make a deposit, we access their address using 'msg.sender', and use it to<br/>increase their balance with the amount that they sent us. I'll explain exactly <i>what it is</i> they sent us soon, just see it as some money-like thing for now. We access it using 'msg.value'.</p>
+            <p>So if someone wants to make a deposit, we <strong>a</strong>ccess their address using 'msg.sender', and use it to<br/>increase their balance with the amount that they sent us. I'll explain exactly <i>what it is</i> they sent us soon, just see it as some money-like thing for now. We <strong>a</strong>ccess it using 'msg.value'.</p>
             <p>And if anyone wants to 'withdraw' an 'amount', we check that they have have enough in their account, and then we send the amount to them and return true.</p>
-            <p>Remember that in Ethereum, we don't need to trust the executor: We can say that EVERYONE executes this. So this is effectively like a bank that no one controls, even though it's extremely simple.</p>
-            <p>We could add rules though. We could require a fee for setting up an account, or loan a fraction of the contract's balance to other users or contracts and so on. You just have to figure out the business logic.</p>
+            <p>Remember that in Ethereum, we don't need to trust the executor: We can say that EVERYONE executes this. So this is effectively like a bank that no one controls. Even though it's an extremely simple bank.</p>
+            <p>We could add rules though. We could require a <i>fee</i> for setting up an account, or <i>loan</i> a fraction of the bank's balance to other users or contracts and so on. You just have to figure out the business logic.</p>
             <strong><i>CLICK</i></strong><br />
             <p>But anyway, I've talked about this money-like thing for a while now, so it's time to explain what it is.</p>
           </aside>
@@ -292,11 +294,12 @@ contract Bank {
           <h3><i>Ether</i>&nbsp;is&nbsp;deposited&nbsp;and&nbsp;withdrawn!</h3>
           <ul>
             <li>Currency/token</li>
+            <li>All contracts and users may own ether</li>
             <li class="fragment" data-fragment-index="1">May be sent separately, or with a function call</li>
           </ul>
           <aside class="notes">
-            <p>In short, ethereum has an internal token called ether which can be used to transfer real value. Each user and contract on Ethereum has a specific balance of Ether.<br />
-            <strong><i>CLICK</i></strong></p>
+            <p>In short, ethereum has an internal token called ether which can be used to transfer real value. Each user and contract on Ethereum has a specific balance of Ether.</p>
+            <strong><i>CLICK</i></strong>
             <p>Both users and contracts can send any ether they own to any other contract or user.
             </p>
           
@@ -334,7 +337,7 @@ joinGame move = do
             <p>As you can see though, the return type is not a <i>normal</i> boolean, but it is something called "EthereumEff" which <i>"contains"</i> a boolean.<br/>
             "EthereumEff" stands for "ethereum effects" and basically, this says that the function might use the state of the Ethereum system in some way.</p>
             <p>In this case for example, it has to check how many players are already in the game. To do this, it has to <i>read</i> a value from the <i>data store</i>, which is why the return type has to be an EthereumEff. The value that is read is saved in 'pc'.</p>
-            <p>Then we use 'pc' to check that the game is not full. We <i>also</i> have to check that the player sent enough ether. The amount of ether that was included in the call is accessed using the variable 'value', as we can see here.<br/>
+            <p>Then we use 'pc' to check that the game is not full. We <i>also</i> have to check that the player sent enough ether. The amount of ether that was included in the call is <strong>a</strong>ccessed using the variable 'value', as we can see here.<br/>
             Just like this 'joinGame' function doesn't return a simple boolean, 'value' doesn't return a simple integer. The exclamation mark basically allows us to treat it as if it was a simple integer.</p>
             <p>So if the game is not full <i>and</i> the player payed enough ether, we should just save the player and its move, increase the number of players and then return true. Otherwise we just return false.</p>
             <p>This might <i>seem</i> reasonable, but there are actually a few errors here.</p>
@@ -394,12 +397,13 @@ joinGame move = do
             </tbody>
           </table>
           <aside class="notes">
-            <p>Ok, so we have showed you two classes of errors that are common for smart contract developers to make.</p>
-            <p>The first was to not handle ether properly, and the second was to upload secret information.</p>
+            <p>Ok, so we have showed you <i>two</i> classes of errors that are common for smart contract developers to make.</p>
+            <p>The <i>first</i> was to not handle ether properly, and the <i>second</i> was to upload secret information.</p>
             <p><i>Our thesis</i> is that these problems can be solved at the language level with an extensive type system.</p>
+            <p>To do this, we will use the type system in <i>two</i> ways.</p>
+
             <p><strong><i>CLICK</i></strong></p>
-            <p>To do this, we will use the type system in <i>two</i> ways.<br/>
-            The <i>first</i> is to use types to enforce how contracts are allowed to behave.<br/>
+            <p>The <i>first</i> is to use types to enforce how contracts are allowed to behave.<br/>
             The <i>second</i> is to use types to tell the compiler which values that are secret, and then the compiler can handle the rest for us.<br />
             <strong><i>CLICK</i></strong></p>
           </aside>
