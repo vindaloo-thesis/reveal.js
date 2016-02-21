@@ -462,9 +462,13 @@ joinGame : Int ->
             <p>&nbsp;</p>
           <aside class="notes">
             <p>Our Ethereum effect has some optional parameters. In this example, we include:<br />
+            <strong><i>CLICK</i></strong><br />
             the amount of ether included for this call,<br />
+            <strong><i>CLICK</i></strong><br />
             the ether balance of the contract, <br />
+            <strong><i>CLICK</i></strong><br />
             the amount of outgoing ether transferred to others during the call,<br />
+            <strong><i>CLICK</i></strong><br />
             and the amount of incoming ether that's kept in the contract after the call.</p>
           </aside>
           </section>
@@ -556,7 +560,7 @@ joinGame : <span class="highlight-purple">Commit</span> Int -> {auto p : LTE 10 
           <aside class="notes">
             <p>Now for the last problem that Jack mentioned; how to hide the player's move from being publicly read.</p><p>This is done using a cryptographic construction called a commitment - basically, it means that a player can commit to a specific value without that value being known until they choose to reveal it. If we use the type Commit here, we signify to the compiler that it should generate the necessary code for this. <br />
             <strong><i>CLICK</i></strong><br />
-            <p>The library supplies two functions - the first takes a secret from the user in order to reveal the value that they commited to. After this is run, the value can be used in the contract.<br />
+            <p>Our library supplies two functions - the first takes a secret from the user in order to reveal the value that they commited to. After this is run, the value can be used in the contract.<br />
             <strong><i>CLICK</i></strong><br />
             <p>This is done using the second function, open. It returns the commited value if it has been previously revealed.<br />
           </aside>
@@ -586,7 +590,7 @@ joinGame {value} move = do
           </code></pre>
           
           <aside class="notes">
-            <p>Here is the complete joinGame function. The implementation is exactly the same as we saw before, with two small changes.<br />
+            <p>Here is the complete joinGame function. The implementation is the same as we saw before, with two small changes.<br />
             <strong><i>CLICK</i></strong><br />
             We need to explicitly define when we keep ether in the contract to make it type check.<br />
             <strong><i>CLICK</i></strong><br />
@@ -645,13 +649,13 @@ joinGame {value} move = do
             STORE allows us to interact with the contract's data store.</p>
             <p>The EthereumEff we saw before is just syntactic sugar which includes all three.</p>
             <strong><i>CLICK</i></strong><br />
-            All of these are fully as Idris libraries. That about the library. Let's talk about the code generator.<br />
+            All of these are fully implemented as Idris libraries. Now let's talk about the code generator.<br />
             <strong><i>CLICK</i></strong><br />
             As I said, we use the Idris compiler API as a library to get an intermidiate abstract syntax tree representation of the contract as input.<br />
             <strong><i>CLICK</i></strong><br />
             We actually don't output Ethereum byte code directly, but instead we output Serpent code. Serpent is the Python-like smart contract language. The Serpent compiler can then be used for the final step.<br />
             <strong><i>CLICK</i></strong><br />
-            The current version of the code generator is not complete. We haven't implemented functinoality to generate the open and reveal functions for commitments that we talked about earlier.<br />
+            The current version of the code generator is not complete. We haven't implemented functionality to generate the open and reveal functions for commitments that we talked about earlier.<br />
             <strong><i>CLICK</i></strong><br />
              Apart from that, all type checking works as intended, but it only generates working code for a subset of contracts. Let's look at how this is used in practice and see if it works.</p>
           </aside>
@@ -725,7 +729,7 @@ joinGame {value} move = do
          </ul>
           
         <aside class="notes">
-          So, we have laid down the theory and design for an implementation of this applying Idris to Ethereum. The implementation itself is still just a proof of concept and especially the code generator will probably have to be rewritten from scratch before it's ready for production use. We hope that someone will pick ball and build upon our work.
+          So, we have laid down the theory and design for an implementation of this applying Idris to Ethereum. The implementation itself is still just a proof of concept and especially the code generator will probably have to be rewritten from scratch before it's ready for production use. We hope that someone will pick up the ball and build upon our work.
         </aside>
         </section>
         <section>
