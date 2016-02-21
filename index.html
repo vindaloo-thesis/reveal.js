@@ -163,7 +163,7 @@ function buy() {
           <p class="fragment">Do both parties trust the executor?</p>
           <aside class="notes">
           <p>So let's say that we wanted to turn all the contracts in the world into code. Just to give you an intuition of how that might look, let's take a very common financial contract and try to encode it as a program.</p>
-          <p>The contract we'll look at allows the holder to buy an asset at a fixed price, but only at a particular time.<br/>
+          <p>We'll take a contract that allows the holder to buy an asset at a fixed price, but only at a particular time.<br/>
           Or: "at time t, party a may buy asset x from party b for price y"<br />
           <strong><i>CLICK</i></strong><br />
           <p>Here is some object-oriented pseudocode that encodes these rules. If the holder wants to buy the asset, they simply call the buy function. The function checks the current time and transfers the money and the asset.</p>
